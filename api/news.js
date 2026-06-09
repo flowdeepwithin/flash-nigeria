@@ -1,94 +1,80 @@
+const API_KEY = 'pub_8c67b54a3b2a420c8492f7291a3f3224';
+
+const CATEGORY_MAP = {
+  politics: 'politics',
+  business: 'business',
+  entertainment: 'entertainment',
+  sports: 'sports',
+  technology: 'technology',
+  health: 'health',
+};
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=300');
 
-  const { url } = req.query;
-  if (!url) return res.status(400).json({ error: 'No URL' });
+  const { url, category, page } = req.query;
 
-  let decoded;
-  try { decoded = decodeURIComponent(url); }
-  catch(e) { decoded = url; }
+  // If called with RSS url (legacy) — proxy it directly
+  if (url) {
+    let decoded;
+    try { decoded = decodeURIComponent(url); }
+    catch(e) { decoded = url; }
+    try {
+      const response = await fetch(decoded, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1)',
+          'Accept': 'application/rss+xml, application/xml, text/xml, */*',
+        },
+        signal: AbortSignal.timeout(12000),
+      });
+      if (!response.ok) throw new Error(response.status);
+      const text = await response.text();
+      res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+      return res.send(text);
+    } catch(err) {
+      return res.status(500).send('<?xml version="1.0"?><rss version="2.0"><channel></channel></rss>');
+    }
+  }
 
+  // NewsData.io API call
   try {
-    const response = await fetch(decoded, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
-        'Accept': 'application/rss+xml, application/xml, text/xml, */*',
-      },
+    const params = new URLSearchParams({
+      apikey: API_KEY,
+      country: 'ng',
+      language: 'en',
+      image: '1',
+      size: '50',
+    });
+    if (category && category !== 'all' && CATEGORY_MAP[category]) {
+      params.set('category', CATEGORY_MAP[category]);
+    }
+    if (page) params.set('page', page);
+
+    const apiUrl = `https://newsdata.io/api/1/latest?${params}`;
+    const response = await fetch(apiUrl, {
+      headers: { 'User-Agent': 'Mozilla/5.0' },
       signal: AbortSignal.timeout(12000),
     });
 
-    if (!response.ok) throw new Error('Feed error: ' + response.status);
-    const text = await response.text();
+    if (!response.ok) throw new Error('NewsData API error: ' + response.status);
+    const data = await response.json();
 
-    // Parse items from raw XML text using regex (avoids namespace issues)
-    const items = [];
-    const itemRegex = /<item[\s>]([\s\S]*?)<\/item>/gi;
-    let match;
+    if (data.status !== 'success') throw new Error('API returned: ' + data.status);
 
-    while ((match = itemRegex.exec(text)) !== null && items.length < 15) {
-      const block = match[1];
+    const articles = (data.results || []).map(item => ({
+      title: (item.title || '').trim(),
+      link: item.link || item.source_url || '#',
+      pub: item.pubDate || '',
+      desc: (item.description || item.content || '').replace(/<[^>]+>/g,'').trim().slice(0, 200),
+      img: item.image_url || '',
+      n: item.source_id || item.source_name || 'News',
+      cat: item.category?.[0] || 'news',
+      id: Buffer.from(item.link || item.title || Math.random().toString()).toString('base64').slice(0, 22),
+    })).filter(a => a.title);
 
-      const title = decodeEntities(extractTag(block, 'title'));
-      const link = extractTag(block, 'link') || extractAttr(block, 'link', 'href');
-      const pubDate = extractTag(block, 'pubDate') || extractTag(block, 'dc:date') || extractTag(block, 'published');
-      const desc = decodeEntities(extractTag(block, 'description') || extractTag(block, 'content:encoded') || '');
-
-      // Extract image - try ALL possible locations
-      let img = '';
-
-      // 1. media:content url attribute
-      img = img || extractAttr(block, 'media:content', 'url');
-      // 2. media:thumbnail url attribute  
-      img = img || extractAttr(block, 'media:thumbnail', 'url');
-      // 3. enclosure url attribute
-      const encType = extractAttr(block, 'enclosure', 'type') || '';
-      if (!img && (encType.includes('image') || !encType)) {
-        img = extractAttr(block, 'enclosure', 'url');
-      }
-      // 4. og:image in content
-      img = img || (block.match(/og:image[^>]+content=["']([^"']+)["']/i) || [])[1];
-      // 5. img src in description
-      if (!img) {
-        const imgMatch = desc.match(/<img[^>]+src=["']([^"']+)["']/i)
-                      || desc.match(/https?:\/\/[^\s"'<>]+\.(jpg|jpeg|png|webp|gif)(\?[^\s"'<>]*)?/i);
-        if (imgMatch) img = imgMatch[1] || imgMatch[0];
-      }
-      // 6. Any image URL in the whole block
-      if (!img) {
-        const anyImg = block.match(/https?:\/\/[^\s"'<>]+\.(jpg|jpeg|png|webp)(\?[^\s"'<>]*)?/i);
-        if (anyImg) img = anyImg[0];
-      }
-
-      // Clean up img URL
-      if (img) img = img.replace(/&amp;/g, '&').replace(/^\s+|\s+$/g, '');
-
-      // Clean description
-      const cleanDesc = desc.replace(/<[^>]+>/g, '').replace(/&nbsp;/g,' ').trim().slice(0, 200);
-
-      if (title && link) {
-        items.push({ title, link: link.trim(), pubDate, desc: cleanDesc, img });
-      }
-    }
-
-    res.json({ status: 'ok', items });
-  } catch (err) {
-    res.status(500).json({ error: err.message, items: [] });
+    res.json({ status: 'ok', articles, nextPage: data.nextPage || null });
+  } catch(err) {
+    res.status(500).json({ status: 'error', message: err.message, articles: [] });
   }
-}
-
-function extractTag(text, tag) {
-  const r = new RegExp(`<${tag}[^>]*>(?:<!\\[CDATA\\[)?([\\s\\S]*?)(?:\\]\\]>)?<\\/${tag}>`, 'i');
-  const m = text.match(r);
-  return m ? m[1].trim() : '';
-}
-
-function extractAttr(text, tag, attr) {
-  const r = new RegExp(`<${tag}[^>]+${attr}=["']([^"']+)["']`, 'i');
-  const m = text.match(r);
-  return m ? m[1].trim() : '';
-}
-
-function decodeEntities(s) {
-  return s.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'");
 }
