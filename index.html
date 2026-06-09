@@ -471,18 +471,17 @@ body.dark .bnav-item.on{color:#FFD700;}
 <div class="toast" id="toast"></div>
 
 <script>
-const RSS = 'https://api.rss2json.com/v1/api.json?rss_url=';
 const SOURCES = [
-  {n:'Punch', u:RSS+encodeURIComponent('https://feeds.punch.ng/'), c:'politics'},
-  {n:'Vanguard', u:RSS+encodeURIComponent('https://www.vanguardngr.com/feed/'), c:'business'},
-  {n:'TheCable', u:RSS+encodeURIComponent('https://www.thecable.ng/feed'), c:'politics'},
-  {n:'BellaNaija', u:RSS+encodeURIComponent('https://www.bellanaija.com/feed/'), c:'entertainment'},
-  {n:'Legit.ng', u:RSS+encodeURIComponent('https://www.legit.ng/rss/all.rss'), c:'entertainment'},
-  {n:'Premium Times', u:RSS+encodeURIComponent('https://www.premiumtimesng.com/feed/'), c:'politics'},
-  {n:'Channels TV', u:RSS+encodeURIComponent('https://www.channelstv.com/feed/'), c:'politics'},
-  {n:'Naijaloaded', u:RSS+encodeURIComponent('https://naijaloaded.com.ng/feed/'), c:'entertainment'},
-  {n:'Tech Cabal', u:RSS+encodeURIComponent('https://techcabal.com/feed/'), c:'tech'},
-  {n:'Nairametrics', u:RSS+encodeURIComponent('https://nairametrics.com/feed/'), c:'business'},
+  {n:'Punch', rssUrl:'https://feeds.punch.ng/', c:'politics'},
+  {n:'Vanguard', rssUrl:'https://www.vanguardngr.com/feed/', c:'business'},
+  {n:'TheCable', rssUrl:'https://www.thecable.ng/feed', c:'politics'},
+  {n:'BellaNaija', rssUrl:'https://www.bellanaija.com/feed/', c:'entertainment'},
+  {n:'Legit.ng', rssUrl:'https://www.legit.ng/rss/all.rss', c:'entertainment'},
+  {n:'Premium Times', rssUrl:'https://www.premiumtimesng.com/feed/', c:'politics'},
+  {n:'Channels TV', rssUrl:'https://www.channelstv.com/feed/', c:'politics'},
+  {n:'Naijaloaded', rssUrl:'https://naijaloaded.com.ng/feed/', c:'entertainment'},
+  {n:'Tech Cabal', rssUrl:'https://techcabal.com/feed/', c:'tech'},
+  {n:'Nairametrics', rssUrl:'https://nairametrics.com/feed/', c:'business'},
 ];
 
 const POLLS = [
@@ -606,21 +605,31 @@ async function fetchAll(){
   return all;
 }
 async function fetchSource(src){
+  var rssUrl=src.rssUrl;
+  // Use our own Vercel proxy - no CORS issues, no rate limits!
+  var proxyUrl='/api/news?url='+encodeURIComponent(rssUrl);
   try{
-    var res=await fetch(src.u,{signal:AbortSignal.timeout(10000)});
-    var data=await res.json();
-    if(!data.items||data.status!=='ok') return [];
-    return data.items.slice(0,12).map(function(item){
-      var title=(item.title||'').trim();
-      var link=item.link||'#';
-      var pub=item.pubDate||'';
-      var desc=(item.description||item.content||'').replace(/<[^>]+>/g,'').trim().slice(0,200);
-      var img=item.thumbnail||item.enclosure&&item.enclosure.link||null;
-      var cat=detectCat(title+' '+desc, src.c);
+    var res=await fetch(proxyUrl,{signal:AbortSignal.timeout(12000)});
+    if(!res.ok) throw new Error('proxy failed');
+    var text=await res.text();
+    var parser=new DOMParser();
+    var xml=parser.parseFromString(text,'text/xml');
+    var items=xml.querySelectorAll('item');
+    if(!items.length) return [];
+    return Array.from(items).slice(0,12).map(function(item){
+      var title=(item.querySelector('title')&&item.querySelector('title').textContent||'').trim();
+      var link=(item.querySelector('link')&&item.querySelector('link').textContent||'#').trim();
+      var pub=item.querySelector('pubDate')&&item.querySelector('pubDate').textContent||'';
+      var desc=item.querySelector('description')&&item.querySelector('description').textContent||'';
+      var enc=item.querySelector('enclosure');
+      var img=enc?enc.getAttribute('url'):null;
+      if(!img){var m=desc.match(/<img[^>]+src=["']([^"']+)["']/i);if(m)img=m[1];}
+      var cleanDesc=desc.replace(/<[^>]+>/g,'').trim().slice(0,200);
+      var cat=detectCat(title+' '+cleanDesc, src.c);
       var id=safeId(link);
-      return {title:title, link:link, pub:pub, desc:desc, img:img, n:src.n, cat:cat, id:id};
+      return {title:title, link:link, pub:pub, desc:cleanDesc, img:img, n:src.n, cat:cat, id:id};
     });
-  }catch(e){return [];}
+  }catch(ex){return [];}
 }
 function safeId(s){try{return btoa(unescape(encodeURIComponent(s))).slice(0,20);}catch(e){return Math.random().toString(36).slice(2,12);}}
 function detectCat(text,fb){
