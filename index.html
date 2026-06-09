@@ -22,6 +22,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .app-shell{max-width:1200px;margin:0 auto;background:var(--bg);min-height:100vh;}
 @media(min-width:768px){
   .feed-grid{display:grid;grid-template-columns:1fr 320px;gap:0;align-items:start;}
+  #page-home{display:block!important;}
   .sidebar{border-left:1px solid var(--border);padding:14px 16px;position:sticky;top:110px;max-height:90vh;overflow-y:auto;}
   .bottom-nav{display:none;}
   .desktop-nav{display:flex!important;}
@@ -56,11 +57,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 /* BREAKING */
 .breaking-bar{background:var(--green);padding:7px 16px;display:flex;align-items:center;gap:10px;overflow:hidden;}
 .breaking-label{color:var(--gold);font-size:10px;font-weight:700;padding:2px 7px;border:1px solid var(--gold);border-radius:3px;white-space:nowrap;letter-spacing:0.8px;}
-.breaking-ticker{flex:1;overflow:hidden;white-space:nowrap;}
+.breaking-ticker{flex:1;overflow:hidden;white-space:nowrap;min-width:0;}
 .breaking-ticker-inner{display:inline-block;animation:ticker 80s linear infinite;}
 .breaking-ticker-inner:hover{animation-play-state:paused;}
 @keyframes ticker{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
-.breaking-item{color:#fff;font-size:12px;font-weight:500;margin-right:48px;}
+.breaking-item{color:#fff;font-size:12px;font-weight:500;margin-right:48px;display:inline-block;}
 
 /* CATS */
 .cats-wrap{background:var(--bg);border-bottom:1px solid var(--border);position:sticky;top:49px;z-index:99;}
@@ -342,7 +343,7 @@ body.dark .nav-item.active{color:var(--gold);}
 
 <div class="refresh-bar" id="refreshBar" onclick="applyNewArticles()">⚡ New stories — tap to load</div>
 
-<div id="page-home">
+<div id="page-home" style="display:block;">
   <div class="cats-wrap">
     <div class="cats" id="catBar">
       <button class="cat-btn active" data-cat="all">All</button>
@@ -1135,6 +1136,8 @@ function switchPage(page,btn){
     const el=document.getElementById('page-'+p);
     if(el)el.style.display=p===page?'block':'none';
   });
+  // Force home visible on desktop
+  if(page==='home'){const h=document.getElementById('page-home');if(h)h.style.display='block';}
   if(page==='saved')renderSaved();
   if(page==='search')document.getElementById('searchInput').focus();
   if(page==='videos')loadYouTube();
