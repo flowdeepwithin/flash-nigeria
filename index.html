@@ -945,7 +945,7 @@ function renderCard(a){
   html+='<button data-title="'+escJ(a.title)+'" data-url="'+escJ(a.link)+'" onclick="event.stopPropagation();shareWA(this.dataset.title,this.dataset.url)" title="WhatsApp">📲</button>';
   html+='<button data-title="'+escJ(a.title)+'" data-url="'+escJ(a.link)+'" onclick="event.stopPropagation();shareTG(this.dataset.title,this.dataset.url)" title="Telegram">✈️</button>';
   html+='<button data-url="'+escJ(a.link)+'" onclick="event.stopPropagation();copyLink(this.dataset.url)" title="Copy">🔗</button>';
-  html+='<button data-article="'+safeJson(a)+'" data-id="'+a.id+'" onclick="event.stopPropagation();saveArticle(JSON.parse(this.dataset.article),this.dataset.id,this)">'+(saved?'🔖':'➕')+'</button>';
+  html+='<button data-id="'+a.id+'" onclick="event.stopPropagation();toggleSave(this)" class="save-btn">'+(saved?'🔖':'➕')+'</button>';
   html+='</div></div></div></div>';
   html+='<div class="reactions" id="rx_'+a.id+'">'+rxBtns+'</div>';
   html+='</div>';
@@ -1060,6 +1060,13 @@ function saveArticle(article,id,btn){
   else{savedArticles.push(article);btn.textContent='🔖';showToast('⚡ Saved!');}
   localStorage.setItem('fn_saved',JSON.stringify(savedArticles));
   updateSavedBadge();
+}
+
+function toggleSave(btn){
+  var id=btn.dataset.id;
+  var article=allArticles.find(function(a){return a.id===id;})||savedArticles.find(function(a){return a.id===id;});
+  if(!article)return;
+  saveArticle(article,id,btn);
 }
 function updateSavedBadge(){const b=document.getElementById('savedBadge');if(savedArticles.length>0){b.textContent=savedArticles.length;b.classList.add('show');}else b.classList.remove('show');}
 function markRead(id){readArticles.add(id);localStorage.setItem('fn_read',JSON.stringify([...readArticles]));}
