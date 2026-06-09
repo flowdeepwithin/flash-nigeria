@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
 <meta name="theme-color" content="#0d0d0d"/>
-<meta name="description" content="Flash Nigeria — Breaking Nigeria. Every Second."/>
+<meta name="description" content="Flash Nigeria — Nigeria's Fastest News. Every Second."/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
 <meta name="apple-mobile-web-app-title" content="Flash Nigeria"/>
@@ -252,7 +252,7 @@ body.dark .nav-item.active{color:var(--gold);}
 <div id="splash">
   <div class="splash-bolt">⚡</div>
   <div class="splash-title">FLASH <span>NIGERIA</span></div>
-  <div class="splash-sub">Breaking Nigeria. Every Second.</div>
+  <div class="splash-sub">Nigeria's Fastest News. Every Second.</div>
   <div class="splash-bar"><div class="splash-fill"></div></div>
 </div>
 
@@ -824,11 +824,11 @@ async function getAISummary(id,title,desc){
 }
 
 // ── SHARE ─────────────────────────────────────────────────────────────────
-function shareWA(title,url){event.stopPropagation();window.open(`https://wa.me/?text=${encodeURIComponent('⚡ *'+title+'*\n\nRead more: '+url+'\n\n_Via Flash Nigeria — flash-nigeria.vercel.app_`)},'_blank');}
-function shareStatus(title,url){event.stopPropagation();window.open(`https://wa.me/?text=${encodeURIComponent('⚡ '+title+' '+url)},'_blank');}
-function shareFB(url){event.stopPropagation();window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,'_blank');}
-function shareTG(title,url){event.stopPropagation();window.open(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent('⚡ '+title)}`,'_blank');}
-function shareTW(title,url){event.stopPropagation();window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent('⚡ '+title)}&url=${encodeURIComponent(url)}&via=FlashNigeria`,'_blank');}
+function shareWA(title,url){event.stopPropagation();var m=encodeURIComponent('\u26a1 *'+title+'*\n\nRead more: '+url+'\n\n_Via Flash Nigeria_');window.open('https://wa.me/?text='+m,'_blank');}
+function shareStatus(title,url){event.stopPropagation();var m=encodeURIComponent('\u26a1 '+title+' '+url);window.open('https://wa.me/?text='+m,'_blank');}
+function shareFB(url){event.stopPropagation();window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(url),'_blank');}
+function shareTG(title,url){event.stopPropagation();window.open('https://t.me/share/url?url='+encodeURIComponent(url)+'&text='+encodeURIComponent('⚡ '+title),'_blank');}
+function shareTW(title,url){event.stopPropagation();window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent('⚡ '+title)+'&url='+encodeURIComponent(url)+'&via=FlashNigeria','_blank');}
 function copyLink(url){event.stopPropagation();navigator.clipboard.writeText(url).then(()=>showToast('🔗 Link copied!')).catch(()=>showToast('Could not copy'));}
 
 // ── OGA REPORT ────────────────────────────────────────────────────────────
@@ -838,7 +838,7 @@ function submitReport(){
   const name=document.getElementById('reportName').value.trim()||'Anonymous';
   const contact=document.getElementById('reportContact').value.trim();
   const msg=`🚨 *News Tip from Flash Nigeria*\n\n*From:* ${name}\n*Contact:* ${contact||'Not provided'}\n\n*Report:*\n${text}`;
-  window.open(`https://wa.me/2348000000000?text=${encodeURIComponent(msg)}`,'_blank');
+  window.open('https://wa.me/2348000000000?text='+encodeURIComponent(msg),'_blank');
   closeModal('ogaModal');
   document.getElementById('reportText').value='';
   showToast('🚨 Report sent! Thank you!');
