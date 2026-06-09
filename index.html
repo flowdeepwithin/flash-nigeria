@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="theme-color" content="#0d0d0d"/>
+<meta name="description" content="Flash Nigeria — Nigeria's Fastest News. Every Second."/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-title" content="Flash Nigeria"/>
+<link rel="manifest" href="manifest.json"/>
+<title>Flash Nigeria ⚡</title>
+<!-- category-fix-v3 -->
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{--black:#0d0d0d;--gold:#FFD700;--green:#1a6e3c;--red:#c0392b;--purple:#6b1a6e;--brown:#8b4000;--bg:#fff;--bg2:#f5f5f5;--text:#111;--text2:#666;--border:#e0e0e0;}
+body.dark{--bg:#111;--bg2:#1a1a1a;--text:#f0f0f0;--text2:#aaa;--border:#2a2a2a;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+#splash{position:fixed;inset:0;background:#0d0d0d;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity 0.6s;}
+#splash.hide{opacity:0;pointer-events:none;}
+.splash-bolt{font-size:64px;animation:pulse 1s ease-in-out infinite;}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.splash-title{color:#fff;font-size:28px;font-weight:700;margin-top:12px;}
+.splash-title span{color:#FFD700;}
+.splash-sub{color:#888;font-size:13px;margin-top:6px;}
+.splash-bar{width:200px;height:3px;background:#222;border-radius:2px;margin-top:24px;overflow:hidden;}
+.splash-fill{height:100%;background:#FFD700;animation:load 2.2s ease-out forwards;}
+@keyframes load{0%{width:0}100%{width:100%}}
+.wrap{max-width:1100px;margin:0 auto;}
+.flag-strip{height:4px;background:linear-gradient(to right,#1a6e3c 33%,#fff 33%,#fff 66%,#1a6e3c 66%);}
+.header{background:var(--black);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.logo{display:flex;align-items:center;gap:6px;text-decoration:none;}
+.logo-text{font-size:20px;font-weight:700;color:#fff;}
+.logo-text span{color:#FFD700;}
+.hbtns{display:flex;gap:8px;}
+.hbtn{background:none;border:none;color:#fff;font-size:20px;cursor:pointer;padding:4px;position:relative;}
+.badge{position:absolute;top:0;right:0;background:var(--green);color:#fff;font-size:9px;font-weight:700;min-width:15px;height:15px;border-radius:8px;display:none;align-items:center;justify-content:center;}
+.badge.on{display:flex;}
+.dnav{background:var(--black);border-bottom:2px solid var(--green);padding:0 16px;display:none;}
+.dnav a{color:#ccc;font-size:13px;font-weight:600;padding:11px 14px;display:inline-block;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;}
+.dnav a.active,.dnav a:hover{color:#4caf7d;border-bottom-color:var(--green);}
+@media(min-width:768px){.dnav{display:block;}.bnav{display:none!important;}}
+.breaking{background:var(--green);padding:7px 16px;display:flex;align-items:center;gap:10px;overflow:hidden;}
+.breaking-lbl{color:#FFD700;font-size:10px;font-weight:700;padding:2px 7px;border:1px solid #FFD700;border-radius:3px;white-space:nowrap;}
+.ticker-wrap{flex:1;overflow:hidden;min-width:0;}
+.ticker{display:inline-block;white-space:nowrap;animation:scroll 60s linear infinite;}
+.ticker:hover{animation-play-state:paused;}
+@keyframes scroll{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
+.tick-item{color:#fff;font-size:12px;font-weight:500;margin-right:50px;display:inline-block;}
+.rbar{background:var(--green);color:#fff;font-size:12px;font-weight:700;text-align:center;padding:8px;cursor:pointer;display:none;}
+.rbar.on{display:block;}
+.main{display:block;}
+@media(min-width:768px){.main{display:grid;grid-template-columns:1fr 300px;align-items:start;max-width:1100px;margin:0 auto;}}
+.feed{padding-bottom:80px;}
+.cats-bar{background:var(--bg);border-bottom:1px solid var(--border);position:sticky;top:49px;z-index:90;overflow-x:auto;display:flex;gap:8px;padding:10px 16px;scrollbar-width:none;}
+.cats-bar::-webkit-scrollbar{display:none;}
+.cat{padding:6px 16px;border-radius:20px;font-size:13px;white-space:nowrap;cursor:pointer;border:1px solid var(--border);color:var(--text2);background:var(--bg2);font-family:inherit;}
+.cat.on{background:var(--black);color:#FFD700;border-color:var(--black);font-weight:600;}
+.filter-btn{padding:6px 14px;border-radius:20px;font-size:13px;white-space:nowrap;cursor:pointer;border:1px solid var(--border);color:var(--text2);background:var(--bg2);font-family:inherit;}
+.tdrop{display:none;position:absolute;right:16px;top:100%;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:8px;z-index:200;box-shadow:0 4px 20px rgba(0,0,0,0.15);min-width:160px;}
+.tdrop.on{display:block;}
+.topt{padding:8px 12px;border-radius:8px;font-size:13px;cursor:pointer;color:var(--text);}
+.topt:hover{background:var(--bg2);}
+.topt.on{background:var(--green);color:#fff;font-weight:600;}
+.slbl{font-size:11px;font-weight:700;color:var(--text2);padding:14px 16px 8px;text-transform:uppercase;letter-spacing:0.8px;display:flex;align-items:center;gap:8px;}
+.slbl::after{content:'';flex:1;height:1px;background:var(--border);}
+.sotd{background:linear-gradient(135deg,#0d4726,#1a6e3c);border-radius:12px;padding:14px;margin:12px 16px 8px;cursor:pointer;}
+.sotd-lbl{color:#FFD700;font-size:10px;font-weight:700;letter-spacing:1px;margin-bottom:6px;}
+.sotd-title{color:#fff;font-size:15px;font-weight:700;line-height:1.4;margin-bottom:6px;}
+.sotd-meta{color:rgba(255,255,255,0.7);font-size:11px;}
+.slider-wrap{position:relative;margin:0 16px 4px;border-radius:12px;overflow:hidden;border:1px solid var(--border);}
+.slider-track{display:flex;transition:transform 0.4s ease;}
+.slide{min-width:100%;flex-shrink:0;}
+.slide-img{height:230px;position:relative;overflow:hidden;background:#1a1a1a;cursor:pointer;display:flex;align-items:flex-end;}
+.slide-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;}
+.slide-fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:60px;opacity:0.2;}
+.slide-overlay{position:relative;z-index:2;width:100%;background:linear-gradient(transparent,rgba(0,0,0,0.9));padding:12px 14px 14px;}
+.slide-cat-badge{display:inline-block;background:#FFD700;color:#000;font-size:10px;font-weight:700;padding:3px 8px;border-radius:3px;margin-bottom:6px;}
+.slide-src{float:right;background:rgba(0,0,0,0.6);color:#FFD700;font-size:10px;padding:3px 8px;border-radius:20px;font-weight:600;}
+.slide-title{color:#fff;font-size:14px;font-weight:700;line-height:1.4;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.slide-foot{display:flex;align-items:center;justify-content:space-between;}
+.slide-time{color:rgba(255,255,255,0.7);font-size:11px;}
+.slide-btns{display:flex;gap:5px;}
+.sbtn{font-size:11px;border:none;padding:4px 9px;border-radius:20px;cursor:pointer;font-family:inherit;font-weight:600;color:#fff;}
+.sbtn-wa{background:#25D366;}
+.sbtn-tg{background:#0088cc;}
+.sbtn-ai{background:rgba(255,215,0,0.2);color:#FFD700;border:1px solid rgba(255,215,0,0.3);}
+.sprev,.snext{position:absolute;top:50%;transform:translateY(-60%);background:rgba(0,0,0,0.5);color:#fff;border:none;font-size:26px;width:34px;height:34px;border-radius:50%;cursor:pointer;z-index:10;display:flex;align-items:center;justify-content:center;}
+.sprev{left:8px;}
+.snext{right:8px;}
+.sdots{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:10;}
+.sdot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.4);cursor:pointer;transition:all 0.2s;}
+.sdot.on{background:#FFD700;width:18px;border-radius:4px;}
+.sctr{position:absolute;top:8px;right:10px;background:rgba(0,0,0,0.6);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;z-index:10;}
+.ai-box{background:#fff8e0;border-left:3px solid #FFD700;border-radius:0 8px 8px 0;padding:10px 14px;margin:0 16px 10px;font-size:13px;color:#856000;line-height:1.6;display:none;}
+.ai-box.on{display:block;}
+.poll{margin:8px 16px;border-radius:12px;border:1px solid var(--border);overflow:hidden;}
+.poll-head{background:linear-gradient(135deg,var(--green),#0d4726);padding:12px 14px;}
+.poll-lbl{color:#FFD700;font-size:10px;font-weight:700;letter-spacing:1px;margin-bottom:4px;}
+.poll-q{color:#fff;font-size:15px;font-weight:700;line-height:1.4;}
+.poll-body{padding:12px 14px;}
+.poll-opt{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;border:1px solid var(--border);margin-bottom:8px;cursor:pointer;background:var(--bg2);}
+.poll-opt.voted{border-color:var(--green);background:rgba(26,110,60,0.08);}
+.poll-opt-lbl{font-size:13px;font-weight:600;color:var(--text);min-width:80px;}
+.poll-bar-wrap{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden;}
+.poll-bar{height:100%;background:var(--green);border-radius:3px;transition:width 0.5s;width:0;}
+.poll-pct{font-size:12px;font-weight:700;color:var(--green);min-width:36px;text-align:right;}
+.poll-foot{font-size:11px;color:var(--text2);padding:0 14px 12px;display:flex;justify-content:space-between;align-items:center;}
+.poll-share{background:none;border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:11px;cursor:pointer;font-family:inherit;color:var(--text2);}
+.ad{margin:8px 16px;border-radius:8px;background:var(--bg2);border:1px dashed var(--border);padding:16px;text-align:center;color:var(--text2);font-size:12px;}
+.ad-lbl{font-size:10px;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;}
+.card{padding:12px 16px;border-bottom:1px solid var(--border);background:var(--bg);}
+.card.read{opacity:0.45;}
+.card-top{display:flex;gap:12px;cursor:pointer;margin-bottom:8px;}
+.thumb{width:72px;height:72px;border-radius:8px;flex-shrink:0;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;font-size:28px;}
+.thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;}
+.thumb-emoji{position:relative;z-index:1;}
+.tp{background:linear-gradient(135deg,#1a1a1a,#333);}
+.te{background:linear-gradient(135deg,#3d1a6e,#1e0d36);}
+.tb{background:linear-gradient(135deg,#5c2800,#3a1800);}
+.ts{background:linear-gradient(135deg,#0d4726,#062d17);}
+.tl{background:linear-gradient(135deg,#4a003a,#2d0023);}
+.tt{background:linear-gradient(135deg,#002a5c,#001a38);}
+.td{background:linear-gradient(135deg,#1a1a1a,#333);}
+.cbody{flex:1;min-width:0;}
+.ccat{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;}
+.cp{color:var(--red)}.ce{color:var(--purple)}.cb{color:var(--brown)}.cs{color:var(--green)}.cl{color:#c0006e}.ct{color:#0055cc}.cd{color:var(--text2)}
+.ctitle{font-size:14px;font-weight:600;color:var(--text);line-height:1.35;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.cfoot{display:flex;align-items:center;justify-content:space-between;}
+.csrc{font-size:11px;color:var(--text2);}
+.cbtns{display:flex;gap:2px;}
+.cbtns button{background:none;border:none;font-size:15px;cursor:pointer;padding:3px;}
+.rxrow{display:flex;gap:6px;padding:4px 0 2px;}
+.rx{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:3px 10px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:4px;font-family:inherit;}
+.rx.on{background:#fff8e0;border-color:#FFD700;color:#856000;font-weight:600;}
+.rx-cnt{font-size:11px;color:var(--text2);}
+.oga{display:flex;align-items:center;gap:12px;margin:8px 16px;padding:12px 14px;background:linear-gradient(135deg,#1a1a1a,#2a2a2a);border-radius:12px;cursor:pointer;border:1px solid #333;}
+.oga-icon{font-size:28px;}
+.oga-txt{flex:1;}
+.oga-title{color:#fff;font-size:14px;font-weight:700;}
+.oga-sub{color:#888;font-size:12px;margin-top:2px;}
+.oga-arr{color:#FFD700;font-size:20px;}
+.trend-sec{padding:14px 16px;}
+.trend-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
+.ttag{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:5px 13px;font-size:12px;color:var(--text);cursor:pointer;}
+.ttag:hover{border-color:#FFD700;color:#856000;background:#fff8e0;}
+.sidebar{display:none;padding:14px 16px;border-left:1px solid var(--border);position:sticky;top:110px;max-height:85vh;overflow-y:auto;}
+@media(min-width:768px){.sidebar{display:block;}}
+.src-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--text);}
+.src-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0;}
+.page{display:none;padding-bottom:80px;}
+.page.on{display:block;}
+#pg-home{display:block;}
+.search-wrap{padding:12px 16px;position:sticky;top:49px;background:var(--bg);z-index:90;border-bottom:1px solid var(--border);}
+.sinput{display:flex;align-items:center;background:var(--bg2);border-radius:24px;border:1px solid var(--border);padding:8px 14px;gap:8px;}
+.sinput input{flex:1;border:none;background:none;font-size:14px;color:var(--text);font-family:inherit;outline:none;}
+.about-hero{background:linear-gradient(160deg,#0d0d0d,#1a1a1a);padding:32px 20px 24px;text-align:center;}
+.about-card{background:var(--bg2);border-radius:12px;padding:16px;margin:12px 16px 0;border:1px solid var(--border);}
+.about-row{display:flex;gap:14px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border);}
+.about-icon{font-size:24px;width:40px;text-align:center;flex-shrink:0;}
+.contact-row{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--bg);text-decoration:none;border-bottom:1px solid var(--border);}
+.advert-box{background:linear-gradient(135deg,#1a6e3c,#0d4726);border-radius:12px;padding:16px;margin:12px 16px 0;}
+.sources-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;}
+.src-chip{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:13px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:6px;}
+.yt-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 16px;}
+.yt-card{border-radius:10px;overflow:hidden;border:1px solid var(--border);cursor:pointer;background:var(--bg);}
+.yt-thumb{width:100%;height:110px;background:#111;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.yt-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.yt-play{position:relative;z-index:2;width:38px;height:38px;background:rgba(255,0,0,0.85);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;padding-left:3px;}
+.yt-info{padding:8px 10px 10px;}
+.yt-title{font-size:13px;font-weight:600;color:var(--text);line-height:1.3;margin-bottom:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.yt-ch{font-size:11px;color:var(--text2);}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:500;display:none;align-items:flex-end;justify-content:center;}
+.overlay.on{display:flex;}
+.modal{background:var(--bg);border-radius:20px 20px 0 0;padding:20px 20px 32px;width:100%;max-width:480px;max-height:85vh;overflow-y:auto;}
+.mhandle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px;}
+.mtitle{font-size:16px;font-weight:700;margin-bottom:14px;color:var(--text);}
+.mclose{float:right;background:none;border:none;font-size:22px;cursor:pointer;color:var(--text2);}
+.minput{width:100%;border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:14px;font-family:inherit;background:var(--bg2);color:var(--text);margin-bottom:10px;outline:none;resize:vertical;min-height:40px;}
+.minput:focus{border-color:var(--green);}
+.mbtn{width:100%;background:var(--green);color:#fff;border:none;padding:12px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;}
+.hbtn.listening{color:#ff4444;animation:vpulse 1s ease-in-out infinite;}
+@keyframes vpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+.bnav{position:fixed;bottom:0;left:0;right:0;background:var(--bg);border-top:1px solid var(--border);display:flex;z-index:100;}
+.bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 0 8px;cursor:pointer;color:var(--text2);font-size:10px;border:none;background:none;font-family:inherit;position:relative;}
+.bnav-item.on{color:var(--black);}
+body.dark .bnav-item.on{color:#FFD700;}
+.bnav-icon{font-size:22px;}
+.bnav-badge{position:absolute;top:6px;right:calc(50% - 18px);background:var(--green);color:#fff;font-size:9px;font-weight:700;min-width:15px;height:15px;border-radius:8px;display:none;align-items:center;justify-content:center;}
+.bnav-badge.on{display:flex;}
+.loading{padding:40px 16px;text-align:center;color:var(--text2);}
+.spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:#FFD700;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.empty{padding:40px 16px;text-align:center;color:var(--text2);}
+.toast{position:fixed;bottom:85px;left:50%;transform:translateX(-50%);background:var(--black);color:#fff;padding:10px 20px;border-radius:24px;font-size:13px;z-index:999;opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap;}
+.toast.on{opacity:1;}
+/* FOUNDER CARD */
+.founder-card{display:flex;gap:16px;align-items:center;background:var(--bg2);border-radius:12px;padding:16px;margin:12px 16px 0;border:1px solid var(--border);}
+.founder-avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#1a6e3c,#0d4726);display:flex;align-items:center;justify-content:center;color:#FFD700;font-size:26px;font-weight:700;flex-shrink:0;overflow:hidden;}
+.founder-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.founder-name{font-size:17px;font-weight:700;color:var(--text);}
+.founder-role{font-size:13px;color:var(--text2);margin-top:3px;}
+.founder-bio{font-size:13px;color:var(--text);line-height:1.6;margin-top:6px;}
+
+/* ===== FLASH NIGERIA CLEAN V3 OVERRIDES ===== */
+body{background:#0b0b0b!important;color:#f4f4f4!important;}
+.header{position:relative!important;top:auto!important;background:#070707!important;border-bottom:1px solid #1d1d1d!important;box-shadow:none!important;}
+.dnav{background:#070707!important;border-bottom:1px solid #1a6e3c!important;}
+.breaking{position:relative!important;background:#106c38!important;}
+.cats-bar{position:relative!important;top:auto!important;background:#0b0b0b!important;border-bottom:1px solid #222!important;max-width:860px;margin:0 auto;padding:12px 14px!important;}
+.main{display:block!important;max-width:860px!important;margin:0 auto!important;}
+.feed{max-width:760px!important;margin:0 auto!important;padding-bottom:60px!important;}
+.sidebar{display:none!important;}
+.sotd{margin:16px 12px 14px!important;border-radius:18px!important;padding:18px!important;background:linear-gradient(135deg,#0f6d3b,#0b4d2b)!important;box-shadow:0 10px 25px rgba(0,0,0,.25)!important;}
+.sotd-title{font-size:17px!important;line-height:1.45!important;}
+.slider-wrap{margin:0 12px 16px!important;border-radius:18px!important;border:1px solid #2a2a2a!important;box-shadow:0 10px 30px rgba(0,0,0,.28)!important;}
+.slide-img{height:300px!important;}
+.poll{margin:18px 12px!important;border-radius:16px!important;}
+.ad{display:none!important;}
+.card{margin:0 12px!important;padding:14px 0!important;border-bottom:1px solid #252525!important;background:transparent!important;}
+.card.read{opacity:.9!important;}
+.card-top{align-items:center!important;}
+.thumb{width:92px!important;height:82px!important;border-radius:14px!important;font-size:26px!important;background:#1a1a1a!important;}
+.ctitle{font-size:15.5px!important;font-weight:750!important;line-height:1.35!important;color:#f2f2f2!important;-webkit-line-clamp:3!important;}
+.ccat{font-size:10px!important;margin-bottom:6px!important;}
+.csrc{font-size:12px!important;color:#aaa!important;}
+.cbtns button{font-size:16px!important;opacity:.9!important;}
+.rxrow{padding-left:104px!important;margin-top:-4px!important;}
+.oga{margin:20px 12px!important;border-radius:16px!important;background:#181818!important;}
+.trend-sec{padding:18px 12px!important;}
+.ttag{background:#171717!important;border-color:#2a2a2a!important;color:#eee!important;}
+.slbl{padding:18px 12px 10px!important;color:#cfcfcf!important;}
+.empty{margin:18px 12px!important;border:1px solid #242424!important;border-radius:18px!important;background:#121212!important;}
+.search-wrap{position:relative!important;top:auto!important;background:#0b0b0b!important;border-bottom:1px solid #222!important;}
+@media(max-width:767px){
+  .header{padding:12px!important;}
+  .logo-text{font-size:18px!important;}
+  .hbtns{gap:4px!important;}
+  .hbtn{font-size:18px!important;}
+  .slide-img{height:240px!important;}
+  .thumb{width:82px!important;height:74px!important;}
+  .rxrow{padding-left:94px!important;}
+  .bnav{background:#070707!important;border-top:1px solid #222!important;}
+}
+
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="splash-bolt">⚡</div>
+  <div class="splash-title">FLASH <span>NIGERIA</span></div>
+  <div class="splash-sub">Nigeria's Fastest News. Every Second.</div>
+  <div class="splash-bar"><div class="splash-fill"></div></div>
+</div>
+
+<!-- OGA REPORT MODAL -->
+<div class="overlay" id="ogaOverlay">
+  <div class="modal">
+    <div class="mhandle"></div>
+    <button class="mclose" onclick="closeOverlay('ogaOverlay')">✕</button>
+    <div class="mtitle">🚨 Oga, Report News!</div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:14px;">You sabi something? Tell us! Submit a news tip.</p>
+    <input class="minput" id="rName" placeholder="Your name (optional)"/>
+    <textarea class="minput" id="rText" placeholder="What happened? Where? When? Give us the full gist..." style="min-height:100px;"></textarea>
+    <input class="minput" id="rContact" placeholder="Phone/WhatsApp (optional)"/>
+    <button class="mbtn" onclick="submitReport()">🚨 Send Report</button>
+  </div>
+</div>
+
+<!-- VOICE MODAL -->
+<div class="overlay" id="voiceOverlay">
+  <div class="modal" style="text-align:center;padding:32px 24px 40px;">
+    <div class="mhandle"></div>
+    <div id="vIcon" style="font-size:56px;margin-bottom:12px;">🎤</div>
+    <div id="vStatus" style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px;">Listening...</div>
+    <div id="vHeard" style="font-size:14px;color:var(--text2);min-height:24px;margin-bottom:20px;font-style:italic;"></div>
+    <div style="background:var(--bg2);border-radius:12px;padding:14px;text-align:left;margin-bottom:20px;">
+      <div style="font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;margin-bottom:8px;">Try saying:</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.9;">
+        🗞️ "Take me to Punch News"<br/>
+        ⚽ "Show me Sports news"<br/>
+        🏛️ "Go to Politics"<br/>
+        🔍 "Search for Tinubu"<br/>
+        🔖 "Open saved articles"
+      </div>
+    </div>
+    <button onclick="closeOverlay('voiceOverlay')" style="background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:10px 24px;font-size:14px;cursor:pointer;font-family:inherit;color:var(--text);">Cancel</button>
+  </div>
+</div>
+
+<div class="flag-strip"></div>
+
+<!-- HEADER -->
+<div class="header">
+  <a class="logo" href="#">⚡ <span class="logo-text">FLASH <span>NIGERIA</span></span></a>
+  <div class="hbtns">
+    <button class="hbtn" onclick="startVoice()" id="voiceBtn" title="Voice">🎤</button>
+    <button class="hbtn" onclick="openOverlay('ogaOverlay')" title="Report news">🚨</button>
+    <button class="hbtn" onclick="toggleNotif()" id="notifBtn" title="Alerts">🔕</button>
+    <button class="hbtn" onclick="toggleDark()" id="darkBtn" title="Dark mode">🌙</button>
+    <button class="hbtn" onclick="refreshFeed()" title="Refresh">🔄<span class="badge" id="newBadge">0</span></button>
+  </div>
+</div>
+
+<!-- DESKTOP NAV -->
+<div class="dnav">
+  <a class="active" onclick="goPage('home',this)">🏠 Home</a>
+  <a onclick="goPage('trending',this)">⚡ Flash</a>
+  <a onclick="goPage('search',this)">🔍 Search</a>
+  <a onclick="goPage('saved',this)">🔖 Saved</a>
+  <a onclick="goPage('videos',this)">▶️ Videos</a>
+  <a onclick="goPage('about',this)">ℹ️ About</a>
+</div>
+
+<!-- BREAKING -->
+<div class="breaking">
+  <span class="breaking-lbl">⚡ FLASH</span>
+  <div class="ticker-wrap"><span class="ticker" id="ticker">Loading breaking news...</span></div>
+</div>
+
+<div class="rbar" id="rbar" onclick="applyNew()">⚡ New stories — tap to load</div>
+
+<!-- HOME PAGE -->
+<div class="page on" id="pg-home">
+  <div style="position:relative;">
+    <div class="cats-bar" id="catBar">
+      <button type="button" class="cat on" data-cat="all" onclick="selectCat('all', this); return false;">All</button>
+      <button type="button" class="cat" data-cat="politics" onclick="selectCat('politics', this); return false;">Politics</button>
+      <button type="button" class="cat" data-cat="entertainment" onclick="selectCat('entertainment', this); return false;">Entertainment</button>
+      <button type="button" class="cat" data-cat="sports" onclick="selectCat('sports', this); return false;">Sports</button>
+      <button type="button" class="cat" data-cat="business" onclick="selectCat('business', this); return false;">Business</button>
+      <button type="button" class="cat" data-cat="lifestyle" onclick="selectCat('lifestyle', this); return false;">Lifestyle</button>
+      <button type="button" class="cat" data-cat="tech" onclick="selectCat('tech', this); return false;">Tech</button>
+      <button type="button" class="filter-btn" onclick="toggleTDrop(); return false;">🕐 Filter</button>
+    </div>
+    <div class="tdrop" id="tdrop">
+      <div class="topt on" onclick="setTime('all',this)">📅 All time</div>
+      <div class="topt" onclick="setTime('1',this)">⚡ Last 1 hour</div>
+      <div class="topt" onclick="setTime('6',this)">🕐 Last 6 hours</div>
+      <div class="topt" onclick="setTime('24',this)">📆 Today</div>
+      <div class="topt" onclick="setTime('168',this)">📅 This week</div>
+    </div>
+  </div>
+  <div class="main">
+    <div class="feed" id="feed">
+      <div class="loading"><div class="spinner"></div>Fetching latest Naija news...</div>
+    </div>
+    <div class="sidebar" id="sidebar">
+      <div class="slbl">🔥 Trending</div>
+      <div id="sbTrending"></div>
+      <div class="slbl" style="margin-top:16px;">📡 Sources</div>
+      <div id="sbSources"></div>
+    </div>
+  </div>
+</div>
+
+<!-- TRENDING PAGE -->
+<div class="page" id="pg-trending">
+  <div style="padding:14px 16px 0;"><div class="slbl">🔥 Trending in Nigeria</div></div>
+  <div id="trendContent" style="padding:0 16px 16px;"></div>
+</div>
+
+<!-- SEARCH PAGE -->
+<div class="page" id="pg-search">
+  <div class="search-wrap">
+    <div class="sinput">
+      <span>🔍</span>
+      <input type="text" id="searchInput" placeholder="Search Nigerian news..." oninput="doSearch(this.value)"/>
+    </div>
+  </div>
+  <div id="searchResults" style="padding-top:8px;"></div>
+</div>
+
+<!-- SAVED PAGE -->
+<div class="page" id="pg-saved">
+  <div style="padding:14px 16px 0;"><div class="slbl">🔖 Saved Articles</div></div>
+  <div id="savedContent"></div>
+</div>
+
+<!-- VIDEOS PAGE -->
+<div class="page" id="pg-videos">
+  <div style="padding:14px 16px;"><div class="slbl">▶️ Nigeria on YouTube</div></div>
+  <div class="yt-grid" id="ytContent"></div>
+</div>
+
+<!-- ABOUT PAGE -->
+<div class="page" id="pg-about" style="padding-bottom:80px;">
+  <div class="about-hero">
+    <div style="font-size:48px;margin-bottom:8px;">⚡</div>
+    <div style="color:#fff;font-size:24px;font-weight:700;">FLASH <span style="color:#FFD700;">NIGERIA</span></div>
+    <div style="color:#888;font-size:13px;margin-top:6px;">Nigeria's Fastest News. Every Second.</div>
+    <div style="margin-top:14px;display:inline-block;background:#1a6e3c;color:#fff;font-size:11px;font-weight:700;padding:4px 14px;border-radius:20px;">🇳🇬 PROUDLY NIGERIAN</div>
+  </div>
+  <div class="about-card">
+    <p style="font-size:14px;line-height:1.7;color:var(--text);">Flash Nigeria gives every Nigerian — at home and in the diaspora — <strong>fast, reliable access to breaking news</strong> from across the country. No bias. No spam. Just Naija news — fast.</p>
+  </div>
+  <div style="padding:20px 20px 0;">
+    <div class="slbl">⚙️ How It Works</div>
+    <div class="about-row"><div class="about-icon">📡</div><div><strong style="font-size:14px;color:var(--text);">Live RSS Aggregation</strong><br/><span style="font-size:13px;color:var(--text2);">We pull live news every 10 minutes from 10+ trusted Nigerian outlets.</span></div></div>
+    <div class="about-row"><div class="about-icon">🤖</div><div><strong style="font-size:14px;color:var(--text);">AI-Powered Summaries</strong><br/><span style="font-size:13px;color:var(--text2);">Summarize any story instantly in 2-3 sentences.</span></div></div>
+    <div class="about-row"><div class="about-icon">🎤</div><div><strong style="font-size:14px;color:var(--text);">Voice Navigation</strong><br/><span style="font-size:13px;color:var(--text2);">Say "Take me to Punch" or "Show sports news" and the app navigates for you.</span></div></div>
+    <div class="about-row" style="border:none;"><div class="about-icon">🔔</div><div><strong style="font-size:14px;color:var(--text);">Smart Breaking Alerts</strong><br/><span style="font-size:13px;color:var(--text2);">Only real breaking news triggers a notification — no spam.</span></div></div>
+  </div>
+
+  <!-- ===== FOUNDER SECTION ===== -->
+  <div style="padding:20px 20px 0;">
+    <div class="slbl">👤 Meet the Founder</div>
+    <div class="founder-card">
+      <div class="founder-avatar">
+        <img src="founder.jpg" alt="Igbinosa, Founder of Flash Nigeria">
+      </div>
+      <div>
+        <div class="founder-name">Igbinosa</div>
+        <div class="founder-role">Founder &amp; Publisher · Flash Nigeria 🇳🇬</div>
+        <div class="founder-bio">Passionate about giving every Nigerian fast, unbiased access to the news that matters. Built Flash Nigeria to keep Naija informed — one flash at a time.</div>
+      </div>
+    </div>
+  </div>
+  <!-- ===== END FOUNDER SECTION ===== -->
+
+  <div style="padding:20px 20px 0;">
+    <div class="slbl">📰 News Sources</div>
+    <div class="sources-grid">
+      <div class="src-chip"><span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;"></span>Punch NG</div>
+      <div class="src-chip"><span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;"></span>Vanguard</div>
+      <div class="src-chip"><span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;"></span>TheCable</div>
+      <div class="src-chip"><span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;"></span>BellaNaija</div>
+      <div class="src-chip"><span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;"></span>Legit.ng</div>
+      <div class="src-chip"><span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;"></span>Premium Times</div>
+      <div class="src-chip"><span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;"></span>Channels TV</div>
+      <div class="src-chip"><span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;"></span>Naijaloaded</div>
+      <div class="src-chip"><span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;"></span>Tech Cabal</div>
+      <div class="src-chip"><span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;"></span>Nairametrics</div>
+    </div>
+  </div>
+
+  <div style="padding:20px 20px 0;">
+    <div class="slbl">📬 Contact Us</div>
+    <div style="border-radius:12px;overflow:hidden;border:1px solid var(--border);">
+      <a href="mailto:therealmrcommander@gmail.com" class="contact-row"><span style="font-size:22px;">📧</span><div><div style="font-size:13px;font-weight:600;color:var(--text);">Email</div><div style="font-size:12px;color:#0055cc;">therealmrcommander@gmail.com</div></div></a>
+      <a href="https://wa.me/2349050811412" target="_blank" class="contact-row"><span style="font-size:22px;">📲</span><div><div style="font-size:13px;font-weight:600;color:var(--text);">WhatsApp</div><div style="font-size:12px;color:#25D366;">+234 905 081 1412</div></div></a>
+      <div class="contact-row" style="cursor:pointer;" onclick="openOverlay('ogaOverlay')"><span style="font-size:22px;">🚨</span><div><div style="font-size:13px;font-weight:600;color:var(--text);">Submit a News Tip</div><div style="font-size:12px;color:var(--text2);">Got breaking news? Tell us!</div></div></div>
+    </div>
+  </div>
+
+  <div class="advert-box" style="margin:20px 20px 0;">
+    <div style="color:#FFD700;font-size:14px;font-weight:700;margin-bottom:6px;">💰 Advertise With Us!</div>
+    <div style="color:rgba(255,255,255,0.85);font-size:13px;line-height:1.6;margin-bottom:12px;">Reach millions of Nigerians at home and in the diaspora.</div>
+    <a href="mailto:therealmrcommander@gmail.com?subject=Advertising on Flash Nigeria" style="display:inline-block;background:#FFD700;color:#0d0d0d;font-size:13px;font-weight:700;padding:8px 18px;border-radius:20px;text-decoration:none;">📧 Get Advertising Rates</a>
+  </div>
+
+  <div class="about-card" style="margin:20px 16px 0;">
+    <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;">🔒 Privacy Policy</div>
+    <p style="font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:10px;">Flash Nigeria does not collect, store, or share any personal data. All preferences are stored locally on your device only.</p>
+    <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;">📋 Disclaimer</div>
+    <p style="font-size:12px;color:var(--text2);line-height:1.6;">Flash Nigeria aggregates news from third-party sources. We do not own the news content. All articles remain property of their respective publishers.</p>
+  </div>
+
+  <div style="padding:24px 20px;text-align:center;">
+    <div style="font-size:13px;font-weight:700;color:var(--text);">⚡ FLASH NIGERIA</div>
+    <div style="font-size:12px;color:var(--text2);margin-top:4px;">© 2026 Flash Nigeria. All rights reserved.</div>
+    <div style="font-size:11px;color:var(--text2);margin-top:4px;">Made with ❤️ for Nigeria 🇳🇬</div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bnav">
+  <button class="bnav-item on" data-page="home" onclick="goPage('home',this)"><span class="bnav-icon">🏠</span>Home</button>
+  <button class="bnav-item" data-page="trending" onclick="goPage('trending',this)"><span class="bnav-icon">⚡</span>Flash</button>
+  <button class="bnav-item" data-page="search" onclick="goPage('search',this)"><span class="bnav-icon">🔍</span>Search</button>
+  <button class="bnav-item" data-page="saved" onclick="goPage('saved',this)"><span class="bnav-icon">🔖</span>Saved<span class="bnav-badge" id="savedBadge">0</span></button>
+  <button class="bnav-item" data-page="videos" onclick="goPage('videos',this)"><span class="bnav-icon">▶️</span>Videos</button>
+  <button class="bnav-item" data-page="about" onclick="goPage('about',this)"><span class="bnav-icon">ℹ️</span>About</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SOURCES = [
+  {n:'Punch', rssUrl:'https://feeds.punch.ng/', c:'politics'},
+  {n:'Vanguard', rssUrl:'https://www.vanguardngr.com/feed/', c:'business'},
+  {n:'TheCable', rssUrl:'https://www.thecable.ng/feed', c:'politics'},
+  {n:'BellaNaija', rssUrl:'https://www.bellanaija.com/feed/', c:'entertainment'},
+  {n:'Legit.ng', rssUrl:'https://www.legit.ng/rss/all.rss', c:'entertainment'},
+  {n:'Premium Times', rssUrl:'https://www.premiumtimesng.com/feed/', c:'politics'},
+  {n:'Channels TV', rssUrl:'https://www.channelstv.com/feed/', c:'politics'},
+  {n:'Naijaloaded', rssUrl:'https://naijaloaded.com.ng/feed/', c:'entertainment'},
+  {n:'Tech Cabal', rssUrl:'https://techcabal.com/feed/', c:'tech'},
+  {n:'Nairametrics', rssUrl:'https://nairametrics.com/feed/', c:'business'},
+];
+
+const POLLS = [
+  {q:'Should state police be created in Nigeria?', opts:['Yes, we need am!','No, too dangerous','Depends on state']},
+  {q:'Who is doing better — FG or State Govts?', opts:['Federal Government','State Governments','Both dey try','Both dey fail']},
+  {q:'Is the naira getting better?', opts:['Yes, improving','No, still suffering','Too early to say']},
+  {q:'Best Nigerian musician right now?', opts:['Burna Boy','Wizkid','Davido','Asake']},
+];
+
+const YT = [
+  {title:'Channels TV — Live Nigerian News', ch:'Channels TV', vid:'hGlyGtCRLwc', q:'channels tv nigeria news today'},
+  {title:'Super Eagles — Latest Highlights', ch:'CAF TV', vid:'Y_XeNgFMhQk', q:'super eagles highlights 2026'},
+  {title:'Burna Boy — Latest Music', ch:'Burna Boy', vid:'O3j_kSDluys', q:'burna boy new song 2026'},
+  {title:'Nollywood — Latest Movies', ch:'Nollywood', vid:'9bZkp7q19f0', q:'nollywood movie 2026'},
+  {title:'Nigerian Politics Today', ch:'Arise News', vid:'gCNeDWCI0vo', q:'nigeria politics today 2026'},
+  {title:'Wizkid — Latest Video', ch:'Wizkid', vid:'xvFZjo5PgG0', q:'wizkid 2026 music'},
+  {title:'Nigerian Comedy Skits', ch:'Nasty Blaq', vid:'dQw4w9WgXcQ', q:'nigerian comedy skit 2026'},
+  {title:'Naija Food & Culture', ch:'All Nigerian Recipes', vid:'eVli-tstM5E', q:'nigerian food recipe'},
+];
+
+const CKEYS = {
+  tech:['technology','telecom','internet','mobile data','smartphone','cyber','blockchain','crypto','software','artificial intelligence','opay','flutterwave','paystack','kuda','mtn','airtel','glo','broadband','5g','computer','digital','startup','operators dispute'],
+  politics:['tinubu','senate','inec','government','election','minister','aso rock','presidency','governor','house of reps','national assembly','police','army','military','court','supreme court','obi','atiku','apc','pdp','lawmakers','foreign policy','protest','strike','rally','vote','federal government','fg ','condemns','retaliation'],
+  sports:['super eagles','afcon','premier league','basketball','athletics','olympics','chelsea','arsenal','man united','liverpool','match','goal','fifa','caf','transfer','coach','stadium','world cup','boxing','tennis','sport'],
+  business:['economy','gdp','inflation','market','stock','investment','oil','gas','dangote','bank','forex','naira','dollar','trade','export','import','revenue','budget','firs','customs','interest rate','cbn','efcc','nnpc','petrol','fuel','pension','salary','tax'],
+  lifestyle:['health','food','recipe','travel','beauty','skincare','wellness','fitness','diet','family','relationship','love','marriage','wedding','pregnancy','baby','church','pastor','hair','makeup','fashion','mental health'],
+  entertainment:['music','award','film','movie','nollywood','afrobeats','celebrity','singer','actor','actress','wizkid','burna','davido','tems','rema','concert','bbnaija','big brother','reality','comedy','album','premiere','red carpet'],
+};
+
+const CICONS = {politics:'🏛️',entertainment:'🎬',sports:'⚽',business:'📈',lifestyle:'✨',tech:'💻',default:'📰'};
+const CBGS = {politics:'linear-gradient(135deg,#1a1a1a,#333)',entertainment:'linear-gradient(135deg,#3d1a6e,#1e0d36)',sports:'linear-gradient(135deg,#0d4726,#062d17)',business:'linear-gradient(135deg,#5c2800,#3a1800)',lifestyle:'linear-gradient(135deg,#4a003a,#2d0023)',tech:'linear-gradient(135deg,#002a5c,#001a38)',default:'linear-gradient(135deg,#1a1a1a,#333)'};
+const CTHUMBS = {politics:'tp',entertainment:'te',business:'tb',sports:'ts',lifestyle:'tl',tech:'tt',default:'td'};
+const CCATS = {politics:'cp',entertainment:'ce',business:'cb',sports:'cs',lifestyle:'cl',tech:'ct',default:'cd'};
+
+var articles=[], pending=[], saved=JSON.parse(localStorage.getItem('fn_saved')||'[]');
+var reads=new Set(JSON.parse(localStorage.getItem('fn_reads')||'[]'));
+var rxs=JSON.parse(localStorage.getItem('fn_rxs')||'{}');
+var pvotes=JSON.parse(localStorage.getItem('fn_pvotes')||'{}');
+var curCat='all', curTime='all', curPoll=0;
+var slides=[], slideIdx=0, slideTimer=null;
+var isDark=localStorage.getItem('fn_dark')==='1';
+var notifOn=localStorage.getItem('fn_notif')==='1';
+var refreshTimer=null;
+
+// INIT
+window.addEventListener('load', function(){
+  // Emergency cache refresh: remove old PWA cache/service worker so new buttons work
+  try{ if('serviceWorker' in navigator){ navigator.serviceWorker.getRegistrations().then(function(regs){regs.forEach(function(r){r.unregister();});}); } }catch(e){}
+  try{ if(window.caches){ caches.keys().then(function(keys){keys.forEach(function(k){caches.delete(k);});}); } }catch(e){}
+  if(isDark) document.body.classList.add('dark');
+  updateDarkBtn(); updateNotifBtn(); updateSavedBadge();
+  loadYT();
+  setTimeout(function(){
+    document.getElementById('splash').classList.add('hide');
+    setTimeout(function(){var s=document.getElementById('splash');if(s)s.remove();},700);
+  },2200);
+  setTimeout(function(){
+    loadFeed();
+    // service worker disabled during UI cleanup to prevent stale cache
+    scheduleRefresh();
+  },400);
+});
+
+// DARK MODE
+function toggleDark(){isDark=!isDark;document.body.classList.toggle('dark',isDark);localStorage.setItem('fn_dark',isDark?'1':'0');updateDarkBtn();}
+function updateDarkBtn(){document.getElementById('darkBtn').textContent=isDark?'☀️':'🌙';}
+
+// NOTIFICATIONS
+function toggleNotif(){
+  if(!('Notification' in window)){showToast('Browser no support notifications');return;}
+  if(notifOn){notifOn=false;localStorage.setItem('fn_notif','0');updateNotifBtn();showToast('🔕 Alerts turned OFF');return;}
+  Notification.requestPermission().then(function(p){
+    if(p==='granted'){notifOn=true;localStorage.setItem('fn_notif','1');updateNotifBtn();showToast('🔔 Breaking alerts ON!');sendNotif('Flash Nigeria','Breaking news alerts activated!');}
+    else showToast('Permission denied');
+  });
+}
+function updateNotifBtn(){document.getElementById('notifBtn').textContent=notifOn?'🔔':'🔕';}
+function sendNotif(title,body){
+  if(!notifOn||Notification.permission!=='granted') return;
+  try{new Notification('⚡ '+title,{body:body,tag:'flash-ng'});}catch(ex){}
+}
+
+// AUTO REFRESH
+function scheduleRefresh(){clearTimeout(refreshTimer);refreshTimer=setTimeout(silentRefresh,10*60*1000);}
+async function silentRefresh(){
+  var fresh=await fetchAll();
+  if(!fresh.length){scheduleRefresh();return;}
+  var ids=new Set(articles.map(function(a){return a.id;}));
+  var newOnes=fresh.filter(function(a){return !ids.has(a.id);});
+  if(newOnes.length>0){
+    pending=fresh;
+    var rb=document.getElementById('rbar');
+    rb.textContent='⚡ '+newOnes.length+' new '+(newOnes.length===1?'story':'stories')+' — tap to load';
+    rb.classList.add('on');
+    var nb=document.getElementById('newBadge');nb.textContent=newOnes.length;nb.classList.add('on');
+    var brk=newOnes.find(function(a){return /breaking|just in|dead|killed|arrested|explosion|emergency|attack|crash|resign/i.test(a.title);});
+    if(brk) sendNotif(brk.title,brk.n+' · Flash Nigeria');
+  }
+  scheduleRefresh();
+}
+function applyNew(){
+  if(pending.length){articles=pending;pending=[];}
+  document.getElementById('rbar').classList.remove('on');
+  var nb=document.getElementById('newBadge');nb.classList.remove('on');
+  updateTicker();renderFeed(curCat);renderTrending();
+  showToast('⚡ Feed updated!');
+}
+
+// =============================================
+// IMAGE EXTRACTION — stronger RSS image detection
+// =============================================
+function extractImage(item, rawDesc) {
+  rawDesc = rawDesc || '';
+
+  // 1. RSS enclosure images
+  var encs = item.querySelectorAll('enclosure');
+  for (var i = 0; i < encs.length; i++) {
+    var eu = encs[i].getAttribute('url');
+    var et = encs[i].getAttribute('type') || '';
+    if (eu && (/image/i.test(et) || /\.(jpg|jpeg|png|webp|gif)(\?|$)/i.test(eu))) return eu.trim();
+  }
+
+  // 2. Media RSS tags. querySelector needs escaped colon.
+  var mediaTags = ['media\:content','media\:thumbnail','content','thumbnail'];
+  for (var m = 0; m < mediaTags.length; m++) {
+    var els = item.querySelectorAll(mediaTags[m]);
+    for (var j = 0; j < els.length; j++) {
+      var u = els[j].getAttribute('url') || els[j].textContent;
+      if (u && /\.(jpg|jpeg|png|webp|gif)(\?|$)/i.test(u)) return u.trim();
+    }
+  }
+
+  // 3. WordPress featured image tags sometimes appear with namespaces.
+  var all = item.getElementsByTagName('*');
+  for (var k = 0; k < all.length; k++) {
+    var name = (all[k].nodeName || '').toLowerCase();
+    if (name.indexOf('thumbnail') >= 0 || name.indexOf('content') >= 0 || name.indexOf('image') >= 0) {
+      var au = all[k].getAttribute && (all[k].getAttribute('url') || all[k].getAttribute('src'));
+      if (au && /\.(jpg|jpeg|png|webp|gif)(\?|$)/i.test(au)) return au.trim();
+    }
+  }
+
+  // 4. Inline image in description/content HTML.
+  var imgMatch = rawDesc.match(/<img[^>]+src=["']([^"']+)["']/i);
+  if (imgMatch && imgMatch[1]) return imgMatch[1].trim();
+
+  // 5. Any direct image URL inside CDATA/description.
+  var urlMatch = rawDesc.match(/https?:\/\/[^"' <>()]+?\.(jpg|jpeg|png|webp|gif)(\?[^"' <>()]*)?/i);
+  if (urlMatch && urlMatch[0]) return urlMatch[0].trim();
+
+  return null;
+}
+
+// Route external images through our Vercel image proxy to avoid hotlink/referrer blocks.
+function proxyImg(url) {
+  if (!url) return '';
+  if (/^data:/i.test(url) || url.indexOf(location.origin) === 0 || url.indexOf('/') === 0) return url;
+  return '/api/image?url=' + encodeURIComponent(url);
+}
+
+// FETCH
+async function fetchAll(){
+  var results=await Promise.allSettled(SOURCES.map(fetchSource));
+  var all=results.flatMap(function(r){return r.status==='fulfilled'?r.value:[];});
+  all.sort(function(a,b){return new Date(b.pub)-new Date(a.pub);});
+  return all;
+}
+
+async function fetchSource(src){
+  var proxyUrl='/api/news?url='+encodeURIComponent(src.rssUrl);
+  try{
+    var res=await fetch(proxyUrl,{signal:AbortSignal.timeout(12000)});
+    if(!res.ok) throw new Error('proxy '+res.status);
+    var text=await res.text();
+    var parser=new DOMParser();
+    var xml=parser.parseFromString(text,'application/xml');
+    // fallback parse
+    if(xml.querySelector('parsererror')) xml=parser.parseFromString(text,'text/xml');
+    var items=xml.querySelectorAll('item');
+    if(!items.length) return [];
+    return Array.from(items).slice(0,12).map(function(item){
+      var title=(item.querySelector('title')&&item.querySelector('title').textContent||'').trim();
+      var link='#';
+      // <link> can be a text node or CDATA — handle both
+      var linkEl=item.querySelector('link');
+      if(linkEl){
+        link=linkEl.textContent.trim()||linkEl.getAttribute('href')||'#';
+      }
+      var pub=item.querySelector('pubDate')&&item.querySelector('pubDate').textContent||'';
+      // Get raw description including HTML tags for image extraction
+      var descEl=item.querySelector('description')||item.querySelector('encoded');
+      var rawDesc=descEl?descEl.textContent:'';
+      var cleanDesc=rawDesc.replace(/<[^>]+>/g,'').trim().slice(0,200);
+      // *** FIXED IMAGE EXTRACTION ***
+      var img=extractImage(item, rawDesc);
+      var cat=detectCat(title+' '+cleanDesc, src.c);
+      var id=safeId(link);
+      return {title:title,link:link,pub:pub,desc:cleanDesc,img:img,n:src.n,cat:cat,id:id};
+    });
+  }catch(ex){
+    console.warn('Feed failed:',src.n,ex.message);
+    return [];
+  }
+}
+
+function safeId(s){try{return btoa(unescape(encodeURIComponent(s))).slice(0,20);}catch(ex){return Math.random().toString(36).slice(2,12);}}
+function detectCat(text,fb){
+  var l=text.toLowerCase();
+  var order=['tech','politics','sports','business','lifestyle','entertainment'];
+  for(var i=0;i<order.length;i++){var cat=order[i];var keys=CKEYS[cat];for(var j=0;j<keys.length;j++){if(l.indexOf(keys[j])>=0)return cat;}}
+  return fb||'default';
+}
+
+async function loadFeed(){
+  document.getElementById('feed').innerHTML='<div class="loading"><div class="spinner"></div>Fetching latest Naija news...</div>';
+  articles=await fetchAll();
+  if(!articles.length){
+    document.getElementById('feed').innerHTML='<div class="empty">📡<br/><br/>Could not load news.<br/>Check your connection and refresh.</div>';
+    return;
+  }
+  updateTicker();renderFeed(curCat);renderTrending();updateSidebar();
+}
+function refreshFeed(){showToast('⚡ Refreshing...');loadFeed();}
+
+// TICKER
+function updateTicker(){
+  var items=articles.slice(0,8).map(function(a){return '<span class="tick-item">'+e(a.n)+': '+e(a.title)+'</span>';}).join('');
+  var t=document.getElementById('ticker');
+  t.innerHTML=items+items;
+}
+
+// RENDER FEED
+function renderFeed(cat){
+  curCat=cat;
+  var list=cat==='all'?articles:articles.filter(function(a){return a.cat===cat;});
+  var usingFallback=false;
+  if(curTime!=='all'){
+    var cut=Date.now()-parseInt(curTime)*3600000;
+    var f=list.filter(function(a){return new Date(a.pub).getTime()>=cut;});
+    if(f.length) list=f;
+  }
+  if(!list.length){
+    usingFallback=true;
+    list=articles.slice(0,12);
+  }
+  if(!list.length){
+    document.getElementById('feed').innerHTML='<div class="empty">📡<br/><br/>Could not load news.<br/>Refresh the page.</div>';
+    return;
+  }
+  slides=list.slice(0,5);
+  var rest=list.slice(5);
+  var h='';
+  var sotd=list[0] || articles[0];
+  if(usingFallback){
+    h+='<div class="empty" style="padding:18px;text-align:left;">'+(CICONS[cat]||'📰')+' <strong>No fresh '+e(cat)+' stories yet.</strong><br/><span style="color:var(--text2);font-size:13px;">Showing latest top stories instead.</span></div>';
+  }
+  if(sotd){
+    h+='<div class="sotd" id="sotd" data-link="'+e(sotd.link)+'" data-id="'+sotd.id+'">';
+    h+='<div class="sotd-lbl">⭐ TOP STORY</div>';
+    h+='<div class="sotd-title">'+e(sotd.title)+'</div>';
+    h+='<div class="sotd-meta">'+e(sotd.n)+' · '+ago(sotd.pub)+'</div>';
+    h+='</div>';
+  }
+  h+='<div class="slbl">⚡ Featured stories</div>';
+  h+=buildSlider();
+  h+='<div class="ai-box" id="aiBox"></div>';
+  h+='<div class="slbl">📰 Latest news</div>';
+  rest.slice(0,18).forEach(function(a){h+=buildCard(a);});
+  h+=buildTrendingInline();
+  h+='<div class="oga" onclick="openOverlay('ogaOverlay')">';
+  h+='<div class="oga-icon">🚨</div>';
+  h+='<div class="oga-txt"><div class="oga-title">Oga, You Sabi Something?</div><div class="oga-sub">Submit a news tip — we go investigate am!</div></div>';
+  h+='<div class="oga-arr">›</div></div>';
+  h+='<div class="slbl">🗳️ Naija Poll</div>';
+  h+=buildPoll(curPoll);
+  document.getElementById('feed').innerHTML=h;
+  slideIdx=0;startSlider();
+}
+
+// SLIDER
+function buildSlider(){
+  if(!slides.length) return '';
+  var dots=slides.map(function(_,i){return '<span class="sdot'+(i===0?' on':'')+'" onclick="goSlide('+i+')"></span>';}).join('');
+  var sls=slides.map(function(a,i){return buildSlide(a,i);}).join('');
+  return '<div class="slider-wrap" id="sliderWrap">'+
+    '<div class="slider-track" id="sliderTrack">'+sls+'</div>'+
+    '<button class="sprev" onclick="prevSlide()">&#8249;</button>'+
+    '<button class="snext" onclick="nextSlide()">&#8250;</button>'+
+    '<div class="sdots" id="sdots">'+dots+'</div>'+
+    '<div class="sctr" id="sctr">1 / '+slides.length+'</div>'+
+    '</div>';
+}
+
+function buildSlide(a,i){
+  var bg=CBGS[a.cat]||CBGS.default;
+  var imgHtml='';
+  if(a.img){
+    imgHtml='<img src="'+e(proxyImg(a.img))+'" alt="" referrerpolicy="no-referrer" onerror="this.style.display=\'none\'" loading="lazy"/>';
+  }
+  var fallback='<div class="slide-fallback">'+(CICONS[a.cat]||'📰')+'</div>';
+  var h='<div class="slide">';
+  h+='<div class="slide-img" style="background:'+bg+'" data-link="'+e(a.link)+'" data-id="'+a.id+'" onclick="openA(this)">';
+  h+=imgHtml+fallback;
+  h+='<div class="slide-overlay">';
+  h+='<div><span class="slide-cat-badge">⚡ '+(a.cat||'FLASH').toUpperCase()+'</span><span class="slide-src">'+e(a.n)+'</span></div>';
+  h+='<div class="slide-title">'+e(a.title)+'</div>';
+  h+='<div class="slide-foot">';
+  h+='<span class="slide-time">🕐 '+ago(a.pub)+'</span>';
+  h+='<div class="slide-btns">';
+  h+='<button class="sbtn sbtn-wa" data-t="'+ej(a.title)+'" data-u="'+ej(a.link)+'" onclick="event.stopPropagation();doWA(this)">📲</button>';
+  h+='<button class="sbtn sbtn-tg" data-t="'+ej(a.title)+'" data-u="'+ej(a.link)+'" onclick="event.stopPropagation();doTG(this)">✈️</button>';
+  h+='<button class="sbtn sbtn-ai" data-t="'+ej(a.title)+'" data-d="'+ej(a.desc)+'" onclick="event.stopPropagation();doAI(this)">✨ AI</button>';
+  h+='</div></div></div></div></div>';
+  return h;
+}
+
+function startSlider(){clearInterval(slideTimer);if(!slides||slides.length<2)return;slideTimer=setInterval(nextSlide,5000);}
+function nextSlide(){if(!slides||!slides.length)return;slideIdx=(slideIdx+1)%slides.length;updateSlider();}
+function prevSlide(){slideIdx=(slideIdx-1+slides.length)%slides.length;updateSlider();}
+function goSlide(i){slideIdx=i;updateSlider();clearInterval(slideTimer);slideTimer=setInterval(nextSlide,5000);}
+function updateSlider(){
+  var t=document.getElementById('sliderTrack');if(!t)return;
+  t.style.transform='translateX(-'+(slideIdx*100)+'%)';
+  document.querySelectorAll('.sdot').forEach(function(d,i){d.classList.toggle('on',i===slideIdx);});
+  var c=document.getElementById('sctr');if(c)c.textContent=(slideIdx+1)+' / '+slides.length;
+  var ab=document.getElementById('aiBox');if(ab){ab.classList.remove('on');ab.dataset.loaded='';ab.textContent='';}
+}
+
+// AI SUMMARY
+async function doAI(btn){
+  var box=document.getElementById('aiBox');if(!box)return;
+  if(box.classList.contains('on')&&box.dataset.loaded){box.classList.remove('on');return;}
+  box.classList.add('on');box.textContent='✨ Generating AI summary...';
+  try{
+    var res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',max_tokens:1000,
+        system:'You are a concise Nigerian news summarizer. Summarize in 2-3 sentences, plain English. Start with the key fact.',
+        messages:[{role:'user',content:'Title: '+btn.dataset.t+'\nSnippet: '+btn.dataset.d+'\n\nSummarize in 2-3 sentences.'}]
+      })
+    });
+    var data=await res.json();
+    box.dataset.loaded='1';
+    box.innerHTML='<strong>⚡ AI Summary:</strong> '+(data.content&&data.content[0]?data.content[0].text:'Summary unavailable.');
+  }catch(ex){box.textContent='Summary unavailable.';}
+}
+
+// POLL
+function buildPoll(idx){
+  var poll=POLLS[idx%POLLS.length];var voted=pvotes[idx];
+  var opts=poll.opts.map(function(o,i){
+    var v=Math.floor(Math.random()*80+20);var total=poll.opts.length*50||1;var pct=Math.round((v/total)*100);var isV=voted===i;
+    return '<div class="poll-opt'+(isV?' voted':'')+'" onclick="votePoll('+idx+','+i+',this)">'+
+      '<div class="poll-opt-lbl">'+o+'</div>'+
+      '<div class="poll-bar-wrap"><div class="poll-bar" style="width:'+(isV?pct:0)+'%"></div></div>'+
+      '<div class="poll-pct">'+(isV?pct+'%':'')+'</div></div>';
+  }).join('');
+  return '<div class="poll"><div class="poll-head"><div class="poll-lbl">🗳️ NAIJA POLL</div><div class="poll-q">'+poll.q+'</div></div>'+
+    '<div class="poll-body">'+opts+'</div>'+
+    '<div class="poll-foot"><span>Tap to vote</span><button class="poll-share" onclick="doWAText(\'Flash Nigeria Poll: '+poll.q+'\',\'https://flash-nigeria.vercel.app\')">📲 Share</button></div></div>';
+}
+function votePoll(pi,oi,el){
+  if(pvotes[pi]!==undefined){showToast('You don vote already!');return;}
+  pvotes[pi]=oi;localStorage.setItem('fn_pvotes',JSON.stringify(pvotes));
+  var opts=el.closest('.poll-body').querySelectorAll('.poll-opt');
+  var fv=Array.from({length:opts.length},function(){return Math.floor(Math.random()*80+20);});
+  fv[oi]+=50;var total=fv.reduce(function(a,b){return a+b;},0);
+  opts.forEach(function(o,i){
+    o.classList.toggle('voted',i===oi);
+    var bar=o.querySelector('.poll-bar');var pct=o.querySelector('.poll-pct');var p=Math.round((fv[i]/total)*100);
+    if(bar)bar.style.width=p+'%';if(pct)pct.textContent=p+'%';
+  });
+  curPoll++;showToast('✅ Vote recorded!');
+}
+
+// CARD
+function buildCard(a){
+  var tc=CTHUMBS[a.cat]||'td';var cc=CCATS[a.cat]||'cd';
+  var isSaved=saved.some(function(s){return s.id===a.id;});var isRead=reads.has(a.id);
+  var imgH='';
+  if(a.img){
+    imgH='<img src="'+e(proxyImg(a.img))+'" alt="" referrerpolicy="no-referrer" onerror="this.style.display=\'none\'" loading="lazy"/>';
+  }
+  imgH+='<span class="thumb-emoji">'+(CICONS[a.cat]||'📰')+'</span>';
+  var rxData=rxs[a.id]||{};
+  var rxH=['😮','🔥','💔','😂'].map(function(em){
+    var cnt=rxData[em]||0;var isR=rxData['_m']===em;
+    return '<button class="rx'+(isR?' on':'')+'" onclick="doRx(\''+a.id+'\',\''+em+'\',this)">'+em+' <span class="rx-cnt">'+(cnt>0?cnt:'')+'</span></button>';
+  }).join('');
+  var h='<div class="card'+(isRead?' read':'')+'">';
+  h+='<div class="card-top" data-link="'+e(a.link)+'" data-id="'+a.id+'" onclick="openA(this)">';
+  h+='<div class="thumb '+tc+'">'+imgH+'</div>';
+  h+='<div class="cbody">';
+  h+='<div class="ccat '+cc+'">'+(a.cat||'news').toUpperCase()+'</div>';
+  h+='<div class="ctitle">'+e(a.title)+'</div>';
+  h+='<div class="cfoot"><span class="csrc">'+e(a.n)+' · '+ago(a.pub)+'</span>';
+  h+='<div class="cbtns">';
+  h+='<button data-t="'+ej(a.title)+'" data-u="'+ej(a.link)+'" onclick="event.stopPropagation();doWA(this)" title="WhatsApp">📲</button>';
+  h+='<button data-t="'+ej(a.title)+'" data-u="'+ej(a.link)+'" onclick="event.stopPropagation();doTG(this)" title="Telegram">✈️</button>';
+  h+='<button data-u="'+ej(a.link)+'" onclick="event.stopPropagation();doCopy(this)" title="Copy">🔗</button>';
+  h+='<button class="save-btn" data-id="'+a.id+'" onclick="event.stopPropagation();doSave(this)">'+(isSaved?'🔖':'➕')+'</button>';
+  h+='</div></div></div></div>';
+  h+='<div class="rxrow" id="rx-'+a.id+'">'+rxH+'</div>';
+  h+='</div>';
+  return h;
+}
+
+// TRENDING
+function buildTrendingInline(){
+  var kw=trending(12);if(!kw.length)return '';
+  return '<div class="trend-sec"><div class="slbl">🔥 Trending in Nigeria</div><div class="trend-tags">'+kw.map(function(k){return '<span class="ttag" onclick="searchTag(\''+k+'\')">'+k+'</span>';}).join('')+'</div></div>';
+}
+function renderTrending(){
+  var kw=trending(24);
+  var tags=kw.map(function(k){return '<span class="ttag" onclick="searchTag(\''+k+'\')">'+k+'</span>';}).join('');
+  var srcs=SOURCES.map(function(s){return '<div class="src-row"><span class="src-dot"></span>'+s.n+'<span style="margin-left:auto;font-size:11px;color:var(--green);font-weight:600;">● LIVE</span></div>';}).join('');
+  document.getElementById('trendContent').innerHTML='<p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Most talked-about topics in Nigerian news right now.</p><div class="trend-tags" style="gap:10px;margin-bottom:20px;">'+tags+'</div><div class="slbl">📡 Sources</div>'+srcs;
+  updateSidebar();
+}
+function trending(n){
+  var stop=new Set(['the','and','for','that','with','this','from','have','been','will','were','are','was','into','also','more','than','over','after','but','not','all','has','had','new','can','said','says','who','about','what','when','how','one','two','they','their','them','his','her','our','out','any','may','which','just','top','ago','now','like','post','state','world','first','read','list','over','amid','gets','back','says','make','made']);
+  var boost=new Set(['tinubu','naira','nigeria','lagos','abuja','senate','inec','dangote','obi','atiku','nollywood','afrobeats','eagles','afcon','cbn','efcc','nnpc','buhari','wike','police']);
+  var freq={};
+  articles.forEach(function(a){
+    var words=(a.title).toLowerCase().match(/\b[a-z]{4,}\b/g)||[];
+    words.forEach(function(w){if(!stop.has(w))freq[w]=(freq[w]||0)+(boost.has(w)?3:1);});
+  });
+  return Object.entries(freq).sort(function(a,b){return b[1]-a[1];}).slice(0,n).map(function(pair){return '#'+pair[0].charAt(0).toUpperCase()+pair[0].slice(1);});
+}
+function updateSidebar(){
+  var kw=trending(15);
+  var sb=document.getElementById('sbTrending');if(sb)sb.innerHTML=kw.map(function(k){return '<div class="ttag" style="display:block;margin-bottom:6px;" onclick="searchTag(\''+k+'\')">'+k+'</div>';}).join('');
+  var ss=document.getElementById('sbSources');if(ss)ss.innerHTML=SOURCES.map(function(s){return '<div class="src-row"><span class="src-dot"></span>'+s.n+'</div>';}).join('');
+}
+
+// REACTIONS
+function doRx(id,em,btn){
+  var rx=rxs[id]||{};var prev=rx['_m'];
+  if(prev===em){rx[em]=Math.max(0,(rx[em]||1)-1);delete rx['_m'];}
+  else{if(prev)rx[prev]=Math.max(0,(rx[prev]||1)-1);rx[em]=(rx[em]||0)+1;rx['_m']=em;}
+  rxs[id]=rx;localStorage.setItem('fn_rxs',JSON.stringify(rxs));
+  var row=document.getElementById('rx-'+id);
+  if(row){row.innerHTML=['😮','🔥','💔','😂'].map(function(e2){var cnt=rx[e2]||0;var isR=rx['_m']===e2;return '<button class="rx'+(isR?' on':'')+'" onclick="doRx(\''+id+'\',\''+e2+'\',this)">'+e2+' <span class="rx-cnt">'+(cnt>0?cnt:'')+'</span></button>';}).join('');}
+}
+
+// SAVE
+function doSave(btn){
+  var id=btn.dataset.id;var art=articles.find(function(a){return a.id===id;})||saved.find(function(a){return a.id===id;});
+  if(!art)return;
+  var idx=saved.findIndex(function(s){return s.id===id;});
+  if(idx>=0){saved.splice(idx,1);btn.textContent='➕';showToast('Removed from saved');}
+  else{saved.push(art);btn.textContent='🔖';showToast('⚡ Saved!');}
+  localStorage.setItem('fn_saved',JSON.stringify(saved));updateSavedBadge();
+}
+function updateSavedBadge(){var b=document.getElementById('savedBadge');if(saved.length>0){b.textContent=saved.length;b.classList.add('on');}else b.classList.remove('on');}
+function renderSaved(){
+  if(!saved.length){document.getElementById('savedContent').innerHTML='<div class="empty">🔖<br/><br/>No saved articles yet.<br/>Tap ➕ to save.</div>';return;}
+  document.getElementById('savedContent').innerHTML=saved.map(buildCard).join('');
+}
+
+// SEARCH
+function doSearch(q){
+  if(!q.trim()){document.getElementById('searchResults').innerHTML='';return;}
+  var ql=q.toLowerCase();
+  var res=articles.filter(function(a){return a.title.toLowerCase().indexOf(ql)>=0||a.desc.toLowerCase().indexOf(ql)>=0;});
+  document.getElementById('searchResults').innerHTML=res.length?res.slice(0,20).map(buildCard).join(''):'<div class="empty">🔍<br/><br/>No results for "'+e(q)+'"</div>';
+}
+function searchTag(k){goPage('search',document.querySelector('[data-page="search"]'));document.getElementById('searchInput').value=k.replace('#','');doSearch(k.replace('#',''));}
+
+// YOUTUBE
+function loadYT(){
+  var html=YT.map(function(v){
+    var thumb='https://img.youtube.com/vi/'+v.vid+'/mqdefault.jpg';
+    var url='https://www.youtube.com/results?search_query='+encodeURIComponent(v.q);
+    return '<div class="yt-card" data-url="'+url+'" onclick="window.open(this.dataset.url,\'_blank\')">'
+      +'<div class="yt-thumb"><img src="'+thumb+'" alt="" onerror="this.style.display=\'none\'"/><div class="yt-play">▶</div></div>'
+      +'<div class="yt-info"><div class="yt-title">'+v.title+'</div><div class="yt-ch">'+v.ch+'</div></div>'
+      +'</div>';
+  }).join('');
+  document.getElementById('ytContent').innerHTML=html;
+}
+
+// SHARE
+function doWA(btn){var m=encodeURIComponent('⚡ *'+btn.dataset.t+'*\n\nRead more: '+btn.dataset.u+'\n\n_Via Flash Nigeria_');window.open('https://wa.me/?text='+m,'_blank');}
+function doWAText(t,u){var m=encodeURIComponent('⚡ *'+t+'*\n\n'+u);window.open('https://wa.me/?text='+m,'_blank');}
+function doTG(btn){window.open('https://t.me/share/url?url='+encodeURIComponent(btn.dataset.u)+'&text='+encodeURIComponent('⚡ '+btn.dataset.t),'_blank');}
+function doCopy(btn){navigator.clipboard.writeText(btn.dataset.u).then(function(){showToast('🔗 Link copied!');}).catch(function(){showToast('Could not copy');});}
+
+// OGA REPORT
+function submitReport(){
+  var text=document.getElementById('rText').value.trim();
+  if(!text){showToast('Abeg enter the gist first!');return;}
+  var name=document.getElementById('rName').value.trim()||'Anonymous';
+  var contact=document.getElementById('rContact').value.trim()||'Not provided';
+  var msg='🚨 *News Tip from Flash Nigeria*\n\n*From:* '+name+'\n*Contact:* '+contact+'\n\n*Report:*\n'+text;
+  window.open('https://wa.me/2349050811412?text='+encodeURIComponent(msg),'_blank');
+  closeOverlay('ogaOverlay');document.getElementById('rText').value='';showToast('🚨 Report sent!');
+}
+
+// VOICE
+var VSOURCES={'punch':'Punch','vanguard':'Vanguard','thecable':'TheCable','cable':'TheCable','bellanaija':'BellaNaija','bella':'BellaNaija','legit':'Legit.ng','premium times':'Premium Times','premium':'Premium Times','channels':'Channels TV','naijaloaded':'Naijaloaded','tech cabal':'Tech Cabal','nairametrics':'Nairametrics'};
+var VCATS={'sport':'sports','sports':'sports','football':'sports','politics':'politics','government':'politics','tinubu':'politics','entertainment':'entertainment','music':'entertainment','nollywood':'entertainment','business':'business','economy':'business','tech':'tech','technology':'tech','lifestyle':'lifestyle','health':'lifestyle'};
+var VPAGES={'trending':'trending','flash':'trending','saved':'saved','search':'search','video':'videos','videos':'videos','youtube':'videos','about':'about','home':'home'};
+function startVoice(){
+  var SpeechRec=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SpeechRec){showToast('Voice not supported on this browser');return;}
+  openOverlay('voiceOverlay');document.getElementById('voiceBtn').classList.add('listening');
+  var r=new SpeechRec();r.lang='en-NG';r.continuous=false;r.interimResults=true;r.maxAlternatives=3;
+  r.onstart=function(){document.getElementById('vStatus').textContent='Listening... Speak now!';document.getElementById('vIcon').textContent='🔴';};
+  r.onresult=function(ev){
+    var interim='',final='';
+    for(var i=ev.resultIndex;i<ev.results.length;i++){if(ev.results[i].isFinal)final+=ev.results[i][0].transcript;else interim+=ev.results[i][0].transcript;}
+    var heard=final||interim;document.getElementById('vHeard').textContent='"'+heard+'"';
+    if(final)processVoice(final.toLowerCase().trim());
+  };
+  r.onerror=function(){document.getElementById('vStatus').textContent='Could not hear. Try again!';document.getElementById('vIcon').textContent='🎤';document.getElementById('voiceBtn').classList.remove('listening');};
+  r.onend=function(){document.getElementById('voiceBtn').classList.remove('listening');};
+  r.start();
+}
+function processVoice(cmd){
+  document.getElementById('vStatus').textContent='Got it! Navigating...';document.getElementById('vIcon').textContent='⚡';
+  for(var key in VSOURCES){
+    if(cmd.indexOf(key)>=0){
+      var src=VSOURCES[key];
+      setTimeout(function(s){closeOverlay('voiceOverlay');showToast('⚡ Showing '+s+' news!');var f=articles.filter(function(a){return a.n===s;});if(!f.length){showToast('No '+s+' articles yet');return;}slides=f.slice(0,5);var rest2=f.slice(5);slideIdx=0;var h2='<div class="slbl">📰 '+s+' — Latest Stories</div>'+buildSlider()+'<div class="ai-box" id="aiBox"></div>';rest2.forEach(function(a){h2+=buildCard(a);});document.getElementById('feed').innerHTML=h2;startSlider();goPage('home',document.querySelector('[data-page="home"]'));},800,src);return;
+    }
+  }
+  if(cmd.indexOf('search')>=0||cmd.indexOf('find')>=0){
+    var q=cmd.replace(/search for|search|find /g,'').trim();
+    if(q.length>1){setTimeout(function(){closeOverlay('voiceOverlay');goPage('search',document.querySelector('[data-page="search"]'));document.getElementById('searchInput').value=q;doSearch(q);showToast('🔍 Searching: '+q);},800);return;}
+  }
+  for(var ck in VCATS){
+    if(cmd.indexOf(ck)>=0){var cat=VCATS[ck];setTimeout(function(c){closeOverlay('voiceOverlay');document.querySelectorAll('.cat').forEach(function(b){b.classList.toggle('on',b.dataset.cat===c);});renderFeed(c);showToast('⚡ Showing '+c+' news!');},800,cat);return;}
+  }
+  for(var pk in VPAGES){
+    if(cmd.indexOf(pk)>=0){var pg=VPAGES[pk];setTimeout(function(p){closeOverlay('voiceOverlay');var nb=document.querySelector('[data-page="'+p+'"]');if(nb)goPage(p,nb);showToast('⚡ Going to '+p);},800,pg);return;}
+  }
+  document.getElementById('vStatus').textContent='No understand. Try again!';document.getElementById('vIcon').textContent='🤔';
+}
+
+// NAV
+function goPage(page,btn){
+  document.querySelectorAll('.bnav-item').forEach(function(b){b.classList.remove('on');});
+  var bnBtn=document.querySelector('.bnav-item[data-page="'+page+'"]');if(bnBtn)bnBtn.classList.add('on');
+  document.querySelectorAll('.dnav a').forEach(function(a){a.classList.remove('active');});
+  if(btn&&btn.classList&&btn.classList.contains('dnav'))btn.classList.add('active');
+  else{var dn=document.querySelector('.dnav a[onclick*="\''+page+'\'"]');if(dn)dn.classList.add('active');}
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('on');});
+  var pg=document.getElementById('pg-'+page);if(pg)pg.classList.add('on');
+  if(page==='saved')renderSaved();
+  if(page==='search')document.getElementById('searchInput').focus();
+  if(page==='trending')renderTrending();
+}
+
+// CAT FILTER
+function selectCat(cat, btn){
+  cat = cat || 'all';
+  curCat = cat;
+  document.querySelectorAll('.cat').forEach(function(b){
+    b.classList.toggle('on', (b.dataset.cat || 'all') === cat);
+  });
+  if(btn) btn.classList.add('on');
+  if(!articles || !articles.length){
+    showToast('Loading news...');
+    return;
+  }
+  renderFeed(cat);
+  showToast(cat === 'all' ? 'Showing all news' : 'Showing '+cat+' news');
+}
+
+
+// Strong fallback: catches category taps even if inline click is blocked
+try{
+  document.addEventListener('click', function(ev){
+    var b = ev.target.closest && ev.target.closest('.cat');
+    if(!b) return;
+    ev.preventDefault();
+    ev.stopPropagation();
+    selectCat(b.dataset.cat || 'all', b);
+  }, true);
+}catch(e){}
+
+var catBarEl = document.getElementById('catBar');
+if(catBarEl){
+  catBarEl.addEventListener('click', function(ev){
+    var btn = ev.target.closest('.cat');
+    if(!btn) return;
+    selectCat(btn.dataset.cat || 'all', btn);
+  });
+}
+
+// TIME FILTER
+function toggleTDrop(){document.getElementById('tdrop').classList.toggle('on');}
+function setTime(val,el){curTime=val;document.querySelectorAll('.topt').forEach(function(o){o.classList.remove('on');});el.classList.add('on');document.getElementById('tdrop').classList.remove('on');renderFeed(curCat);showToast('Filter: '+el.textContent.trim());}
+document.addEventListener('click',function(ev){if(!ev.target.closest('.filter-btn')&&!ev.target.closest('#tdrop'))document.getElementById('tdrop').classList.remove('on');});
+
+// OPEN ARTICLE
+function openA(el){
+  var link=el.dataset.link;var id=el.dataset.id;
+  if(id){reads.add(id);localStorage.setItem('fn_reads',JSON.stringify(Array.from(reads)));if(el.closest('.card'))el.closest('.card').classList.add('read');}
+  if(link&&link!=='#')window.open(link,'_blank','noopener');
+}
+
+// SOTD CLICK
+document.addEventListener('click',function(ev){var s=ev.target.closest('#sotd');if(s)window.open(s.dataset.link,'_blank','noopener');});
+
+// OVERLAYS
+function openOverlay(id){document.getElementById(id).classList.add('on');}
+function closeOverlay(id){document.getElementById(id).classList.remove('on');}
+document.querySelectorAll('.overlay').forEach(function(o){o.addEventListener('click',function(ev){if(ev.target===o)o.classList.remove('on');});});
+
+// UTILS
+function e(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+function ej(s){return(s||'').replace(/"/g,'&quot;').replace(/'/g,'&#39;').slice(0,300);}
+function ago(d){if(!d)return'just now';var m=Math.floor((Date.now()-new Date(d))/60000);if(m<1)return'just now';if(m<60)return m+'m ago';var h=Math.floor(m/60);if(h<24)return h+'hr ago';return Math.floor(h/24)+'d ago';}
+function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2500);}
+</script>
+</body>
+</html>
