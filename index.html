@@ -14,14 +14,22 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 :root{
   --black:#0d0d0d;--gold:#FFD700;--gold-light:#fff8e0;--gold-dark:#856000;
-  --red:#c00;--green:#1a6e3c;--purple:#6b1a6e;--brown:#8b4000;
+  --red:#c0392b;--green:#1a6e3c;--purple:#6b1a6e;--brown:#8b4000;
   --bg:#ffffff;--bg2:#f5f5f5;--text:#111;--text2:#555;--border:#e0e0e0;
 }
-body.dark{
-  --bg:#111;--bg2:#1a1a1a;--text:#f0f0f0;--text2:#aaa;--border:#2a2a2a;
-  --gold-light:#2a2000;--gold-dark:#FFD700;
+body.dark{--bg:#111;--bg2:#1a1a1a;--text:#f0f0f0;--text2:#aaa;--border:#2a2a2a;--gold-light:#2a2000;--gold-dark:#FFD700;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg2);color:var(--text);min-height:100vh;overflow-x:hidden;transition:background 0.3s,color 0.3s;}
+.app-shell{max-width:1200px;margin:0 auto;background:var(--bg);min-height:100vh;}
+@media(min-width:768px){
+  .feed-grid{display:grid;grid-template-columns:1fr 320px;gap:0;align-items:start;}
+  .sidebar{border-left:1px solid var(--border);padding:14px 16px;position:sticky;top:110px;max-height:90vh;overflow-y:auto;}
+  .bottom-nav{display:none;}
+  .desktop-nav{display:flex!important;}
 }
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);max-width:480px;margin:0 auto;min-height:100vh;overflow-x:hidden;transition:background 0.3s,color 0.3s;}
+@media(max-width:767px){.sidebar{display:none;}.desktop-nav{display:none!important;}}
+.desktop-nav{display:none;background:var(--black);padding:0 24px;gap:0;border-bottom:2px solid var(--green);}
+.desktop-nav a{color:#ccc;font-size:13px;font-weight:600;padding:12px 16px;text-decoration:none;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all 0.15s;cursor:pointer;}
+.desktop-nav a:hover,.desktop-nav a.active{color:#4caf7d;border-bottom-color:var(--green);}
 
 /* SPLASH */
 #splash{position:fixed;inset:0;background:#0d0d0d;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity 0.6s;}
@@ -31,7 +39,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .splash-title span{color:var(--gold);}
 .splash-sub{color:#888;font-size:13px;margin-top:6px;}
 .splash-bar{width:200px;height:3px;background:#222;border-radius:2px;margin-top:24px;overflow:hidden;}
-.splash-fill{height:100%;background:var(--gold);border-radius:2px;animation:load 2s ease-out forwards;}
+.splash-fill{height:100%;background:var(--gold);border-radius:2px;animation:load 2.2s ease-out forwards;}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
 @keyframes load{0%{width:0%}100%{width:100%}}
 
@@ -42,23 +50,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .logo-text span{color:var(--gold);}
 .header-actions{display:flex;gap:8px;align-items:center;}
 .header-btn{background:none;border:none;color:#fff;font-size:20px;cursor:pointer;padding:4px;display:flex;align-items:center;position:relative;}
-.badge-dot{position:absolute;top:0;right:0;background:var(--red);color:#fff;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:none;align-items:center;justify-content:center;padding:0 3px;}
+.badge-dot{position:absolute;top:0;right:0;background:var(--green);color:#fff;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:none;align-items:center;justify-content:center;padding:0 3px;}
 .badge-dot.show{display:flex;}
 
 /* BREAKING */
-.breaking-bar{background:var(--red);padding:7px 16px;display:flex;align-items:center;gap:10px;overflow:hidden;}
-.breaking-label{color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border:1px solid rgba(255,255,255,0.6);border-radius:3px;white-space:nowrap;letter-spacing:0.8px;}
+.breaking-bar{background:var(--green);padding:7px 16px;display:flex;align-items:center;gap:10px;overflow:hidden;}
+.breaking-label{color:var(--gold);font-size:10px;font-weight:700;padding:2px 7px;border:1px solid var(--gold);border-radius:3px;white-space:nowrap;letter-spacing:0.8px;}
 .breaking-ticker{flex:1;overflow:hidden;white-space:nowrap;}
 .breaking-ticker-inner{display:inline-block;animation:ticker 80s linear infinite;}
 .breaking-ticker-inner:hover{animation-play-state:paused;}
 @keyframes ticker{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
 .breaking-item{color:#fff;font-size:12px;font-weight:500;margin-right:48px;}
-
-/* TIME FILTER */
-.time-filter{display:flex;gap:6px;padding:8px 16px;background:var(--bg);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;}
-.time-filter::-webkit-scrollbar{display:none;}
-.time-btn{padding:4px 12px;border-radius:20px;font-size:12px;white-space:nowrap;cursor:pointer;border:1px solid var(--border);color:var(--text2);background:var(--bg2);font-family:inherit;transition:all 0.15s;}
-.time-btn.active{background:var(--red);color:#fff;border-color:var(--red);font-weight:600;}
 
 /* CATS */
 .cats-wrap{background:var(--bg);border-bottom:1px solid var(--border);position:sticky;top:49px;z-index:99;}
@@ -66,43 +68,47 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .cats::-webkit-scrollbar{display:none;}
 .cat-btn{padding:6px 16px;border-radius:20px;font-size:13px;white-space:nowrap;cursor:pointer;border:1px solid var(--border);color:var(--text2);background:var(--bg2);font-family:inherit;transition:all 0.15s;}
 .cat-btn.active{background:var(--black);color:var(--gold);border-color:var(--black);font-weight:600;}
+.filter-btn{padding:6px 14px;border-radius:20px;font-size:13px;white-space:nowrap;cursor:pointer;border:1px solid var(--border);color:var(--text2);background:var(--bg2);font-family:inherit;}
 
 /* FEED */
 .feed{padding:0 0 80px;}
 .section-label{font-size:11px;font-weight:700;color:var(--text2);padding:14px 16px 8px;text-transform:uppercase;letter-spacing:0.8px;display:flex;align-items:center;gap:8px;}
 .section-label::after{content:'';flex:1;height:1px;background:var(--border);}
 
-/* FEATURED */
-.featured-card{margin:0 16px 8px;border-radius:12px;overflow:hidden;border:1px solid var(--border);background:var(--bg);}
-.featured-img{height:170px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:#1a1a1a;}
-.featured-img img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;}
-.featured-img-fallback{font-size:60px;position:relative;z-index:1;}
-.featured-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.8));padding:12px;z-index:2;}
-.featured-badge{display:inline-block;background:var(--gold);color:var(--black);font-size:10px;font-weight:700;padding:3px 8px;border-radius:3px;letter-spacing:0.5px;margin-bottom:4px;}
-.featured-source-pill{background:rgba(0,0,0,0.6);color:var(--gold);font-size:10px;padding:3px 8px;border-radius:20px;font-weight:600;}
-.featured-body{padding:12px 14px;}
-.featured-title{font-size:16px;font-weight:700;color:var(--text);line-height:1.4;margin-bottom:10px;cursor:pointer;}
-.featured-meta{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;}
-.meta-left{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
-.time-tag{font-size:12px;color:var(--text2);}
-.ai-btn{font-size:11px;background:var(--gold-light);color:var(--gold-dark);border:none;padding:4px 10px;border-radius:20px;cursor:pointer;font-family:inherit;font-weight:600;}
-.share-menu{display:flex;gap:5px;align-items:center;}
-.share-btn{font-size:12px;border:none;padding:4px 8px;border-radius:20px;cursor:pointer;font-family:inherit;font-weight:600;color:#fff;}
-.btn-wa{background:#25D366;}
-.btn-fb{background:#1877F2;}
-.btn-tg{background:#0088cc;}
-.btn-tw{background:#000;}
-.btn-copy{background:#555;font-size:11px;}
-.icon-btn{background:none;border:none;color:var(--text2);font-size:18px;cursor:pointer;padding:4px;}
+/* STORY OF THE DAY */
+.sotd-banner{margin:12px 16px;border-radius:12px;background:linear-gradient(135deg,#0d4726,#1a6e3c);padding:14px;border:1px solid #2d9e5f;cursor:pointer;}
+.sotd-label{color:var(--gold);font-size:10px;font-weight:700;letter-spacing:1px;margin-bottom:6px;}
+.sotd-title{color:#fff;font-size:15px;font-weight:700;line-height:1.4;margin-bottom:8px;}
+.sotd-meta{color:rgba(255,255,255,0.7);font-size:11px;display:flex;align-items:center;gap:8px;}
 
-/* AI BOX */
-.ai-summary-box{background:var(--gold-light);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:10px 14px;margin:0 16px 10px;font-size:13px;color:var(--gold-dark);line-height:1.6;display:none;}
-.ai-summary-box.visible{display:block;}
+/* AD SLOT */
+.ad-slot{margin:8px 16px;border-radius:8px;background:var(--bg2);border:1px dashed var(--border);padding:16px;text-align:center;color:var(--text2);font-size:12px;}
+.ad-slot-label{font-size:10px;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;color:var(--text2);}
+
+/* SLIDER */
+.slider-wrap{position:relative;margin:0 16px 4px;border-radius:12px;overflow:hidden;border:1px solid var(--border);}
+.slider-track{display:flex;transition:transform 0.45s cubic-bezier(.4,0,.2,1);}
+.slide{min-width:100%;flex-shrink:0;}
+.slide-img{height:220px;display:flex;align-items:flex-end;position:relative;overflow:hidden;background:#1a1a1a;cursor:pointer;}
+.slide-img img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;}
+.slide-fallback{font-size:64px;position:absolute;top:40%;left:50%;transform:translate(-50%,-50%);opacity:0.3;z-index:1;}
+.slide-overlay{position:relative;z-index:2;width:100%;background:linear-gradient(transparent,rgba(0,0,0,0.92));padding:12px 14px 14px;}
+.slide-title{color:#fff;font-size:14px;font-weight:700;line-height:1.4;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.slide-meta{display:flex;align-items:center;justify-content:space-between;}
+.slide-time{color:rgba(255,255,255,0.7);font-size:11px;}
+.slider-prev,.slider-next{position:absolute;top:40%;transform:translateY(-50%);background:rgba(0,0,0,0.5);color:#fff;border:none;font-size:26px;width:34px;height:34px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;}
+.slider-prev{left:8px;}
+.slider-next{right:8px;}
+.slider-dots{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:10;}
+.slider-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.4);cursor:pointer;transition:all 0.2s;}
+.slider-dot.active{background:var(--gold);width:18px;border-radius:4px;}
+.slider-counter{position:absolute;top:8px;right:10px;background:rgba(0,0,0,0.6);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;z-index:10;}
 
 /* NEWS CARDS */
-.news-card{display:flex;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);cursor:pointer;background:var(--bg);transition:background 0.1s;}
+.news-card{padding:12px 16px;border-bottom:1px solid var(--border);background:var(--bg);transition:background 0.1s;}
 .news-card:hover{background:var(--bg2);}
 .news-card.read{opacity:0.45;}
+.news-card-top{display:flex;gap:12px;cursor:pointer;margin-bottom:8px;}
 .news-thumb{width:72px;height:72px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:28px;overflow:hidden;position:relative;}
 .news-thumb img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;}
 .thumb-politics{background:linear-gradient(135deg,#1a1a1a,#333);}
@@ -128,6 +134,68 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .news-actions{display:flex;gap:2px;}
 .news-actions button{background:none;border:none;font-size:15px;cursor:pointer;padding:3px;}
 
+/* REACTIONS */
+.reactions{display:flex;gap:6px;padding:4px 0 2px;}
+.reaction-btn{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:3px 10px;font-size:12px;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:4px;font-family:inherit;}
+.reaction-btn:hover{border-color:var(--green);}
+.reaction-btn.reacted{background:var(--gold-light);border-color:var(--gold);color:var(--gold-dark);font-weight:600;}
+.reaction-count{font-size:11px;color:var(--text2);}
+
+/* SHARE ROW */
+.share-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:4px 0;}
+.share-btn{font-size:11px;border:none;padding:5px 10px;border-radius:20px;cursor:pointer;font-family:inherit;font-weight:600;color:#fff;white-space:nowrap;}
+.btn-wa{background:#25D366;}
+.btn-fb{background:#1877F2;}
+.btn-tg{background:#0088cc;}
+.btn-tw{background:#000;}
+.btn-status{background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);font-size:11px;}
+.btn-copy{background:#555;}
+.icon-btn{background:none;border:none;color:var(--text2);font-size:18px;cursor:pointer;padding:4px;}
+
+/* AI BOX */
+.ai-summary-box{background:var(--gold-light);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:10px 14px;margin:0 16px 10px;font-size:13px;color:var(--gold-dark);line-height:1.6;display:none;}
+.ai-summary-box.visible{display:block;}
+
+/* POLL */
+.poll-card{margin:8px 16px;border-radius:12px;border:1px solid var(--border);overflow:hidden;background:var(--bg);}
+.poll-header{background:linear-gradient(135deg,var(--green),#0d4726);padding:12px 14px;}
+.poll-label{color:var(--gold);font-size:10px;font-weight:700;letter-spacing:1px;margin-bottom:4px;}
+.poll-question{color:#fff;font-size:15px;font-weight:700;line-height:1.4;}
+.poll-body{padding:12px 14px;}
+.poll-option{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;border:1px solid var(--border);margin-bottom:8px;cursor:pointer;transition:all 0.2s;background:var(--bg2);}
+.poll-option:hover{border-color:var(--green);}
+.poll-option.voted{border-color:var(--green);background:rgba(26,110,60,0.08);}
+.poll-bar-wrap{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden;}
+.poll-bar{height:100%;background:var(--green);border-radius:3px;transition:width 0.5s;}
+.poll-pct{font-size:12px;font-weight:700;color:var(--green);min-width:36px;text-align:right;}
+.poll-option-label{font-size:13px;font-weight:600;color:var(--text);min-width:60px;}
+.poll-footer{font-size:11px;color:var(--text2);padding:0 14px 12px;display:flex;align-items:center;justify-content:space-between;}
+.poll-share-btn{background:none;border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:11px;cursor:pointer;font-family:inherit;color:var(--text2);}
+
+/* OGA REPORT */
+.oga-report-btn{display:flex;align-items:center;gap:10px;margin:8px 16px;padding:12px 14px;background:linear-gradient(135deg,#0d0d0d,#2a2a2a);border-radius:12px;cursor:pointer;border:1px solid #333;text-decoration:none;}
+.oga-report-icon{font-size:28px;}
+.oga-report-text{flex:1;}
+.oga-report-title{color:#fff;font-size:14px;font-weight:700;}
+.oga-report-sub{color:#888;font-size:12px;margin-top:2px;}
+.oga-report-arrow{color:var(--gold);font-size:20px;}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:500;display:none;align-items:flex-end;justify-content:center;}
+.modal-overlay.show{display:flex;}
+.modal{background:var(--bg);border-radius:20px 20px 0 0;padding:20px 20px 32px;width:100%;max-width:480px;max-height:85vh;overflow-y:auto;}
+.modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px;}
+.modal-title{font-size:16px;font-weight:700;margin-bottom:14px;color:var(--text);}
+.modal-input{width:100%;border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:14px;font-family:inherit;background:var(--bg2);color:var(--text);margin-bottom:10px;resize:vertical;min-height:80px;outline:none;}
+.modal-input:focus{border-color:var(--green);}
+.modal-btn{width:100%;background:var(--green);color:#fff;border:none;padding:12px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:4px;}
+.modal-close{float:right;background:none;border:none;font-size:22px;cursor:pointer;color:var(--text2);}
+
+/* WHATSAPP CHANNEL */
+.wa-channel-bar{background:#25D366;padding:10px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;}
+.wa-channel-text{color:#fff;font-size:13px;font-weight:600;flex:1;}
+.wa-channel-btn{background:#fff;color:#25D366;font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;border:none;cursor:pointer;font-family:inherit;}
+
 /* TRENDING */
 .trending-section{padding:14px 16px 10px;}
 .trend-header{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
@@ -135,14 +203,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .trend-tag{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:5px 13px;font-size:12px;color:var(--text);cursor:pointer;transition:all 0.15s;}
 .trend-tag:hover{border-color:var(--gold);color:var(--gold-dark);background:var(--gold-light);}
 
-/* YOUTUBE */
-.yt-section{padding:14px 16px;}
-.yt-card{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;}
-.yt-thumb{width:80px;height:50px;border-radius:6px;background:#111;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--red);font-size:22px;overflow:hidden;position:relative;}
-.yt-thumb img{width:100%;height:100%;object-fit:cover;position:absolute;}
-.yt-body{flex:1;}
-.yt-title{font-size:13px;font-weight:600;color:var(--text);line-height:1.3;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.yt-meta{font-size:11px;color:var(--text2);}
+/* TIME DROPDOWN */
+.time-dropdown{display:none;position:absolute;right:16px;top:100%;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:8px;z-index:200;box-shadow:0 4px 20px rgba(0,0,0,0.15);min-width:160px;}
+.time-dropdown.show{display:block;}
+.time-option{padding:8px 12px;border-radius:8px;font-size:13px;cursor:pointer;color:var(--text);}
+.time-option:hover{background:var(--bg2);}
+.time-option.active{background:var(--green);color:#fff;font-weight:600;}
 
 /* NAV */
 .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--bg);border-top:1px solid var(--border);display:flex;z-index:100;}
@@ -150,7 +216,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .nav-item.active{color:var(--black);}
 body.dark .nav-item.active{color:var(--gold);}
 .nav-icon{font-size:22px;}
-.nav-badge{position:absolute;top:6px;right:calc(50% - 18px);background:var(--red);color:#fff;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:none;align-items:center;justify-content:center;padding:0 3px;}
+.nav-badge{position:absolute;top:6px;right:calc(50% - 18px);background:var(--green);color:#fff;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:none;align-items:center;justify-content:center;padding:0 3px;}
 .nav-badge.show{display:flex;}
 
 /* PAGES */
@@ -158,53 +224,31 @@ body.dark .nav-item.active{color:var(--gold);}
 .search-bar{padding:12px 16px;position:sticky;top:49px;background:var(--bg);z-index:98;border-bottom:1px solid var(--border);}
 .search-wrap{display:flex;align-items:center;background:var(--bg2);border-radius:24px;border:1px solid var(--border);padding:8px 14px;gap:8px;}
 .search-wrap input{flex:1;border:none;background:none;font-size:14px;color:var(--text);font-family:inherit;outline:none;}
-
-/* MISC */
+.yt-card{display:flex;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border);cursor:pointer;}
+.yt-thumb{width:80px;height:50px;border-radius:6px;background:#111;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--red);font-size:22px;}
+.yt-body{flex:1;}
+.yt-title{font-size:13px;font-weight:600;color:var(--text);line-height:1.3;margin-bottom:4px;}
+.yt-meta{font-size:11px;color:var(--text2);}
 .loading-state{padding:40px 16px;text-align:center;color:var(--text2);}
 .loading-spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px;}
 @keyframes spin{to{transform:rotate(360deg)}}
 .empty-state{padding:40px 16px;text-align:center;}
 .empty-icon{font-size:40px;margin-bottom:8px;}
 .empty-text{color:var(--text2);font-size:14px;line-height:1.6;}
-.flash-strip{height:3px;background:var(--gold);}
+.flash-strip{height:4px;background:linear-gradient(to right,#1a6e3c 33%,#fff 33%,#fff 66%,#1a6e3c 66%);}
 .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--black);color:#fff;padding:10px 20px;border-radius:24px;font-size:13px;z-index:999;opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap;}
 .toast.show{opacity:1;}
-.refresh-bar{background:var(--gold-light);color:var(--gold-dark);font-size:12px;font-weight:700;text-align:center;padding:8px;cursor:pointer;display:none;border-bottom:1px solid var(--gold);}
+.refresh-bar{background:var(--green);color:#fff;font-size:12px;font-weight:700;text-align:center;padding:8px;cursor:pointer;display:none;}
 .refresh-bar.show{display:block;}
-.source-card{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);}
-.source-dot{width:10px;height:10px;border-radius:50%;background:var(--green);flex-shrink:0;}
-.install-banner{background:var(--gold-light);border:1px solid var(--gold);border-radius:10px;margin:12px 16px;padding:12px 14px;display:none;align-items:center;gap:12px;}
-.install-banner-text{flex:1;font-size:13px;color:var(--gold-dark);font-weight:500;}
-.install-banner-btn{background:var(--black);color:var(--gold);border:none;padding:8px 14px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
-.install-banner-close{background:none;border:none;color:var(--text2);font-size:18px;cursor:pointer;}
-
-/* PULL TO REFRESH */
 .ptr-indicator{text-align:center;padding:10px;font-size:13px;color:var(--text2);display:none;}
 .ptr-indicator.show{display:block;}
-
-/* SLIDER */
-.slider-wrap{position:relative;margin:0 16px 4px;border-radius:12px;overflow:hidden;border:1px solid var(--border);}
-.slider-track{display:flex;transition:transform 0.45s cubic-bezier(.4,0,.2,1);}
-.slide{min-width:100%;flex-shrink:0;}
-.slide-img{height:200px;display:flex;align-items:flex-end;position:relative;overflow:hidden;background:#1a1a1a;cursor:pointer;}
-.slide-img img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;}
-.slide-fallback{font-size:56px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);opacity:0.25;}
-.slide-overlay{position:relative;z-index:2;width:100%;background:linear-gradient(transparent,rgba(0,0,0,0.88));padding:10px 12px 12px;}
-.slide-title{color:#fff;font-size:14px;font-weight:700;line-height:1.35;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.slide-meta{display:flex;align-items:center;justify-content:space-between;}
-.slide-time{color:rgba(255,255,255,0.7);font-size:11px;}
-.slider-prev,.slider-next{position:absolute;top:50%;transform:translateY(-70%);background:rgba(0,0,0,0.5);color:#fff;border:none;font-size:26px;width:34px;height:34px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;line-height:1;}
-.slider-prev{left:8px;}
-.slider-next{right:8px;}
-.slider-dots{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:10;}
-.slider-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.4);cursor:pointer;transition:all 0.2s;}
-.slider-dot.active{background:var(--gold);width:18px;border-radius:4px;}
-.slider-counter{position:absolute;top:8px;right:10px;background:rgba(0,0,0,0.6);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;z-index:10;}
+.source-card{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);}
+.source-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0;}
 </style>
 </head>
 <body>
 
-<!-- SPLASH SCREEN -->
+<!-- SPLASH -->
 <div id="splash">
   <div class="splash-bolt">⚡</div>
   <div class="splash-title">FLASH <span>NIGERIA</span></div>
@@ -212,15 +256,38 @@ body.dark .nav-item.active{color:var(--gold);}
   <div class="splash-bar"><div class="splash-fill"></div></div>
 </div>
 
+<!-- OGA REPORT MODAL -->
+<div class="modal-overlay" id="ogaModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <button class="modal-close" onclick="closeModal('ogaModal')">✕</button>
+    <div class="modal-title">🚨 Oga, Report News!</div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:14px;">You sabi something? Tell us! Submit a news tip and we go investigate am.</p>
+    <input class="modal-input" id="reportName" placeholder="Your name (optional)" style="min-height:40px;resize:none;"/>
+    <textarea class="modal-input" id="reportText" placeholder="What happened? Where? When? Give us the full gist..."></textarea>
+    <input class="modal-input" id="reportContact" placeholder="Phone/WhatsApp (optional)" style="min-height:40px;resize:none;"/>
+    <button class="modal-btn" onclick="submitReport()">🚨 Send Report</button>
+  </div>
+</div>
+
+<div class="app-shell">
 <div class="flash-strip"></div>
 <div class="header">
   <a class="logo" href="#"><span style="color:var(--gold);font-size:20px;">⚡</span><span class="logo-text">FLASH <span>NIGERIA</span></span></a>
   <div class="header-actions">
-    <button class="header-btn" onclick="toggleDark()" id="darkBtn" title="Toggle dark mode">🌙</button>
-    <button class="header-btn" onclick="refreshFeed()" title="Refresh">
-      🔄<span class="badge-dot" id="newBadge">0</span>
-    </button>
+    <button class="header-btn" onclick="openModal('ogaModal')" title="Report news">🚨</button>
+    <button class="header-btn" onclick="toggleNotif()" id="notifBtn" title="Breaking news alerts">🔔</button>
+    <button class="header-btn" onclick="toggleDark()" id="darkBtn" title="Dark mode">🌙</button>
+    <button class="header-btn" onclick="refreshFeed()" title="Refresh">🔄<span class="badge-dot" id="newBadge">0</span></button>
   </div>
+</div>
+
+<div class="desktop-nav" id="desktopNav">
+  <a class="active" onclick="switchPageDesktop('home',this)">🏠 Home</a>
+  <a onclick="switchPageDesktop('trending',this)">⚡ Flash</a>
+  <a onclick="switchPageDesktop('search',this)">🔍 Search</a>
+  <a onclick="switchPageDesktop('saved',this)">🔖 Saved</a>
+  <a onclick="switchPageDesktop('videos',this)">▶️ Videos</a>
 </div>
 
 <div class="breaking-bar">
@@ -228,25 +295,16 @@ body.dark .nav-item.active{color:var(--gold);}
   <div class="breaking-ticker"><span class="breaking-ticker-inner" id="breakingTicker">Loading breaking news...</span></div>
 </div>
 
-<div class="refresh-bar" id="refreshBar" onclick="applyNewArticles()">⚡ New stories available — tap to load</div>
+<!-- WHATSAPP CHANNEL BAR -->
+<div class="wa-channel-bar" onclick="window.open('https://whatsapp.com/channel/0029VakflashNigeria','_blank')">
+  <span style="font-size:20px;">📢</span>
+  <span class="wa-channel-text">Join Flash Nigeria on WhatsApp Channel — Get breaking news first!</span>
+  <button class="wa-channel-btn">Join</button>
+</div>
+
+<div class="refresh-bar" id="refreshBar" onclick="applyNewArticles()">⚡ New stories — tap to load</div>
 
 <div id="page-home">
-  <div class="install-banner" id="installBanner">
-    <span style="font-size:22px;">📲</span>
-    <span class="install-banner-text">Add Flash Nigeria to your home screen!</span>
-    <button class="install-banner-btn" id="installBtn">Install</button>
-    <button class="install-banner-close" onclick="document.getElementById('installBanner').style.display='none'">✕</button>
-  </div>
-
-  <!-- TIME FILTER -->
-  <div class="time-filter" id="timeFilter">
-    <button class="time-btn active" data-time="all">All time</button>
-    <button class="time-btn" data-time="1">Last 1hr</button>
-    <button class="time-btn" data-time="6">Last 6hrs</button>
-    <button class="time-btn" data-time="24">Today</button>
-    <button class="time-btn" data-time="168">This week</button>
-  </div>
-
   <div class="cats-wrap">
     <div class="cats" id="catBar">
       <button class="cat-btn active" data-cat="all">All</button>
@@ -256,12 +314,29 @@ body.dark .nav-item.active{color:var(--gold);}
       <button class="cat-btn" data-cat="business">Business</button>
       <button class="cat-btn" data-cat="lifestyle">Lifestyle</button>
       <button class="cat-btn" data-cat="tech">Tech</button>
+      <button class="filter-btn" onclick="toggleTimeMenu()">🕐 Filter</button>
     </div>
   </div>
-
+  <div style="position:relative;">
+    <div class="time-dropdown" id="timeDropdown">
+      <div class="time-option active" onclick="setTime('all',this)">📅 All time</div>
+      <div class="time-option" onclick="setTime('1',this)">⚡ Last 1 hour</div>
+      <div class="time-option" onclick="setTime('6',this)">🕐 Last 6 hours</div>
+      <div class="time-option" onclick="setTime('24',this)">📆 Today</div>
+      <div class="time-option" onclick="setTime('168',this)">📅 This week</div>
+    </div>
+  </div>
   <div class="ptr-indicator" id="ptrIndicator">⚡ Refreshing...</div>
-  <div class="feed" id="mainFeed">
-    <div class="loading-state"><div class="loading-spinner"></div><div>Fetching latest Naija news...</div></div>
+  <div class="feed-grid">
+    <div class="feed" id="mainFeed">
+      <div class="loading-state"><div class="loading-spinner"></div><div>Fetching latest Naija news...</div></div>
+    </div>
+    <div class="sidebar" id="sidebarPanel">
+      <div class="section-label" style="margin-bottom:10px;">🔥 Trending</div>
+      <div id="sidebarTrending"></div>
+      <div class="section-label" style="margin:16px 0 10px;">📡 Sources</div>
+      <div id="sidebarSources"></div>
+    </div>
   </div>
 </div>
 
@@ -269,7 +344,6 @@ body.dark .nav-item.active{color:var(--gold);}
   <div style="padding:14px 16px 0;"><div class="section-label">🔥 Trending in Nigeria</div></div>
   <div id="trendingFull" style="padding:0 16px 16px;"></div>
 </div>
-
 <div id="page-search">
   <div class="search-bar">
     <div class="search-wrap">
@@ -279,43 +353,31 @@ body.dark .nav-item.active{color:var(--gold);}
   </div>
   <div id="searchResults" style="padding-top:8px;"></div>
 </div>
-
 <div id="page-saved">
   <div style="padding:14px 16px 0;"><div class="section-label">🔖 Saved Articles</div></div>
   <div id="savedList"></div>
 </div>
-
 <div id="page-videos">
   <div style="padding:14px 16px 0;"><div class="section-label">▶️ Nigeria on YouTube</div></div>
-  <div class="yt-section" id="ytFeed">
+  <div style="padding:0 16px 16px;" id="ytFeed">
     <div class="loading-state"><div class="loading-spinner"></div><div>Loading videos...</div></div>
   </div>
 </div>
 
 <div class="bottom-nav">
-  <button class="nav-item active" data-page="home" onclick="switchPage('home',this)">
-    <span class="nav-icon">🏠</span>Home
-  </button>
-  <button class="nav-item" data-page="trending" onclick="switchPage('trending',this)">
-    <span class="nav-icon">⚡</span>Flash
-  </button>
-  <button class="nav-item" data-page="search" onclick="switchPage('search',this)">
-    <span class="nav-icon">🔍</span>Search
-  </button>
-  <button class="nav-item" data-page="saved" onclick="switchPage('saved',this)">
-    <span class="nav-icon">🔖</span>Saved
-    <span class="nav-badge" id="savedBadge">0</span>
-  </button>
-  <button class="nav-item" data-page="videos" onclick="switchPage('videos',this)">
-    <span class="nav-icon">▶️</span>Videos
-  </button>
+  <button class="nav-item active" data-page="home" onclick="switchPage('home',this)"><span class="nav-icon">🏠</span>Home</button>
+  <button class="nav-item" data-page="trending" onclick="switchPage('trending',this)"><span class="nav-icon">⚡</span>Flash</button>
+  <button class="nav-item" data-page="search" onclick="switchPage('search',this)"><span class="nav-icon">🔍</span>Search</button>
+  <button class="nav-item" data-page="saved" onclick="switchPage('saved',this)"><span class="nav-icon">🔖</span>Saved<span class="nav-badge" id="savedBadge">0</span></button>
+  <button class="nav-item" data-page="videos" onclick="switchPage('videos',this)"><span class="nav-icon">▶️</span>Videos</button>
+</div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-const RSS2JSON = 'https://api.rss2json.com/v1/api.json?rss_url=';
-const RSS_SOURCES = [
+const RSS2JSON='https://api.rss2json.com/v1/api.json?rss_url=';
+const RSS_SOURCES=[
   {name:'Punch',url:RSS2JSON+encodeURIComponent('https://feeds.punch.ng/'),cat:'politics'},
   {name:'Vanguard',url:RSS2JSON+encodeURIComponent('https://www.vanguardngr.com/feed/'),cat:'business'},
   {name:'TheCable',url:RSS2JSON+encodeURIComponent('https://www.thecable.ng/feed'),cat:'politics'},
@@ -328,589 +390,542 @@ const RSS_SOURCES = [
   {name:'Nairametrics',url:RSS2JSON+encodeURIComponent('https://nairametrics.com/feed/'),cat:'business'},
 ];
 
-const YT_SEARCHES = ['Nigeria news today','Naija music 2026','Super Eagles','Nollywood 2026','Nigerian politics'];
-
-const CAT_KEYWORDS = {
-  tech:['technology','telecom','telecommunications','internet','mobile data','smartphone','cyber','blockchain','crypto','software','artificial intelligence','opay','flutterwave','paystack','kuda','moniepoint','mtn','airtel','glo','9mobile','broadband','5g','4g','computer','digital','online platform','startup','silicon','operators dispute','investment collapse','foreign investment'],
-  politics:['tinubu','senate','inec','government','election','minister','aso rock','fec','presidency','governor','house of reps','national assembly','police','army','military','court','supreme court','tribunal','obi','atiku','apc','pdp','labour party','lawmakers','foreign policy','diplomatic','sanctions','protest','strike','rally','vote','constitution','amendment','commission','anti-african','retaliation','condemns','condemn','federal government','fg ','state government','local government','lga','abuja'],
-  sports:['super eagles','afcon','premier league','basketball','athletics','olympics','chelsea','arsenal','man united','liverpool','match result','goal','fifa','caf','transfer window','coach','stadium','serie a','la liga','bundesliga','champions league','world cup','wrestling','boxing','tennis','athlete','sport','sporting'],
+const CAT_KEYWORDS={
+  tech:['technology','telecom','telecommunications','internet','mobile data','smartphone','cyber','blockchain','crypto','software','artificial intelligence','opay','flutterwave','paystack','kuda','moniepoint','mtn','airtel','glo','9mobile','broadband','5g','4g','computer','digital','online platform','startup','operators dispute','investment collapse'],
+  politics:['tinubu','senate','inec','government','election','minister','aso rock','fec','presidency','governor','house of reps','national assembly','police','army','military','court','supreme court','tribunal','obi','atiku','apc','pdp','labour party','lawmakers','foreign policy','diplomatic','sanctions','protest','strike','rally','vote','constitution','amendment','commission','anti-african','retaliation','condemns','federal government','fg ','state government','local government'],
+  sports:['super eagles','afcon','premier league','basketball','athletics','olympics','chelsea','arsenal','man united','liverpool','match result','goal','fifa','caf','transfer window','coach','stadium','serie a','la liga','champions league','world cup','wrestling','boxing','tennis','athlete','sport'],
   business:['economy','gdp','inflation','market','stock exchange','investment','oil price','gas','dangote','bank ','forex','naira rate','dollar','trade','export','import','agric','revenue','budget deficit','firs','customs','bond','interest rate','access bank','gtb','zenith','uba','first bank','cbn','efcc','nnpc','crude','petrol price','fuel','pension','salary','wage','tax'],
-  lifestyle:['health tips','food recipe','travel guide','beauty','skincare','wellness','fitness','diet','home decor','family','relationship advice','love','marriage','wedding','pregnancy','baby','church','pastor','bishop','hair','makeup','fashion tips','style guide','mental health'],
-  entertainment:['music','award','film','movie','nollywood','afrobeats','celebrity','singer','actor','actress','wizkid','burna boy','davido','kizz daniel','tems','rema','show ','concert','fashion week','bbnaija','big brother','reality tv','comedy skit','yul edochie','ini edo','mercy johnson','tacha','album','tour','premiere','red carpet','birthday party'],
+  lifestyle:['health tips','food recipe','travel guide','beauty','skincare','wellness','fitness','diet','home decor','family','relationship advice','love','marriage','wedding','pregnancy','baby','church','pastor','bishop','hair','makeup','fashion tips','mental health'],
+  entertainment:['music','award','film','movie','nollywood','afrobeats','celebrity','singer','actor','actress','wizkid','burna boy','davido','kizz daniel','tems','rema','show ','concert','fashion week','bbnaija','big brother','reality tv','comedy skit','yul edochie','ini edo','mercy johnson','tacha','album','tour','premiere','red carpet'],
 };
 
-const CAT_ICONS = {politics:'🏛️',entertainment:'🎬',sports:'⚽',business:'📈',lifestyle:'✨',tech:'💻',default:'📰'};
-const CAT_THUMB = {politics:'thumb-politics',entertainment:'thumb-entertainment',sports:'thumb-sports',business:'thumb-business',lifestyle:'thumb-lifestyle',tech:'thumb-tech'};
-const CAT_BG = {politics:'linear-gradient(135deg,#1a1a1a,#333)',entertainment:'linear-gradient(135deg,#3d1a6e,#1e0d36)',sports:'linear-gradient(135deg,#0d4726,#062d17)',business:'linear-gradient(135deg,#5c2800,#3a1800)',lifestyle:'linear-gradient(135deg,#4a003a,#2d0023)',tech:'linear-gradient(135deg,#002a5c,#001a38)',default:'linear-gradient(135deg,#1a1a1a,#333)'};
+const CAT_ICONS={politics:'🏛️',entertainment:'🎬',sports:'⚽',business:'📈',lifestyle:'✨',tech:'💻',default:'📰'};
+const CAT_THUMB={politics:'thumb-politics',entertainment:'thumb-entertainment',sports:'thumb-sports',business:'thumb-business',lifestyle:'thumb-lifestyle',tech:'thumb-tech'};
+const CAT_BG={politics:'linear-gradient(135deg,#1a1a1a,#333)',entertainment:'linear-gradient(135deg,#3d1a6e,#1e0d36)',sports:'linear-gradient(135deg,#0d4726,#062d17)',business:'linear-gradient(135deg,#5c2800,#3a1800)',lifestyle:'linear-gradient(135deg,#4a003a,#2d0023)',tech:'linear-gradient(135deg,#002a5c,#001a38)',default:'linear-gradient(135deg,#1a1a1a,#333)'};
 
-let allArticles = [];
-let pendingArticles = [];
-let savedArticles = JSON.parse(localStorage.getItem('fn_saved') || '[]');
-let readArticles = new Set(JSON.parse(localStorage.getItem('fn_read') || '[]'));
-let currentCat = 'all';
-let currentTime = 'all';
-let deferredInstall = null;
-let autoRefreshTimer = null;
-let isDark = localStorage.getItem('fn_dark') === '1';
-let ptrStartY = 0;
-let ytVideos = [];
+const POLLS=[
+  {q:'Should state police be created in Nigeria?',opts:['Yes, we need am!','No, too dangerous','Depends on the state'],votes:[0,0,0]},
+  {q:'Who is doing better — FG or State Governments?',opts:['Federal Government','State Governments','Both dey try','Both dey fail'],votes:[0,0,0,0]},
+  {q:'Is the naira getting better?',opts:['Yes, improving','No, still suffering','Too early to say'],votes:[0,0,0]},
+  {q:'Best Nigerian musician right now?',opts:['Burna Boy','Wizkid','Davido','Asake'],votes:[0,0,0,0]},
+];
 
-// ── INIT ──────────────────────────────────────────────────────────────────
-window.addEventListener('load', () => {
-  if (isDark) document.body.classList.add('dark');
-  updateDarkBtn();
-  updateSavedBadge();
-  // Splash screen
-  setTimeout(() => {
-    document.getElementById('splash').classList.add('hide');
-    setTimeout(() => document.getElementById('splash').remove(), 700);
-  }, 2200);
-  setTimeout(() => { loadFeed(); setupInstall(); scheduleAutoRefresh(); }, 300);
+let allArticles=[],pendingArticles=[],sliderArticles=[],sliderIndex=0,sliderTimer=null;
+let savedArticles=JSON.parse(localStorage.getItem('fn_saved')||'[]');
+let readArticles=new Set(JSON.parse(localStorage.getItem('fn_read')||'[]'));
+let reactions=JSON.parse(localStorage.getItem('fn_reactions')||'{}');
+let pollVotes=JSON.parse(localStorage.getItem('fn_polls')||'{}');
+let currentCat='all',currentTime='all',deferredInstall=null,autoRefreshTimer=null;
+let isDark=localStorage.getItem('fn_dark')==='1';
+let ptrStartY=0,ytVideos=[];
+let currentPollIdx=0;
+
+window.addEventListener('load',()=>{
+  if(isDark) document.body.classList.add('dark');
+  updateDarkBtn(); updateSavedBadge();
+  setTimeout(()=>{document.getElementById('splash').classList.add('hide');setTimeout(()=>document.getElementById('splash').remove(),700);},2200);
+  setTimeout(()=>{loadFeed();if(navigator.serviceWorker)navigator.serviceWorker.register('sw.js').catch(()=>{});scheduleAutoRefresh();updateNotifBtn();},400);
 });
 
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault(); deferredInstall = e;
-  document.getElementById('installBanner').style.display = 'flex';
-});
-document.getElementById('installBtn').addEventListener('click', async () => {
-  if (!deferredInstall) return;
-  deferredInstall.prompt();
-  const {outcome} = await deferredInstall.userChoice;
-  if (outcome === 'accepted') document.getElementById('installBanner').style.display = 'none';
-});
-function setupInstall() {
-  if (navigator.serviceWorker) navigator.serviceWorker.register('sw.js').catch(()=>{});
+// ── SMART BREAKING NEWS NOTIFICATIONS ────────────────────────────────────
+const BREAKING_KEYWORDS = [
+  'breaking','just in','dead','killed','death','arrested','detained','explosion',
+  'crisis','emergency','attack','crash','fire','resign','resigns','impeach',
+  'impeached','ban','banned','suspended','shutdown','collapse','flood','protest',
+  'shooting','bomb','terror','coup','war','strike','kidnap','abduct','rescue',
+  'freed','released','jailed','sentenced','convicted','acquitted','verdict',
+  'breaking news','just in:','alert:','urgent','developing'
+];
+
+const TRENDING_THRESHOLD = 2; // same topic in 2+ sources = breaking
+
+let notifEnabled = localStorage.getItem('fn_notif') === '1';
+let lastNotifTime = 0;
+const NOTIF_COOLDOWN = 30 * 60 * 1000; // max 1 notif per 30 mins
+
+function updateNotifBtn() {
+  const btn = document.getElementById('notifBtn');
+  if (!btn) return;
+  btn.textContent = notifEnabled ? '🔔' : '🔕';
+  btn.style.opacity = notifEnabled ? '1' : '0.5';
+  btn.title = notifEnabled ? 'Breaking alerts ON — tap to turn off' : 'Tap to enable breaking news alerts';
+}
+
+async function toggleNotif() {
+  if (!('Notification' in window)) {
+    showToast('Your browser no support notifications');
+    return;
+  }
+  if (notifEnabled) {
+    notifEnabled = false;
+    localStorage.setItem('fn_notif', '0');
+    updateNotifBtn();
+    showToast('🔕 Breaking alerts turned OFF');
+    return;
+  }
+  // Ask permission only when user explicitly taps
+  const permission = await Notification.requestPermission();
+  if (permission === 'granted') {
+    notifEnabled = true;
+    localStorage.setItem('fn_notif', '1');
+    updateNotifBtn();
+    showToast('🔔 Breaking alerts ON! We go only disturb you for real news.');
+    // Send a welcome test notification
+    setTimeout(() => {
+      sendBreakingNotif('Breaking alerts activated!', 'You go receive alerts only for major breaking news. No spam!');
+    }, 1000);
+  } else {
+    showToast('Permission denied. Check your browser settings.');
+  }
+}
+
+function isBreakingNews(title) {
+  const lower = title.toLowerCase();
+  return BREAKING_KEYWORDS.some(k => lower.includes(k));
+}
+
+function detectTrendingTopics(newArticles) {
+  // Find topics appearing in 2+ different sources
+  const topicMap = {};
+  newArticles.forEach(a => {
+    const words = a.title.toLowerCase().match(/[a-z]{4,}/g) || [];
+    const key = words.slice(0, 4).join(' ');
+    if (!topicMap[key]) topicMap[key] = { sources: new Set(), article: a };
+    topicMap[key].sources.add(a.source);
+  });
+  // Return articles trending across multiple sources
+  return Object.values(topicMap)
+    .filter(t => t.sources.size >= TRENDING_THRESHOLD)
+    .map(t => t.article);
+}
+
+function sendBreakingNotif(title, body) {
+  if (!notifEnabled) return;
+  if (Notification.permission !== 'granted') return;
+  const now = Date.now();
+  if (now - lastNotifTime < NOTIF_COOLDOWN) return; // cooldown
+  lastNotifTime = now;
+  try {
+    new Notification('⚡ Flash Nigeria Breaking', {
+      body: body || title,
+      icon: '/icons/icon-192.png',
+      badge: '/icons/icon-192.png',
+      tag: 'flash-nigeria-breaking', // replaces previous notif instead of stacking
+      renotify: true,
+    });
+  } catch(e) {}
+}
+
+function checkForBreakingNews(newArticles) {
+  if (!notifEnabled || !newArticles.length) return;
+  // Priority 1: Explicit breaking keyword in headline
+  const breakingStory = newArticles.find(a => isBreakingNews(a.title));
+  if (breakingStory) {
+    sendBreakingNotif(breakingStory.title, breakingStory.source + ' · Tap to read on Flash Nigeria');
+    return;
+  }
+  // Priority 2: Same topic trending across multiple sources
+  const trending = detectTrendingTopics(newArticles);
+  if (trending.length > 0) {
+    sendBreakingNotif(
+      trending[0].title,
+      'Trending across ' + trending[0].source + ' and more · Flash Nigeria'
+    );
+  }
 }
 
 // ── PULL TO REFRESH ───────────────────────────────────────────────────────
-document.addEventListener('touchstart', e => { ptrStartY = e.touches[0].clientY; }, {passive:true});
-document.addEventListener('touchend', e => {
-  const diff = e.changedTouches[0].clientY - ptrStartY;
-  if (diff > 80 && window.scrollY === 0) {
-    const ind = document.getElementById('ptrIndicator');
+document.addEventListener('touchstart',e=>{ptrStartY=e.touches[0].clientY;},{passive:true});
+document.addEventListener('touchend',e=>{
+  const diff=e.changedTouches[0].clientY-ptrStartY;
+  if(diff>80&&window.scrollY===0){
+    const ind=document.getElementById('ptrIndicator');
     ind.classList.add('show');
-    loadFeed().then(() => ind.classList.remove('show'));
+    loadFeed().then(()=>ind.classList.remove('show'));
   }
-}, {passive:true});
+},{passive:true});
 
 // ── DARK MODE ─────────────────────────────────────────────────────────────
-function toggleDark() {
-  isDark = !isDark;
-  document.body.classList.toggle('dark', isDark);
-  localStorage.setItem('fn_dark', isDark ? '1' : '0');
-  updateDarkBtn();
-}
-function updateDarkBtn() {
-  document.getElementById('darkBtn').textContent = isDark ? '☀️' : '🌙';
-}
+function toggleDark(){isDark=!isDark;document.body.classList.toggle('dark',isDark);localStorage.setItem('fn_dark',isDark?'1':'0');updateDarkBtn();}
+function updateDarkBtn(){document.getElementById('darkBtn').textContent=isDark?'☀️':'🌙';}
 
 // ── AUTO REFRESH ──────────────────────────────────────────────────────────
-function scheduleAutoRefresh() {
-  clearTimeout(autoRefreshTimer);
-  autoRefreshTimer = setTimeout(silentRefresh, 10 * 60 * 1000);
-}
-async function silentRefresh() {
-  const results = await Promise.allSettled(RSS_SOURCES.map(fetchSource));
-  const fresh = results.flatMap(r => r.status === 'fulfilled' ? r.value : []);
-  fresh.sort((a,b) => new Date(b.pubDate) - new Date(a.pubDate));
-  const existingIds = new Set(allArticles.map(a => a.id));
-  const newOnes = fresh.filter(a => !existingIds.has(a.id));
-  if (newOnes.length > 0) {
-    pendingArticles = fresh;
-    const bar = document.getElementById('refreshBar');
-    bar.textContent = `⚡ ${newOnes.length} new ${newOnes.length===1?'story':'stories'} — tap to load`;
-    bar.classList.add('show');
-    document.getElementById('newBadge').textContent = newOnes.length;
+function scheduleAutoRefresh(){clearTimeout(autoRefreshTimer);autoRefreshTimer=setTimeout(silentRefresh,10*60*1000);}
+async function silentRefresh(){
+  const results=await Promise.allSettled(RSS_SOURCES.map(fetchSource));
+  const fresh=results.flatMap(r=>r.status==='fulfilled'?r.value:[]);
+  fresh.sort((a,b)=>new Date(b.pubDate)-new Date(a.pubDate));
+  const existingIds=new Set(allArticles.map(a=>a.id));
+  const newOnes=fresh.filter(a=>!existingIds.has(a.id));
+  if(newOnes.length>0){
+    pendingArticles=fresh;
+    document.getElementById('refreshBar').textContent=`⚡ ${newOnes.length} new ${newOnes.length===1?'story':'stories'} — tap to load`;
+    document.getElementById('refreshBar').classList.add('show');
+    document.getElementById('newBadge').textContent=newOnes.length;
     document.getElementById('newBadge').classList.add('show');
+    checkForBreakingNews(newOnes); // Smart breaking news detection
   }
   scheduleAutoRefresh();
 }
-function applyNewArticles() {
-  if (pendingArticles.length) { allArticles = pendingArticles; pendingArticles = []; }
+function applyNewArticles(){
+  if(pendingArticles.length){allArticles=pendingArticles;pendingArticles=[];}
   document.getElementById('refreshBar').classList.remove('show');
   document.getElementById('newBadge').classList.remove('show');
-  updateBreakingTicker();
-  renderFeed(currentCat);
-  renderTrending();
-  showToast('⚡ Feed updated!');
+  updateBreakingTicker();renderFeed(currentCat);renderTrending();showToast('⚡ Feed updated!');
 }
 
 // ── FETCH ─────────────────────────────────────────────────────────────────
-async function fetchSource(source) {
-  try {
-    const res = await fetch(source.url, {signal: AbortSignal.timeout(10000)});
-    const data = await res.json();
-    if (!data.items || data.status !== 'ok') return [];
-    return data.items.slice(0,12).map(item => {
-      const title = (item.title || '').trim();
-      const link = item.link || '#';
-      const pubDate = item.pubDate || '';
-      const description = (item.description || item.content || '').trim();
-      const image = item.thumbnail || item.enclosure?.link || null;
-      const cleanDesc = description.replace(/<[^>]+>/g,'').trim().slice(0,200);
-      const cat = detectCat(title + ' ' + cleanDesc, source.cat);
-      return {title, link, pubDate, description:cleanDesc, image, source:source.name, cat, id:safeB64(link)};
+async function fetchSource(source){
+  try{
+    const res=await fetch(source.url,{signal:AbortSignal.timeout(10000)});
+    const data=await res.json();
+    if(!data.items||data.status!=='ok') return [];
+    return data.items.slice(0,12).map(item=>{
+      const title=(item.title||'').trim();
+      const link=item.link||'#';
+      const pubDate=item.pubDate||'';
+      const description=(item.description||item.content||'').trim();
+      const image=item.thumbnail||item.enclosure?.link||null;
+      const cleanDesc=description.replace(/<[^>]+>/g,'').trim().slice(0,200);
+      const cat=detectCat(title+' '+cleanDesc,source.cat);
+      return{title,link,pubDate,description:cleanDesc,image,source:source.name,cat,id:safeB64(link)};
     });
-  } catch(e) { return []; }
+  }catch(e){return[];}
+}
+function safeB64(str){try{return btoa(unescape(encodeURIComponent(str))).slice(0,20);}catch(e){return Math.random().toString(36).slice(2,12);}}
+function detectCat(text,fallback){
+  const lower=text.toLowerCase();
+  const priority=['tech','politics','sports','business','lifestyle','entertainment'];
+  for(const cat of priority){if(CAT_KEYWORDS[cat].some(k=>lower.includes(k)))return cat;}
+  return fallback||'default';
 }
 
-function safeB64(str) {
-  try { return btoa(unescape(encodeURIComponent(str))).slice(0,20); }
-  catch(e) { return Math.random().toString(36).slice(2,12); }
-}
-
-function detectCat(text, fallback) {
-  const lower = text.toLowerCase();
-  const priority = ['tech','politics','sports','business','lifestyle','entertainment'];
-  for (const cat of priority) {
-    if (CAT_KEYWORDS[cat].some(k => lower.includes(k))) return cat;
-  }
-  return fallback || 'default';
-}
-
-async function loadFeed() {
-  document.getElementById('mainFeed').innerHTML = `<div class="loading-state"><div class="loading-spinner"></div><div>Fetching latest Naija news...</div></div>`;
-  const results = await Promise.allSettled(RSS_SOURCES.map(fetchSource));
-  allArticles = results.flatMap(r => r.status === 'fulfilled' ? r.value : []);
-  allArticles.sort((a,b) => new Date(b.pubDate) - new Date(a.pubDate));
-  if (allArticles.length === 0) {
-    document.getElementById('mainFeed').innerHTML = `<div class="empty-state"><div class="empty-icon">📡</div><div class="empty-text">Could not load news.<br>Check your connection and try refreshing.</div></div>`;
+async function loadFeed(){
+  document.getElementById('mainFeed').innerHTML=`<div class="loading-state"><div class="loading-spinner"></div><div>Fetching latest Naija news...</div></div>`;
+  const results=await Promise.allSettled(RSS_SOURCES.map(fetchSource));
+  allArticles=results.flatMap(r=>r.status==='fulfilled'?r.value:[]);
+  allArticles.sort((a,b)=>new Date(b.pubDate)-new Date(a.pubDate));
+  if(allArticles.length===0){
+    document.getElementById('mainFeed').innerHTML=`<div class="empty-state"><div class="empty-icon">📡</div><div class="empty-text">Could not load news.<br>Check connection and refresh.</div></div>`;
     return;
   }
-  updateBreakingTicker();
-  renderFeed(currentCat);
-  renderTrending();
+  updateBreakingTicker();renderFeed(currentCat);renderTrending();updateSidebar();
 }
-
-function refreshFeed() { showToast('⚡ Refreshing...'); loadFeed(); }
+function refreshFeed(){showToast('⚡ Refreshing...');loadFeed();}
 
 // ── BREAKING TICKER ───────────────────────────────────────────────────────
-function updateBreakingTicker() {
-  const top = allArticles.slice(0,6).map(a => `<span class="breaking-item">${a.source}: ${a.title}</span>`).join('');
-  document.getElementById('breakingTicker').innerHTML = top + top;
+function updateBreakingTicker(){
+  const top=allArticles.slice(0,6).map(a=>`<span class="breaking-item">${a.source}: ${a.title}</span>`).join('');
+  document.getElementById('breakingTicker').innerHTML=top+top;
 }
 
-// ── TIME FILTER ───────────────────────────────────────────────────────────
-function filterByTime(articles, hours) {
-  if (hours === 'all') return articles;
-  const cutoff = Date.now() - (hours * 60 * 60 * 1000);
-  const filtered = articles.filter(a => new Date(a.pubDate).getTime() >= cutoff);
-  return filtered.length > 0 ? filtered : articles;
-}
-
-document.getElementById('timeFilter').addEventListener('click', e => {
-  const btn = e.target.closest('.time-btn');
-  if (!btn) return;
-  document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  currentTime = btn.dataset.time;
-  renderFeed(currentCat);
-});
-
-// ── RENDER FEED ───────────────────────────────────────────────────────────
-let sliderIndex = 0;
-let sliderTimer = null;
-let sliderArticles = [];
-
-function renderFeed(cat) {
-  currentCat = cat;
-  let articles = cat === 'all' ? allArticles : allArticles.filter(a => a.cat === cat);
-  articles = filterByTime(articles, currentTime === 'all' ? 'all' : parseInt(currentTime));
-  if (articles.length === 0) {
-    document.getElementById('mainFeed').innerHTML = `<div class="empty-state"><div class="empty-icon">${CAT_ICONS[cat]||'📰'}</div><div class="empty-text">No ${cat} news found.<br>Try a different time filter.</div></div>`;
-    return;
-  }
-  sliderArticles = articles.slice(0, 5);
-  const rest = articles.slice(5);
-  sliderIndex = 0;
-  let html = '';
-  html += `<div class="section-label">⚡ Breaking stories</div>`;
-  html += renderSlider();
-  html += `<div class="ai-summary-box" id="aiBox_main"></div>`;
-  html += `<div class="section-label">📰 Latest flashes</div>`;
-  rest.slice(0,40).forEach(a => { html += renderCard(a); });
-  html += renderTrendingInline();
-  document.getElementById('mainFeed').innerHTML = html;
+// ── SLIDER ────────────────────────────────────────────────────────────────
+function renderFeed(cat){
+  currentCat=cat;
+  let articles=cat==='all'?allArticles:allArticles.filter(a=>a.cat===cat);
+  if(currentTime!=='all'){const cutoff=Date.now()-(parseInt(currentTime)*3600000);const f=articles.filter(a=>new Date(a.pubDate).getTime()>=cutoff);if(f.length>0)articles=f;}
+  if(articles.length===0){document.getElementById('mainFeed').innerHTML=`<div class="empty-state"><div class="empty-icon">${CAT_ICONS[cat]||'📰'}</div><div class="empty-text">No ${cat} news found.<br>Try different filter.</div></div>`;return;}
+  sliderArticles=articles.slice(0,5);
+  const rest=articles.slice(5);
+  sliderIndex=0;
+  let html='';
+  // Story of the Day
+  const sotd=allArticles[0];
+  if(sotd) html+=`<div class="sotd-banner" onclick="openArticle('${esc(sotd.link)}','${sotd.id}')"><div class="sotd-label">⭐ STORY OF THE DAY</div><div class="sotd-title">${esc(sotd.title)}</div><div class="sotd-meta"><span>${esc(sotd.source)}</span><span>🕐 ${timeAgo(sotd.pubDate)}</span></div></div>`;
+  html+=`<div class="section-label">⚡ Breaking stories</div>`;
+  html+=renderSlider();
+  html+=`<div class="ai-summary-box" id="aiBox_main"></div>`;
+  // Poll
+  html+=renderPoll(currentPollIdx);
+  // Ad slot
+  html+=`<div class="ad-slot"><div class="ad-slot-label">Advertisement</div><div style="font-size:13px;">Your ad here — contact us to advertise on Flash Nigeria</div></div>`;
+  html+=`<div class="section-label">📰 Latest flashes</div>`;
+  rest.slice(0,15).forEach(a=>{html+=renderCard(a);});
+  // Oga Report button
+  html+=`<div class="oga-report-btn" onclick="openModal('ogaModal')"><div class="oga-report-icon">🚨</div><div class="oga-report-text"><div class="oga-report-title">Oga, You Sabi Something?</div><div class="oga-report-sub">Submit a news tip — we go investigate am!</div></div><div class="oga-report-arrow">›</div></div>`;
+  // Second ad slot
+  html+=`<div class="ad-slot"><div class="ad-slot-label">Advertisement</div><div style="font-size:13px;">Advertise your business on Flash Nigeria</div></div>`;
+  rest.slice(15,40).forEach(a=>{html+=renderCard(a);});
+  html+=renderTrendingInline();
+  document.getElementById('mainFeed').innerHTML=html;
   startSlider();
 }
 
-function renderSlider() {
-  const dots = sliderArticles.map((_,i) => `<span class="slider-dot${i===0?' active':''}" onclick="goSlide(${i})"></span>`).join('');
-  return `
-  <div class="slider-wrap" id="sliderWrap">
-    <div class="slider-track" id="sliderTrack">
-      ${sliderArticles.map((a,i) => renderSlide(a,i)).join('')}
-    </div>
-    <button class="slider-prev" onclick="prevSlide()">&#8249;</button>
-    <button class="slider-next" onclick="nextSlide()">&#8250;</button>
-    <div class="slider-dots" id="sliderDots">${dots}</div>
-    <div class="slider-counter" id="sliderCounter">1 / ${sliderArticles.length}</div>
-  </div>`;
+// ── SLIDER ────────────────────────────────────────────────────────────────
+function renderSlider(){
+  const dots=sliderArticles.map((_,i)=>`<span class="slider-dot${i===0?' active':''}" onclick="goSlide(${i})"></span>`).join('');
+  return`<div class="slider-wrap" id="sliderWrap"><div class="slider-track" id="sliderTrack">${sliderArticles.map((a,i)=>renderSlide(a,i)).join('')}</div><button class="slider-prev" onclick="prevSlide()">&#8249;</button><button class="slider-next" onclick="nextSlide()">&#8250;</button><div class="slider-dots" id="sliderDots">${dots}</div><div class="slider-counter" id="sliderCounter">1 / ${sliderArticles.length}</div></div>`;
+}
+function renderSlide(a,i){
+  const bg=CAT_BG[a.cat]||CAT_BG.default;
+  const imgHtml=a.image?`<img src="${esc(a.image)}" alt="" onerror="this.style.display='none'"/><div class="slide-fallback">${CAT_ICONS[a.cat]||'📰'}</div>`:`<div class="slide-fallback">${CAT_ICONS[a.cat]||'📰'}</div>`;
+  return`<div class="slide"><div class="slide-img" style="background:${bg}" onclick="openArticle('${esc(a.link)}','${a.id}')">${imgHtml}<div class="slide-overlay"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;"><span class="featured-badge" style="background:var(--gold);color:#000;font-size:10px;font-weight:700;padding:3px 8px;border-radius:3px;">⚡ ${(a.cat||'FLASH').toUpperCase()}</span><span style="background:rgba(0,0,0,0.6);color:var(--gold);font-size:10px;padding:3px 8px;border-radius:20px;font-weight:600;">${esc(a.source)}</span></div><div class="slide-title">${esc(a.title)}</div><div class="slide-meta"><span class="slide-time">🕐 ${timeAgo(a.pubDate)}</span><div style="display:flex;gap:4px;"><button class="share-btn btn-wa" onclick="event.stopPropagation();shareWA('${escJ(a.title)}','${escJ(a.link)}')">📲</button><button class="share-btn btn-tg" onclick="event.stopPropagation();shareTG('${escJ(a.title)}','${escJ(a.link)}')">✈️</button><button class="ai-btn" style="background:rgba(255,215,0,0.15);color:var(--gold);border:none;padding:4px 10px;border-radius:20px;cursor:pointer;font-size:11px;font-weight:600;" onclick="event.stopPropagation();getAISummary('main','${escJ(a.title)}','${escJ(a.description)}')">✨ AI</button></div></div></div></div></div>`;
+}
+function startSlider(){clearInterval(sliderTimer);sliderTimer=setInterval(()=>nextSlide(),5000);}
+function nextSlide(){sliderIndex=(sliderIndex+1)%sliderArticles.length;updateSlider();}
+function prevSlide(){sliderIndex=(sliderIndex-1+sliderArticles.length)%sliderArticles.length;updateSlider();}
+function goSlide(i){sliderIndex=i;updateSlider();clearInterval(sliderTimer);sliderTimer=setInterval(()=>nextSlide(),5000);}
+function updateSlider(){
+  const track=document.getElementById('sliderTrack');
+  if(!track)return;
+  track.style.transform=`translateX(-${sliderIndex*100}%)`;
+  document.querySelectorAll('.slider-dot').forEach((d,i)=>d.classList.toggle('active',i===sliderIndex));
+  const c=document.getElementById('sliderCounter');
+  if(c)c.textContent=`${sliderIndex+1} / ${sliderArticles.length}`;
+  const aiBox=document.getElementById('aiBox_main');
+  if(aiBox){aiBox.classList.remove('visible');aiBox.dataset.loaded='';aiBox.textContent='';}
 }
 
-function renderSlide(a, i) {
-  const bg = CAT_BG[a.cat] || CAT_BG.default;
-  const imgHtml = a.image
-    ? `<img src="${esc(a.image)}" alt="" onerror="this.style.display='none'"/><div class="slide-fallback">${CAT_ICONS[a.cat]||'📰'}</div>`
-    : `<div class="slide-fallback">${CAT_ICONS[a.cat]||'📰'}</div>`;
-  return `
-  <div class="slide" data-index="${i}">
-    <div class="slide-img" style="background:${bg}" onclick="openArticle('${esc(a.link)}','${a.id}')">
-      ${imgHtml}
-      <div class="slide-overlay">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
-          <span class="featured-badge">⚡ ${a.cat?.toUpperCase()||'FLASH'}</span>
-          <span class="featured-source-pill">${esc(a.source)}</span>
-        </div>
-        <div class="slide-title">${esc(a.title)}</div>
-        <div class="slide-meta">
-          <span class="slide-time">🕐 ${timeAgo(a.pubDate)}</span>
-          <div style="display:flex;gap:4px;">
-            <button class="share-btn btn-wa" onclick="event.stopPropagation();shareWA('${escJ(a.title)}','${escJ(a.link)}')">📲</button>
-            <button class="share-btn btn-tg" onclick="event.stopPropagation();shareTG('${escJ(a.title)}','${escJ(a.link)}')">✈️</button>
-            <button class="ai-btn" onclick="event.stopPropagation();getAISummary('main','${escJ(a.title)}','${escJ(a.description)}')">✨ AI</button>
+// ── POLL ──────────────────────────────────────────────────────────────────
+function renderPoll(idx){
+  const poll=POLLS[idx%POLLS.length];
+  const saved=pollVotes[idx]??null;
+  const totalVotes=poll.votes.reduce((a,b)=>a+b,0)+(Object.values(pollVotes).length*2);
+  const opts=poll.opts.map((o,i)=>{
+    const v=poll.votes[i]+Math.floor(Math.random()*80+20);
+    const total=poll.opts.reduce((_,__,j)=>_+poll.votes[j]+Math.floor(Math.random()*80+20),0)||1;
+    const pct=Math.round((v/total)*100);
+    const voted=saved===i;
+    return`<div class="poll-option${voted?' voted':''}" onclick="votePoll(${idx},${i},this)"><div class="poll-option-label">${o}</div><div class="poll-bar-wrap"><div class="poll-bar" style="width:${voted?pct:0}%"></div></div><div class="poll-pct">${voted?pct+'%':''}</div></div>`;
+  }).join('');
+  return`<div class="poll-card"><div class="poll-header"><div class="poll-label">🗳️ NAIJA POLL</div><div class="poll-question">${poll.q}</div></div><div class="poll-body">${opts}</div><div class="poll-footer"><span>Tap to vote · Results show after voting</span><button class="poll-share-btn" onclick="shareWA('Flash Nigeria Poll: ${escJ(poll.q)}','https://flash-nigeria.vercel.app')">📲 Share Poll</button></div></div>`;
+}
+
+function votePoll(pollIdx,optIdx,el){
+  if(pollVotes[pollIdx]!==undefined){showToast('You don vote already!');return;}
+  pollVotes[pollIdx]=optIdx;
+  localStorage.setItem('fn_polls',JSON.stringify(pollVotes));
+  // Animate bars
+  const card=el.closest('.poll-card');
+  const opts=card.querySelectorAll('.poll-option');
+  const fakeVotes=POLLS[pollIdx].opts.map(()=>Math.floor(Math.random()*80+20));
+  fakeVotes[optIdx]+=50;
+  const total=fakeVotes.reduce((a,b)=>a+b,0);
+  opts.forEach((o,i)=>{
+    o.classList.toggle('voted',i===optIdx);
+    const bar=o.querySelector('.poll-bar');
+    const pct=o.querySelector('.poll-pct');
+    const p=Math.round((fakeVotes[i]/total)*100);
+    if(bar)bar.style.width=p+'%';
+    if(pct)pct.textContent=p+'%';
+  });
+  showToast('✅ Vote recorded!');
+  currentPollIdx=(pollIdx+1);
+}
+
+// ── NEWS CARD ─────────────────────────────────────────────────────────────
+function renderCard(a){
+  const thumbClass=CAT_THUMB[a.cat]||'thumb-default';
+  const catClass='cat-'+(a.cat||'default');
+  const saved=savedArticles.some(s=>s.id===a.id);
+  const isRead=readArticles.has(a.id);
+  const imgHtml=a.image?`<img src="${esc(a.image)}" alt="" onerror="this.style.display='none'"/><span class="thumb-emoji">${CAT_ICONS[a.cat]||'📰'}</span>`:`<span class="thumb-emoji">${CAT_ICONS[a.cat]||'📰'}</span>`;
+  const rxData=reactions[a.id]||{};
+  const rxBtns=['😮','🔥','💔','😂'].map(e=>{
+    const count=rxData[e]||0;
+    const reacted=rxData['_mine']===e;
+    return`<button class="reaction-btn${reacted?' reacted':''}" onclick="event.stopPropagation();reactTo('${a.id}','${e}',this)">${e} <span class="reaction-count">${count>0?count:''}</span></button>`;
+  }).join('');
+  return`
+  <div class="news-card${isRead?' read':''}">
+    <div class="news-card-top" onclick="openArticle('${esc(a.link)}','${a.id}')">
+      <div class="news-thumb ${thumbClass}">${imgHtml}</div>
+      <div class="news-body">
+        <div class="news-cat ${catClass}">${(a.cat||'news').toUpperCase()}</div>
+        <div class="news-title">${esc(a.title)}</div>
+        <div class="news-foot">
+          <span class="news-source">${esc(a.source)} · ${timeAgo(a.pubDate)}</span>
+          <div class="news-actions">
+            <button onclick="event.stopPropagation();shareWA('${escJ(a.title)}','${escJ(a.link)}')" title="WhatsApp">📲</button>
+            <button onclick="event.stopPropagation();shareTG('${escJ(a.title)}','${escJ(a.link)}')" title="Telegram">✈️</button>
+            <button onclick="event.stopPropagation();copyLink('${escJ(a.link)}')" title="Copy">🔗</button>
+            <button onclick="event.stopPropagation();saveArticle(${safeJson(a)},'${a.id}',this)">${saved?'🔖':'➕'}</button>
           </div>
         </div>
       </div>
     </div>
+    <div class="reactions" id="rx_${a.id}">${rxBtns}</div>
   </div>`;
 }
 
-function startSlider() {
-  clearInterval(sliderTimer);
-  sliderTimer = setInterval(() => nextSlide(), 5000);
+// ── REACTIONS ─────────────────────────────────────────────────────────────
+function reactTo(articleId,emoji,btn){
+  const rx=reactions[articleId]||{};
+  const prev=rx['_mine'];
+  if(prev===emoji){
+    rx[emoji]=Math.max(0,(rx[emoji]||1)-1);
+    delete rx['_mine'];
+  } else {
+    if(prev){rx[prev]=Math.max(0,(rx[prev]||1)-1);}
+    rx[emoji]=(rx[emoji]||0)+1;
+    rx['_mine']=emoji;
+  }
+  reactions[articleId]=rx;
+  localStorage.setItem('fn_reactions',JSON.stringify(reactions));
+  // Re-render just the reaction row
+  const row=document.getElementById('rx_'+articleId);
+  if(row){
+    const rxBtns=['😮','🔥','💔','😂'].map(e=>{
+      const count=rx[e]||0;
+      const reacted=rx['_mine']===e;
+      return`<button class="reaction-btn${reacted?' reacted':''}" onclick="event.stopPropagation();reactTo('${articleId}','${e}',this)">${e} <span class="reaction-count">${count>0?count:''}</span></button>`;
+    }).join('');
+    row.innerHTML=rxBtns;
+  }
 }
 
-function nextSlide() {
-  sliderIndex = (sliderIndex + 1) % sliderArticles.length;
-  updateSlider();
+// ── TRENDING ──────────────────────────────────────────────────────────────
+function renderTrendingInline(){
+  const keywords=extractTrending();
+  if(!keywords.length)return'';
+  const tags=keywords.map(k=>`<span class="trend-tag" onclick="doSearchFromTag('${k}')">#${k}</span>`).join('');
+  return`<div class="trending-section"><div class="trend-header">🔥 Trending in Nigeria</div><div class="trend-tags">${tags}</div></div>`;
 }
-
-function prevSlide() {
-  sliderIndex = (sliderIndex - 1 + sliderArticles.length) % sliderArticles.length;
-  updateSlider();
+function renderTrending(){
+  const keywords=extractTrending(24);
+  const tags=keywords.map(k=>`<span class="trend-tag" onclick="doSearchFromTag('${k}')">#${k}</span>`).join('');
+  const sources=RSS_SOURCES.map(s=>`<div class="source-card"><span class="source-dot"></span><span style="font-size:14px;font-weight:600;">${s.name}</span><span style="margin-left:auto;font-size:11px;color:var(--green);font-weight:600;">● LIVE</span></div>`).join('');
+  document.getElementById('trendingFull').innerHTML=`<p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Most talked-about topics in Nigerian news right now.</p><div class="trend-tags" style="gap:10px;margin-bottom:24px;">${tags}</div><div class="section-label" style="margin:0 0 8px;">📡 Live Sources</div>${sources}`;
+  updateSidebar();
 }
-
-function goSlide(i) {
-  sliderIndex = i;
-  updateSlider();
-  clearInterval(sliderTimer);
-  sliderTimer = setInterval(() => nextSlide(), 5000);
-}
-
-function updateSlider() {
-  const track = document.getElementById('sliderTrack');
-  if (!track) return;
-  track.style.transform = `translateX(-${sliderIndex * 100}%)`;
-  document.querySelectorAll('.slider-dot').forEach((d,i) => d.classList.toggle('active', i===sliderIndex));
-  const counter = document.getElementById('sliderCounter');
-  if (counter) counter.textContent = `${sliderIndex+1} / ${sliderArticles.length}`;
-  // clear old AI summary
-  const aiBox = document.getElementById('aiBox_main');
-  if (aiBox) { aiBox.classList.remove('visible'); aiBox.dataset.loaded = ''; aiBox.textContent = ''; }
-}
-
-function renderFeatured(a) {
-  const saved = savedArticles.some(s => s.id === a.id);
-  const bg = CAT_BG[a.cat] || CAT_BG.default;
-  const imgHtml = a.image
-    ? `<img src="${esc(a.image)}" alt="" onerror="this.style.display='none'"/><div class="featured-img-fallback">${CAT_ICONS[a.cat]||'📰'}</div>`
-    : `<div class="featured-img-fallback">${CAT_ICONS[a.cat]||'📰'}</div>`;
-  return `
-  <div class="featured-card">
-    <div class="featured-img" style="background:${bg}" onclick="openArticle('${esc(a.link)}','${a.id}')">
-      ${imgHtml}
-      <div class="featured-overlay">
-        <div style="display:flex;align-items:center;justify-content:space-between;">
-          <span class="featured-badge">⚡ TOP FLASH</span>
-          <span class="featured-source-pill">${esc(a.source)}</span>
-        </div>
-      </div>
-    </div>
-    <div class="featured-body">
-      <div class="featured-title" onclick="openArticle('${esc(a.link)}','${a.id}')">${esc(a.title)}</div>
-      <div class="featured-meta">
-        <div class="meta-left">
-          <span class="time-tag">🕐 ${timeAgo(a.pubDate)}</span>
-          <button class="ai-btn" onclick="getAISummary('${a.id}','${escJ(a.title)}','${escJ(a.description)}')">✨ AI</button>
-        </div>
-        <div class="share-menu">
-          <button class="share-btn btn-wa" onclick="shareWA('${escJ(a.title)}','${escJ(a.link)}')">📲</button>
-          <button class="share-btn btn-fb" onclick="shareFB('${escJ(a.link)}')">f</button>
-          <button class="share-btn btn-tg" onclick="shareTG('${escJ(a.title)}','${escJ(a.link)}')">✈️</button>
-          <button class="share-btn btn-tw" onclick="shareTW('${escJ(a.title)}','${escJ(a.link)}')">𝕏</button>
-          <button class="share-btn btn-copy" onclick="copyLink('${escJ(a.link)}')">🔗</button>
-          <button class="icon-btn" onclick="saveArticle(${safeJson(a)},'${a.id}',this)">${saved?'🔖':'➕'}</button>
-        </div>
-      </div>
-    </div>
-  </div>`;
-}
-
-function renderCard(a) {
-  const thumbClass = CAT_THUMB[a.cat] || 'thumb-default';
-  const catClass = 'cat-' + (a.cat || 'default');
-  const saved = savedArticles.some(s => s.id === a.id);
-  const isRead = readArticles.has(a.id);
-  const imgHtml = a.image
-    ? `<img src="${esc(a.image)}" alt="" onerror="this.style.display='none'"/><span class="thumb-emoji">${CAT_ICONS[a.cat]||'📰'}</span>`
-    : `<span class="thumb-emoji">${CAT_ICONS[a.cat]||'📰'}</span>`;
-  return `
-  <div class="news-card${isRead?' read':''}" onclick="openArticle('${esc(a.link)}','${a.id}')">
-    <div class="news-thumb ${thumbClass}">${imgHtml}</div>
-    <div class="news-body">
-      <div class="news-cat ${catClass}">${(a.cat||'news').toUpperCase()}</div>
-      <div class="news-title">${esc(a.title)}</div>
-      <div class="news-foot">
-        <span class="news-source">${esc(a.source)} · ${timeAgo(a.pubDate)}</span>
-        <div class="news-actions">
-          <button onclick="event.stopPropagation();shareWA('${escJ(a.title)}','${escJ(a.link)}')" title="WhatsApp">📲</button>
-          <button onclick="event.stopPropagation();shareTG('${escJ(a.title)}','${escJ(a.link)}')" title="Telegram">✈️</button>
-          <button onclick="event.stopPropagation();copyLink('${escJ(a.link)}')" title="Copy link">🔗</button>
-          <button onclick="event.stopPropagation();saveArticle(${safeJson(a)},'${a.id}',this)" title="Save">${saved?'🔖':'➕'}</button>
-        </div>
-      </div>
-    </div>
-  </div>`;
-}
-
-function renderTrendingInline() {
-  const keywords = extractTrending();
-  if (!keywords.length) return '';
-  const tags = keywords.map(k => `<span class="trend-tag" onclick="doSearchFromTag('${k}')">#${k}</span>`).join('');
-  return `<div class="trending-section"><div class="trend-header">🔥 Trending in Nigeria</div><div class="trend-tags">${tags}</div></div>`;
-}
-
-function renderTrending() {
-  const keywords = extractTrending(24);
-  const tags = keywords.map(k => `<span class="trend-tag" onclick="doSearchFromTag('${k}')">#${k}</span>`).join('');
-  const sources = RSS_SOURCES.map(s => `
-    <div class="source-card">
-      <span class="source-dot"></span>
-      <span style="font-size:14px;font-weight:600;">${s.name}</span>
-      <span style="margin-left:auto;font-size:11px;color:var(--green);font-weight:600;">● LIVE</span>
-    </div>`).join('');
-  document.getElementById('trendingFull').innerHTML = `
-    <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Most talked-about topics across Nigerian news right now.</p>
-    <div class="trend-tags" style="gap:10px;margin-bottom:24px;">${tags}</div>
-    <div class="section-label" style="margin:0 0 8px;">📡 Live Sources</div>${sources}`;
-}
-
-// ── YOUTUBE ───────────────────────────────────────────────────────────────
-async function loadYouTube() {
-  if (ytVideos.length > 0) { renderYT(); return; }
-  document.getElementById('ytFeed').innerHTML = `<div class="loading-state"><div class="loading-spinner"></div><div>Loading videos...</div></div>`;
-  try {
-    const query = encodeURIComponent('Nigeria news 2026');
-    const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://www.youtube.com/feeds/videos.xml?channel_id=UCg6gPGh8HU9Pv8WFKN5sqzg')}`);
-    const data = await res.json();
-    if (data.status === 'ok' && data.items?.length) {
-      ytVideos = data.items.slice(0,10);
-      renderYT();
-    } else {
-      showYTFallback();
-    }
-  } catch(e) { showYTFallback(); }
-}
-
-function showYTFallback() {
-  const searches = YT_SEARCHES.map(q => `
-    <div class="yt-card" onclick="window.open('https://www.youtube.com/results?search_query=${encodeURIComponent(q)}','_blank')">
-      <div class="yt-thumb">▶️</div>
-      <div class="yt-body">
-        <div class="yt-title">Search: ${q}</div>
-        <div class="yt-meta">Tap to search on YouTube</div>
-      </div>
-    </div>`).join('');
-  document.getElementById('ytFeed').innerHTML = `
-    <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Quick links to Nigerian content on YouTube.</p>
-    ${searches}`;
-}
-
-function renderYT() {
-  const cards = ytVideos.map(v => {
-    const vidId = v.link?.match(/v=([^&]+)/)?.[1] || '';
-    const thumb = vidId ? `https://img.youtube.com/vi/${vidId}/mqdefault.jpg` : '';
-    return `
-    <div class="yt-card" onclick="window.open('${esc(v.link)}','_blank')">
-      <div class="yt-thumb">${thumb?`<img src="${thumb}" alt=""/>`:''} ▶️</div>
-      <div class="yt-body">
-        <div class="yt-title">${esc(v.title||'')}</div>
-        <div class="yt-meta">${esc(v.author||'')} · ${timeAgo(v.pubDate)}</div>
-      </div>
-    </div>`;
-  }).join('');
-  document.getElementById('ytFeed').innerHTML = cards;
-}
-
-// ── SMARTER TRENDING ──────────────────────────────────────────────────────
-function extractTrending(n=12) {
-  const stopwords = new Set(['the','and','for','that','with','this','from','have','been','will','were','are','was','its','into','also','more','than','over','after','but','not','all','has','had','new','can','said','says','who','about','what','when','how','one','two','they','their','them','his','her','our','out','any','may','which','just','top','ago','now','like','post','state','world','first','appeared','latest','says','read','lists','list','over','amid','after','gets','back']);
-  const naijaPriority = new Set(['tinubu','naira','nigeria','lagos','abuja','senate','inec','dangote','obi','atiku','nollywood','afrobeats','eagles','afcon','cbn','efcc','nnpc','ndlea','buhari','wike','obi','kemi','shettima','police']);
-  const freq = {};
-  allArticles.forEach(a => {
-    const words = (a.title).toLowerCase().match(/\b[a-z]{4,}\b/g) || [];
-    words.forEach(w => {
-      if (!stopwords.has(w)) {
-        const boost = naijaPriority.has(w) ? 3 : 1;
-        freq[w] = (freq[w]||0) + boost;
-      }
+function extractTrending(n=12){
+  const stop=new Set(['the','and','for','that','with','this','from','have','been','will','were','are','was','its','into','also','more','than','over','after','but','not','all','has','had','new','can','said','says','who','about','what','when','how','one','two','they','their','them','his','her','our','out','any','may','which','just','top','ago','now','like','post','state','world','first','appeared','latest','read','lists','list','over','amid','after','gets','back']);
+  const boost=new Set(['tinubu','naira','nigeria','lagos','abuja','senate','inec','dangote','obi','atiku','nollywood','afrobeats','eagles','afcon','cbn','efcc','nnpc','buhari','wike','kemi','shettima','police']);
+  const freq={};
+  allArticles.forEach(a=>{
+    (a.title).toLowerCase().match(/\b[a-z]{4,}\b/g)?.forEach(w=>{
+      if(!stop.has(w)){freq[w]=(freq[w]||0)+(boost.has(w)?3:1);}
     });
   });
   return Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,n).map(([w])=>w.charAt(0).toUpperCase()+w.slice(1));
 }
+function updateSidebar(){
+  const keywords=extractTrending(15);
+  const tags=keywords.map(k=>`<div class="trend-tag" style="margin-bottom:6px;display:block;" onclick="doSearchFromTag('${k}')">#${k}</div>`).join('');
+  const sb=document.getElementById('sidebarTrending');
+  if(sb)sb.innerHTML=tags;
+  const sources=RSS_SOURCES.map(s=>`<div style="padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;display:flex;align-items:center;gap:8px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;flex-shrink:0;"></span>${s.name}</div>`).join('');
+  const ss=document.getElementById('sidebarSources');
+  if(ss)ss.innerHTML=sources;
+}
 
 // ── AI SUMMARY ────────────────────────────────────────────────────────────
-async function getAISummary(id, title, desc) {
-  const box = document.getElementById('aiBox_'+id);
-  if (!box) return;
-  if (box.classList.contains('visible') && box.dataset.loaded) { box.classList.remove('visible'); return; }
-  box.classList.add('visible');
-  box.textContent = '✨ Generating AI summary...';
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:1000,
-        system:'You are a concise Nigerian news summarizer. Summarize in 2-3 sentences, plain English. Start with the key fact. Be direct.',
-        messages:[{role:'user',content:`Title: ${title}\nSnippet: ${desc}\n\nSummarize this Nigerian news article in 2-3 sentences.`}]
-      })
-    });
-    const data = await res.json();
-    const text = data.content?.[0]?.text || 'Summary unavailable.';
-    box.dataset.loaded = '1';
-    box.innerHTML = `<strong>⚡ AI Summary:</strong> ${text}`;
-  } catch(e) { box.textContent = 'Summary unavailable. Tap to open full article.'; }
+async function getAISummary(id,title,desc){
+  const box=document.getElementById('aiBox_'+id);
+  if(!box)return;
+  if(box.classList.contains('visible')&&box.dataset.loaded){box.classList.remove('visible');return;}
+  box.classList.add('visible');box.textContent='✨ Generating AI summary...';
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:'You are a concise Nigerian news summarizer. Summarize in 2-3 sentences, plain English. Start with the key fact.',messages:[{role:'user',content:`Title: ${title}\nSnippet: ${desc}\n\nSummarize in 2-3 sentences.`}]})});
+    const data=await res.json();
+    box.dataset.loaded='1';
+    box.innerHTML=`<strong>⚡ AI Summary:</strong> ${data.content?.[0]?.text||'Summary unavailable.'}`;
+  }catch(e){box.textContent='Summary unavailable.';}
 }
 
-// ── SHARE FUNCTIONS ───────────────────────────────────────────────────────
-function shareWA(title, url) {
-  event.stopPropagation();
-  const msg = encodeURIComponent(`⚡ *${title}*\n\nRead more: ${url}\n\n_Via Flash Nigeria — flash-nigeria.vercel.app_`);
-  window.open(`https://wa.me/?text=${msg}`, '_blank');
-}
-function shareFB(url) {
-  event.stopPropagation();
-  window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
-}
-function shareTG(title, url) {
-  event.stopPropagation();
-  window.open(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent('⚡ '+title)}`, '_blank');
-}
-function shareTW(title, url) {
-  event.stopPropagation();
-  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent('⚡ '+title)}&url=${encodeURIComponent(url)}&via=FlashNigeria`, '_blank');
-}
-function copyLink(url) {
-  event.stopPropagation();
-  navigator.clipboard.writeText(url).then(() => showToast('🔗 Link copied!')).catch(() => showToast('Could not copy link'));
+// ── SHARE ─────────────────────────────────────────────────────────────────
+function shareWA(title,url){event.stopPropagation();window.open(`https://wa.me/?text=${encodeURIComponent('⚡ *'+title+'*\n\nRead more: '+url+'\n\n_Via Flash Nigeria — flash-nigeria.vercel.app_`)},'_blank');}
+function shareStatus(title,url){event.stopPropagation();window.open(`https://wa.me/?text=${encodeURIComponent('⚡ '+title+' '+url)},'_blank');}
+function shareFB(url){event.stopPropagation();window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,'_blank');}
+function shareTG(title,url){event.stopPropagation();window.open(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent('⚡ '+title)}`,'_blank');}
+function shareTW(title,url){event.stopPropagation();window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent('⚡ '+title)}&url=${encodeURIComponent(url)}&via=FlashNigeria`,'_blank');}
+function copyLink(url){event.stopPropagation();navigator.clipboard.writeText(url).then(()=>showToast('🔗 Link copied!')).catch(()=>showToast('Could not copy'));}
+
+// ── OGA REPORT ────────────────────────────────────────────────────────────
+function submitReport(){
+  const text=document.getElementById('reportText').value.trim();
+  if(!text){showToast('Abeg enter the gist first!');return;}
+  const name=document.getElementById('reportName').value.trim()||'Anonymous';
+  const contact=document.getElementById('reportContact').value.trim();
+  const msg=`🚨 *News Tip from Flash Nigeria*\n\n*From:* ${name}\n*Contact:* ${contact||'Not provided'}\n\n*Report:*\n${text}`;
+  window.open(`https://wa.me/2348000000000?text=${encodeURIComponent(msg)}`,'_blank');
+  closeModal('ogaModal');
+  document.getElementById('reportText').value='';
+  showToast('🚨 Report sent! Thank you!');
 }
 
 // ── SAVE / READ ───────────────────────────────────────────────────────────
-function saveArticle(article, id, btn) {
+function saveArticle(article,id,btn){
   event.stopPropagation();
-  const exists = savedArticles.findIndex(s => s.id === id);
-  if (exists >= 0) {
-    savedArticles.splice(exists,1);
-    btn.textContent = '➕';
-    showToast('Removed from saved');
-  } else {
-    savedArticles.push(article);
-    btn.textContent = '🔖';
-    showToast('⚡ Saved!');
-  }
-  localStorage.setItem('fn_saved', JSON.stringify(savedArticles));
+  const exists=savedArticles.findIndex(s=>s.id===id);
+  if(exists>=0){savedArticles.splice(exists,1);btn.textContent='➕';showToast('Removed from saved');}
+  else{savedArticles.push(article);btn.textContent='🔖';showToast('⚡ Saved!');}
+  localStorage.setItem('fn_saved',JSON.stringify(savedArticles));
   updateSavedBadge();
 }
-
-function updateSavedBadge() {
-  const b = document.getElementById('savedBadge');
-  if (savedArticles.length > 0) { b.textContent = savedArticles.length; b.classList.add('show'); }
-  else b.classList.remove('show');
-}
-
-function markRead(id) {
-  readArticles.add(id);
-  localStorage.setItem('fn_read', JSON.stringify([...readArticles]));
-}
-
-function renderSaved() {
-  if (savedArticles.length === 0) {
-    document.getElementById('savedList').innerHTML = `<div class="empty-state"><div class="empty-icon">🔖</div><div class="empty-text">No saved articles yet.<br>Tap ➕ on any story to save it.</div></div>`;
-    return;
-  }
-  document.getElementById('savedList').innerHTML = savedArticles.map(a => renderCard(a)).join('');
+function updateSavedBadge(){const b=document.getElementById('savedBadge');if(savedArticles.length>0){b.textContent=savedArticles.length;b.classList.add('show');}else b.classList.remove('show');}
+function markRead(id){readArticles.add(id);localStorage.setItem('fn_read',JSON.stringify([...readArticles]));}
+function renderSaved(){
+  if(savedArticles.length===0){document.getElementById('savedList').innerHTML=`<div class="empty-state"><div class="empty-icon">🔖</div><div class="empty-text">No saved articles yet.<br>Tap ➕ to save.</div></div>`;return;}
+  document.getElementById('savedList').innerHTML=savedArticles.map(a=>renderCard(a)).join('');
 }
 
 // ── SEARCH ────────────────────────────────────────────────────────────────
-function doSearch(query) {
-  if (!query.trim()) { document.getElementById('searchResults').innerHTML=''; return; }
-  const q = query.toLowerCase();
-  const results = allArticles.filter(a => a.title.toLowerCase().includes(q) || a.description.toLowerCase().includes(q));
-  if (results.length === 0) {
-    document.getElementById('searchResults').innerHTML = `<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-text">No results for "${esc(query)}"</div></div>`;
-    return;
-  }
-  document.getElementById('searchResults').innerHTML = results.slice(0,20).map(a => renderCard(a)).join('');
+function doSearch(query){
+  if(!query.trim()){document.getElementById('searchResults').innerHTML='';return;}
+  const q=query.toLowerCase();
+  const results=allArticles.filter(a=>a.title.toLowerCase().includes(q)||a.description.toLowerCase().includes(q));
+  document.getElementById('searchResults').innerHTML=results.length?results.slice(0,20).map(a=>renderCard(a)).join(''):`<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-text">No results for "${esc(query)}"</div></div>`;
+}
+function doSearchFromTag(keyword){switchPage('search',document.querySelector('[data-page="search"]'));document.getElementById('searchInput').value=keyword;doSearch(keyword);}
+
+// ── YOUTUBE ───────────────────────────────────────────────────────────────
+async function loadYouTube(){
+  if(ytVideos.length>0){renderYT();return;}
+  const searches=['Nigeria news today','Naija music 2026','Super Eagles highlight','Nollywood 2026','Nigerian politics today'];
+  const cards=searches.map(q=>`<div class="yt-card" onclick="window.open('https://www.youtube.com/results?search_query=${encodeURIComponent(q)}','_blank')"><div class="yt-thumb">▶️</div><div class="yt-body"><div class="yt-title">Search: ${q}</div><div class="yt-meta">Tap to search YouTube</div></div></div>`).join('');
+  document.getElementById('ytFeed').innerHTML=`<p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Quick links to Nigerian content on YouTube.</p>${cards}`;
 }
 
-function doSearchFromTag(keyword) {
-  switchPage('search', document.querySelector('[data-page="search"]'));
-  document.getElementById('searchInput').value = keyword;
-  doSearch(keyword);
+// ── TIME FILTER ───────────────────────────────────────────────────────────
+function toggleTimeMenu(){document.getElementById('timeDropdown').classList.toggle('show');}
+function setTime(val,el){
+  currentTime=val;
+  document.querySelectorAll('.time-option').forEach(o=>o.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('timeDropdown').classList.remove('show');
+  renderFeed(currentCat);
+  showToast('Filter: '+el.textContent.trim());
 }
+document.addEventListener('click',e=>{if(!e.target.closest('.filter-btn')&&!e.target.closest('#timeDropdown'))document.getElementById('timeDropdown')?.classList.remove('show');});
+
+// ── MODAL ─────────────────────────────────────────────────────────────────
+function openModal(id){document.getElementById(id).classList.add('show');}
+function closeModal(id){document.getElementById(id).classList.remove('show');}
+document.getElementById('ogaModal').addEventListener('click',e=>{if(e.target===document.getElementById('ogaModal'))closeModal('ogaModal');});
 
 // ── NAV ───────────────────────────────────────────────────────────────────
-function switchPage(page, btn) {
-  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  ['home','trending','search','saved','videos'].forEach(p => {
-    const el = document.getElementById('page-'+p);
-    if (el) el.style.display = p===page?'block':'none';
+function switchPage(page,btn){
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  ['home','trending','search','saved','videos'].forEach(p=>{
+    const el=document.getElementById('page-'+p);
+    if(el)el.style.display=p===page?'block':'none';
   });
-  if (page==='saved') renderSaved();
-  if (page==='search') document.getElementById('searchInput').focus();
-  if (page==='videos') loadYouTube();
+  if(page==='saved')renderSaved();
+  if(page==='search')document.getElementById('searchInput').focus();
+  if(page==='videos')loadYouTube();
 }
-
-document.getElementById('catBar').addEventListener('click', e => {
-  const btn = e.target.closest('.cat-btn');
-  if (!btn) return;
-  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+function switchPageDesktop(page,el){
+  document.querySelectorAll('.desktop-nav a').forEach(a=>a.classList.remove('active'));
+  el.classList.add('active');
+  switchPage(page,document.querySelector(`[data-page="${page}"]`));
+}
+document.getElementById('catBar').addEventListener('click',e=>{
+  const btn=e.target.closest('.cat-btn');
+  if(!btn)return;
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   renderFeed(btn.dataset.cat);
 });
 
 // ── UTILS ─────────────────────────────────────────────────────────────────
-function openArticle(url, id) {
-  if (id) markRead(id);
-  if (url && url!=='#') window.open(url,'_blank','noopener');
-}
-function timeAgo(dateStr) {
-  if (!dateStr) return 'just now';
-  const diff = Date.now() - new Date(dateStr).getTime();
-  const mins = Math.floor(diff/60000);
-  if (mins<1) return 'just now';
-  if (mins<60) return mins+'m ago';
-  const hrs = Math.floor(mins/60);
-  if (hrs<24) return hrs+'hr ago';
-  return Math.floor(hrs/24)+'d ago';
-}
-function esc(str) {
-  return (str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-}
-function escJ(str) {
-  return (str||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'\\"').replace(/\n/g,' ').slice(0,300);
-}
-function safeJson(a) { return JSON.stringify(a).replace(/"/g,'&quot;'); }
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2500);
-}
+function openArticle(url,id){if(id)markRead(id);if(url&&url!=='#')window.open(url,'_blank','noopener');}
+function timeAgo(d){if(!d)return'just now';const m=Math.floor((Date.now()-new Date(d))/60000);if(m<1)return'just now';if(m<60)return m+'m ago';const h=Math.floor(m/60);if(h<24)return h+'hr ago';return Math.floor(h/24)+'d ago';}
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+function escJ(s){return(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'\\"').replace(/\n/g,' ').slice(0,300);}
+function safeJson(a){return JSON.stringify(a).replace(/"/g,'&quot;');}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
 </script>
 </body>
 </html>
