@@ -282,13 +282,13 @@ body.dark .bnav-item.on{color:#FFD700;}
 <div class="page on" id="pg-home">
   <div style="position:relative;">
     <div class="cats-bar" id="catBar">
-      <button class="cat on" data-cat="all">All</button>
-      <button class="cat" data-cat="politics">Politics</button>
-      <button class="cat" data-cat="entertainment">Entertainment</button>
-      <button class="cat" data-cat="sports">Sports</button>
-      <button class="cat" data-cat="business">Business</button>
-      <button class="cat" data-cat="lifestyle">Lifestyle</button>
-      <button class="cat" data-cat="tech">Tech</button>
+      <button class="cat on" data-cat="all" onclick="selectCat('all', this)">All</button>
+      <button class="cat" data-cat="politics" onclick="selectCat('politics', this)">Politics</button>
+      <button class="cat" data-cat="entertainment" onclick="selectCat('entertainment', this)">Entertainment</button>
+      <button class="cat" data-cat="sports" onclick="selectCat('sports', this)">Sports</button>
+      <button class="cat" data-cat="business" onclick="selectCat('business', this)">Business</button>
+      <button class="cat" data-cat="lifestyle" onclick="selectCat('lifestyle', this)">Lifestyle</button>
+      <button class="cat" data-cat="tech" onclick="selectCat('tech', this)">Tech</button>
       <button class="filter-btn" onclick="toggleTDrop()">🕐 Filter</button>
     </div>
     <div class="tdrop" id="tdrop">
@@ -993,11 +993,21 @@ function goPage(page,btn){
 }
 
 // CAT FILTER
-document.getElementById('catBar').addEventListener('click',function(ev){
-  var btn=ev.target.closest('.cat');if(!btn)return;
+function selectCat(cat, btn){
   document.querySelectorAll('.cat').forEach(function(b){b.classList.remove('on');});
-  btn.classList.add('on');renderFeed(btn.dataset.cat);
-});
+  if(btn) btn.classList.add('on');
+  curCat = cat || 'all';
+  renderFeed(curCat);
+}
+
+var catBarEl = document.getElementById('catBar');
+if(catBarEl){
+  catBarEl.addEventListener('click', function(ev){
+    var btn = ev.target.closest('.cat');
+    if(!btn) return;
+    selectCat(btn.dataset.cat || 'all', btn);
+  });
+}
 
 // TIME FILTER
 function toggleTDrop(){document.getElementById('tdrop').classList.toggle('on');}
