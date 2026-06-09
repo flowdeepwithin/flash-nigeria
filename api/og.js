@@ -1,41 +1,50 @@
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=3600');
   
   const { url } = req.query;
-  if (!url) return res.status(400).json({ error: 'No URL' });
+  if (!url) return res.status(400).json({ image: '' });
+
+  let decoded;
+  try { decoded = decodeURIComponent(url); }
+  catch(e) { decoded = url; }
+
+  const headers = {
+    'User-Agent': 'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    'Accept-Language': 'en-US,en;q=0.5',
+  };
 
   try {
-    const decoded = decodeURIComponent(url);
     const response = await fetch(decoded, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
-        'Accept': 'text/html,application/xhtml+xml',
-      },
-      signal: AbortSignal.timeout(8000),
+      headers,
+      redirect: 'follow',
+      signal: AbortSignal.timeout(7000),
     });
 
-    if (!response.ok) throw new Error(response.status);
+    if (!response.ok) return res.json({ image: '' });
+    
     const html = await response.text();
 
-    // Extract og:image or twitter:image
+    // Try all common image meta tags
     const patterns = [
       /property=["']og:image["'][^>]+content=["']([^"']+)["']/i,
       /content=["']([^"']+)["'][^>]+property=["']og:image["']/i,
       /name=["']twitter:image["'][^>]+content=["']([^"']+)["']/i,
       /content=["']([^"']+)["'][^>]+name=["']twitter:image["']/i,
+      /property=["']og:image:secure_url["'][^>]+content=["']([^"']+)["']/i,
+      /<link[^>]+rel=["']image_src["'][^>]+href=["']([^"']+)["']/i,
     ];
 
-    let image = '';
-    for (const p of patterns) {
-      const m = html.match(p);
-      if (m && m[1] && /https?:\/\//i.test(m[1])) {
-        image = m[1].replace(/&amp;/g, '&');
-        break;
+    for (const pattern of patterns) {
+      const match = html.match(pattern);
+      if (match && match[1] && /^https?:\/\//i.test(match[1])) {
+        return res.json({ image: match[1].replace(/&amp;/g, '&').trim() });
       }
     }
 
-    res.json({ image });
+    return res.json({ image: '' });
   } catch (err) {
-    res.json({ image: '' });
+    return res.json({ image: '' });
   }
 }
