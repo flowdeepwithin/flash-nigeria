@@ -802,19 +802,19 @@ function renderFeed(cat){
   // Story of the Day
   const sotd=allArticles[0];
     if(sotd){html+='<div class="sotd-banner" id="sotdCard" data-link="'+esc(sotd.link)+'" data-id="'+sotd.id+'"><div class="sotd-label">⭐ STORY OF THE DAY</div><div class="sotd-title">'+esc(sotd.title)+'</div><div class="sotd-meta"><span>'+esc(sotd.source)+'</span><span>🕐 '+timeAgo(sotd.pubDate)+'</span></div></div>';}
-  html+=`<div class="section-label">⚡ Breaking stories</div>`;
+  html+='<div class="section-label">⚡ Breaking stories</div>';
   html+=renderSlider();
-  html+=``;
+  html+='<div class="ai-summary-box" id="aiBox_main"></div>';
   // Poll
   html+=renderPoll(currentPollIdx);
   // Ad slot
-  html+=`<div class="ad-slot"><div class="ad-slot-label">Advertisement</div><div style="font-size:13px;">Your ad here — contact us to advertise on Flash Nigeria</div></div>`;
-  html+=`<div class="section-label">📰 Latest flashes</div>`;
+  html+='<div class="ad-slot"><div class="ad-slot-label">Advertisement</div><div style="font-size:13px;">Your ad here — contact us to advertise on Flash Nigeria</div></div>';
+  html+='<div class="section-label">📰 Latest flashes</div>';
   rest.slice(0,15).forEach(a=>{html+=renderCard(a);});
   // Oga Report button
-  html+=`<div class="oga-report-btn" onclick="openModal('ogaModal')"><div class="oga-report-icon">🚨</div><div class="oga-report-text"><div class="oga-report-title">Oga, You Sabi Something?</div><div class="oga-report-sub">Submit a news tip — we go investigate am!</div></div><div class="oga-report-arrow">›</div></div>`;
+  '<div class="oga-report-btn" onclick="openModal(\'ogaModal\')"><div class="oga-report-icon">🚨</div><div class="oga-report-text"><div class="oga-report-title">Oga, You Sabi Something?</div><div class="oga-report-sub">Submit a news tip — we go investigate am!</div></div><div class="oga-report-arrow">›</div></div>';
   // Second ad slot
-  html+=`<div class="ad-slot"><div class="ad-slot-label">Advertisement</div><div style="font-size:13px;">Advertise your business on Flash Nigeria</div></div>`;
+  html+='<div class="ad-slot"><div class="ad-slot-label">Advertisement</div><div style="font-size:13px;">Advertise your business on Flash Nigeria</div></div>';
   rest.slice(15,40).forEach(a=>{html+=renderCard(a);});
   html+=renderTrendingInline();
   document.getElementById('mainFeed').innerHTML=html;
