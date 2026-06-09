@@ -152,9 +152,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .btn-copy{background:#555;}
 .icon-btn{background:none;border:none;color:var(--text2);font-size:18px;cursor:pointer;padding:4px;}
 
-/* AI BOX */
-.ai-summary-box{background:var(--gold-light);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:10px 14px;margin:0 16px 10px;font-size:13px;color:var(--gold-dark);line-height:1.6;display:none;}
-.ai-summary-box.visible{display:block;}
+
 
 /* POLL */
 .poll-card{margin:8px 16px;border-radius:12px;border:1px solid var(--border);overflow:hidden;background:var(--bg);}
@@ -253,6 +251,16 @@ body.dark .nav-item.active{color:var(--gold);}
 .yt-info{padding:8px 10px 10px;}
 .yt-title-big{font-size:13px;font-weight:600;color:var(--text);line-height:1.3;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 .yt-channel{font-size:11px;color:var(--text2);}
+
+/* VOICE */
+#voiceBtn.listening{animation:voicePulse 1s ease-in-out infinite;color:#ff4444;}
+@keyframes voicePulse{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.3);opacity:0.7;}}
+.voice-ripple{position:relative;display:inline-block;}
+.voice-ripple::after{content:'';position:absolute;inset:-8px;border-radius:50%;border:2px solid #ff4444;animation:ripple 1s ease-out infinite;}
+@keyframes ripple{0%{transform:scale(1);opacity:1;}100%{transform:scale(2);opacity:0;}}
+/* AI BOX */
+.ai-summary-box{background:var(--gold-light);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:10px 14px;margin:0 16px 10px;font-size:13px;color:var(--gold-dark);line-height:1.6;display:none;}
+.ai-summary-box.visible{display:block;}
 </style>
 </head>
 <body>
@@ -263,6 +271,30 @@ body.dark .nav-item.active{color:var(--gold);}
   <div class="splash-title">FLASH <span>NIGERIA</span></div>
   <div class="splash-sub">Nigeria's Fastest News. Every Second.</div>
   <div class="splash-bar"><div class="splash-fill"></div></div>
+</div>
+
+
+<!-- VOICE MODAL -->
+<div class="modal-overlay" id="voiceModal">
+  <div class="modal" style="text-align:center;padding:32px 24px 40px;">
+    <div class="modal-handle"></div>
+    <div id="voiceIcon" style="font-size:56px;margin-bottom:12px;">🎤</div>
+    <div id="voiceStatus" style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px;">Listening...</div>
+    <div id="voiceHeard" style="font-size:14px;color:var(--text2);min-height:24px;margin-bottom:20px;font-style:italic;"></div>
+    <div style="background:var(--bg2);border-radius:12px;padding:14px;text-align:left;margin-bottom:20px;">
+      <div style="font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Try saying:</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.8;">
+        🗞️ "Take me to Punch News"<br/>
+        📺 "Open Channels TV"<br/>
+        ⚽ "Show me Sports news"<br/>
+        🏛️ "Go to Politics"<br/>
+        🔥 "Show trending"<br/>
+        🔍 "Search for Tinubu"<br/>
+        🔖 "Open my saved articles"
+      </div>
+    </div>
+    <button onclick="closeModal('voiceModal')" style="background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:10px 24px;font-size:14px;cursor:pointer;font-family:inherit;color:var(--text);">Cancel</button>
+  </div>
 </div>
 
 <!-- OGA REPORT MODAL -->
@@ -285,6 +317,7 @@ body.dark .nav-item.active{color:var(--gold);}
   <a class="logo" href="#"><span style="color:var(--gold);font-size:20px;">⚡</span><span class="logo-text">FLASH <span>NIGERIA</span></span></a>
   <div class="header-actions">
     <button class="header-btn" onclick="openModal('ogaModal')" title="Report news">🚨</button>
+    <button class="header-btn" onclick="startVoice()" id="voiceBtn" title="Voice search">🎤</button>
     <button class="header-btn" onclick="toggleNotif()" id="notifBtn" title="Breaking news alerts">🔔</button>
     <button class="header-btn" onclick="toggleDark()" id="darkBtn" title="Dark mode">🌙</button>
     <button class="header-btn" onclick="refreshFeed()" title="Refresh">🔄<span class="badge-dot" id="newBadge">0</span></button>
@@ -297,6 +330,7 @@ body.dark .nav-item.active{color:var(--gold);}
   <a onclick="switchPageDesktop('search',this)">🔍 Search</a>
   <a onclick="switchPageDesktop('saved',this)">🔖 Saved</a>
   <a onclick="switchPageDesktop('videos',this)">▶️ Videos</a>
+  <a onclick="switchPageDesktop('about',this)">ℹ️ About</a>
 </div>
 
 <div class="breaking-bar">
@@ -366,6 +400,137 @@ body.dark .nav-item.active{color:var(--gold);}
   <div style="padding:0 16px 16px;" id="ytFeed">
     <div class="loading-state"><div class="loading-spinner"></div><div>Loading videos...</div></div>
   </div>
+
+<div id="page-about" style="display:none;padding:0 0 80px;">
+
+  <!-- HERO -->
+  <div style="background:linear-gradient(160deg,#0d0d0d,#1a1a1a);padding:32px 20px 24px;text-align:center;">
+    <div style="font-size:48px;margin-bottom:8px;">⚡</div>
+    <div style="color:#fff;font-size:24px;font-weight:700;letter-spacing:-0.5px;">FLASH <span style="color:#FFD700;">NIGERIA</span></div>
+    <div style="color:#888;font-size:13px;margin-top:6px;">Nigeria's Fastest News. Every Second.</div>
+    <div style="margin-top:16px;display:inline-block;background:#1a6e3c;color:#fff;font-size:11px;font-weight:700;padding:4px 14px;border-radius:20px;letter-spacing:0.5px;">🇳🇬 PROUDLY NIGERIAN</div>
+  </div>
+
+  <!-- MISSION -->
+  <div style="padding:20px 20px 0;">
+    <div class="section-label">🎯 Our Mission</div>
+    <div style="background:var(--bg2);border-radius:12px;padding:16px;margin-top:8px;border:1px solid var(--border);">
+      <p style="font-size:14px;line-height:1.7;color:var(--text);">Flash Nigeria was built to give every Nigerian — at home and in the diaspora — <strong>fast, reliable access to breaking news</strong> from across the country. We aggregate headlines from Nigeria's most trusted news outlets and deliver them in one clean, fast experience.</p>
+      <p style="font-size:14px;line-height:1.7;color:var(--text);margin-top:10px;">No bias. No spam. Just Naija news — fast.</p>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div style="padding:20px 20px 0;">
+    <div class="section-label">⚙️ How It Works</div>
+    <div style="margin-top:8px;">
+      <div style="display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border);">
+        <div style="font-size:24px;width:40px;text-align:center;">📡</div>
+        <div><div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px;">Live RSS Aggregation</div><div style="font-size:13px;color:var(--text2);line-height:1.5;">We pull live news every 10 minutes from 10+ trusted Nigerian outlets including Punch, Vanguard, TheCable, BellaNaija, Premium Times, Channels TV and more.</div></div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border);">
+        <div style="font-size:24px;width:40px;text-align:center;">🤖</div>
+        <div><div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px;">AI-Powered Summaries</div><div style="font-size:13px;color:var(--text2);line-height:1.5;">Each story can be summarized instantly using Claude AI — giving you the key facts in 2-3 sentences without reading the full article.</div></div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border);">
+        <div style="font-size:24px;width:40px;text-align:center;">🤖</div>
+      <div><div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px;">AI-Powered Summaries</div><div style="font-size:13px;color:var(--text2);line-height:1.5;">Each story can be summarized instantly using Claude AI — giving you the key facts in 2-3 sentences without reading the full article.</div></div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border);">
+      <div style="font-size:24px;width:40px;text-align:center;">🔔</div>
+        <div><div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px;">Smart Breaking Alerts</div><div style="font-size:13px;color:var(--text2);line-height:1.5;">Our system detects genuinely breaking news using keyword analysis and cross-source trending — so notifications are rare and meaningful.</div></div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;padding:12px 0;">
+        <div style="font-size:24px;width:40px;text-align:center;">📱</div>
+        <div><div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px;">Works Like an App</div><div style="font-size:13px;color:var(--text2);line-height:1.5;">Flash Nigeria is a Progressive Web App (PWA) — install it on your phone home screen for a full native app experience, no App Store needed.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEWS SOURCES -->
+  <div style="padding:20px 20px 0;">
+    <div class="section-label">📰 Our News Sources</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;">
+  
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:13px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:#1a6e3c;display:inline-block;"></span>Punch NG</div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:13px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:#1a6e3c;display:inline-block;"></span>Vanguard</div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:13px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:#1a6e3c;display:inline-block;"></span>TheCable</div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:13px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:#1a6e3c;display:inline-block;"></span>BellaNaija</div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:13px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:#1a6e3c;display:inline-block;"></span>Legit.ng</div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:13px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:#1a6e3c;display:inline-block;"></span>Premium Times</div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:13px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:#1a6e3c;display:inline-block;"></span>Channels TV</div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:13px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:#1a6e3c;display:inline-block;"></span>Naijaloaded</div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:13px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:#1a6e3c;display:inline-block;"></span>Tech Cabal</div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:13px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:#1a6e3c;display:inline-block;"></span>Nairametrics</div>
+
+    </div>
+  </div>
+
+  <!-- FOUNDER -->
+  <div style="padding:20px 20px 0;">
+    <div class="section-label">👤 Founder</div>
+    <div style="background:var(--bg2);border-radius:12px;padding:16px;margin-top:8px;border:1px solid var(--border);display:flex;gap:14px;align-items:center;">
+      <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#1a6e3c,#0d4726);display:flex;align-items:center;justify-content:center;color:#FFD700;font-size:22px;font-weight:700;flex-shrink:0;">IG</div>
+      <div>
+        <div style="font-size:16px;font-weight:700;color:var(--text);">Igbinosa</div>
+        <div style="font-size:13px;color:var(--text2);margin-top:2px;">Founder & Publisher</div>
+        <div style="font-size:12px;color:#1a6e3c;margin-top:4px;font-weight:600;">🇳🇬 Flash Nigeria</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <div style="padding:20px 20px 0;">
+    <div class="section-label">📬 Contact Us</div>
+    <div style="margin-top:8px;border-radius:12px;overflow:hidden;border:1px solid var(--border);">
+      <a href="mailto:therealmrcommander@gmail.com" style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--bg);text-decoration:none;border-bottom:1px solid var(--border);">
+        <span style="font-size:22px;">📧</span>
+        <div><div style="font-size:13px;font-weight:600;color:var(--text);">Email</div><div style="font-size:12px;color:#0055cc;">therealmrcommander@gmail.com</div></div>
+      </a>
+      <a href="https://wa.me/2349050811412" target="_blank" style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--bg);text-decoration:none;border-bottom:1px solid var(--border);">
+        <span style="font-size:22px;">📲</span>
+        <div><div style="font-size:13px;font-weight:600;color:var(--text);">WhatsApp</div><div style="font-size:12px;color:#25D366;">+234 905 081 1412</div></div>
+      </a>
+      <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--bg);cursor:pointer;" onclick="openModal('ogaModal')">
+        <span style="font-size:22px;">🚨</span>
+        <div><div style="font-size:13px;font-weight:600;color:var(--text);">Submit a News Tip</div><div style="font-size:12px;color:var(--text2);">Got breaking news? Tell us!</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADVERTISE -->
+  <div style="padding:20px 20px 0;">
+    <div class="section-label">💰 Advertise With Us</div>
+    <div style="background:linear-gradient(135deg,#1a6e3c,#0d4726);border-radius:12px;padding:16px;margin-top:8px;">
+      <div style="color:#FFD700;font-size:14px;font-weight:700;margin-bottom:6px;">Reach millions of Nigerians!</div>
+      <div style="color:rgba(255,255,255,0.85);font-size:13px;line-height:1.6;margin-bottom:12px;">Flash Nigeria reaches a growing audience of news-hungry Nigerians at home and in the diaspora. Advertise your brand, product, or service with us.</div>
+      <a href="mailto:therealmrcommander@gmail.com?subject=Advertising on Flash Nigeria" style="display:inline-block;background:#FFD700;color:#0d0d0d;font-size:13px;font-weight:700;padding:8px 18px;border-radius:20px;text-decoration:none;">📧 Get Advertising Rates</a>
+    </div>
+  </div>
+
+  <!-- PRIVACY & LEGAL -->
+  <div style="padding:20px 20px 0;">
+    <div class="section-label">🔒 Privacy & Legal</div>
+    <div style="background:var(--bg2);border-radius:12px;padding:16px;margin-top:8px;border:1px solid var(--border);">
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;">Privacy Policy</div>
+      <p style="font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:10px;">Flash Nigeria does not collect, store, or share any personal data. All your preferences (saved articles, dark mode, read history) are stored locally on your device only and never transmitted to our servers.</p>
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;">Disclaimer</div>
+      <p style="font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:10px;">Flash Nigeria aggregates news from third-party sources. We do not own or create the news content. All articles remain the property of their respective publishers. We link directly to original sources.</p>
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;">Terms of Use</div>
+      <p style="font-size:12px;color:var(--text2);line-height:1.6;">By using Flash Nigeria, you agree to use the platform for lawful purposes only. We reserve the right to update these terms at any time.</p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div style="padding:24px 20px;text-align:center;">
+    <div style="font-size:20px;margin-bottom:4px;">⚡</div>
+    <div style="font-size:13px;font-weight:700;color:var(--text);">FLASH NIGERIA</div>
+    <div style="font-size:12px;color:var(--text2);margin-top:4px;">© 2026 Flash Nigeria. All rights reserved.</div>
+    <div style="font-size:11px;color:var(--text2);margin-top:4px;">Made with ❤️ for Nigeria 🇳🇬</div>
+  </div>
+
+</div>
+
 </div>
 
 <div class="bottom-nav">
@@ -374,6 +539,7 @@ body.dark .nav-item.active{color:var(--gold);}
   <button class="nav-item" data-page="search" onclick="switchPage('search',this)"><span class="nav-icon">🔍</span>Search</button>
   <button class="nav-item" data-page="saved" onclick="switchPage('saved',this)"><span class="nav-icon">🔖</span>Saved<span class="nav-badge" id="savedBadge">0</span></button>
   <button class="nav-item" data-page="videos" onclick="switchPage('videos',this)"><span class="nav-icon">▶️</span>Videos</button>
+  <button class="nav-item" data-page="about" onclick="switchPage('about',this)"><span class="nav-icon">ℹ️</span>About</button>
 </div>
 </div>
 
@@ -563,7 +729,7 @@ async function silentRefresh(){
   const newOnes=fresh.filter(a=>!existingIds.has(a.id));
   if(newOnes.length>0){
     pendingArticles=fresh;
-    document.getElementById('refreshBar').textContent=`⚡ ${newOnes.length} new ${newOnes.length===1?'story':'stories'} — tap to load`;
+    document.getElementById('refreshBar').textContent='⚡ '+newOnes.length+' new '+(newOnes.length===1?'story':'stories')+' — tap to load';
     document.getElementById('refreshBar').classList.add('show');
     document.getElementById('newBadge').textContent=newOnes.length;
     document.getElementById('newBadge').classList.add('show');
@@ -619,7 +785,7 @@ function refreshFeed(){showToast('⚡ Refreshing...');loadFeed();}
 
 // ── BREAKING TICKER ───────────────────────────────────────────────────────
 function updateBreakingTicker(){
-  const top=allArticles.slice(0,6).map(a=>`<span class="breaking-item">${a.source}: ${a.title}</span>`).join('');
+  const top=allArticles.slice(0,6).map(a=>'<span class="breaking-item">'+a.source+': '+a.title+'</span>').join('');
   document.getElementById('breakingTicker').innerHTML=top+top;
 }
 
@@ -628,17 +794,17 @@ function renderFeed(cat){
   currentCat=cat;
   let articles=cat==='all'?allArticles:allArticles.filter(a=>a.cat===cat);
   if(currentTime!=='all'){const cutoff=Date.now()-(parseInt(currentTime)*3600000);const f=articles.filter(a=>new Date(a.pubDate).getTime()>=cutoff);if(f.length>0)articles=f;}
-  if(articles.length===0){document.getElementById('mainFeed').innerHTML=`<div class="empty-state"><div class="empty-icon">${CAT_ICONS[cat]||'📰'}</div><div class="empty-text">No ${cat} news found.<br>Try different filter.</div></div>`;return;}
+  if(articles.length===0){document.getElementById('mainFeed').innerHTML='<div class="empty-state"><div class="empty-icon">'+(CAT_ICONS[cat]||'📰')+'</div><div class="empty-text">No '+cat+' news found.<br>Try different filter.</div></div>';return;}
   sliderArticles=articles.slice(0,5);
   const rest=articles.slice(5);
   sliderIndex=0;
   let html='';
   // Story of the Day
   const sotd=allArticles[0];
-  if(sotd) html+='<div class="sotd-banner" onclick="openArticle(''+esc(sotd.link)+'',''+sotd.id+'')"><div class="sotd-label">⭐ STORY OF THE DAY</div><div class="sotd-title">'+esc(sotd.title)+'</div><div class="sotd-meta"><span>'+esc(sotd.source)+'</span><span>🕐 '+timeAgo(sotd.pubDate)+'</span></div></div>';
+    if(sotd){html+='<div class="sotd-banner" id="sotdCard" data-link="'+esc(sotd.link)+'" data-id="'+sotd.id+'"><div class="sotd-label">⭐ STORY OF THE DAY</div><div class="sotd-title">'+esc(sotd.title)+'</div><div class="sotd-meta"><span>'+esc(sotd.source)+'</span><span>🕐 '+timeAgo(sotd.pubDate)+'</span></div></div>';}
   html+=`<div class="section-label">⚡ Breaking stories</div>`;
   html+=renderSlider();
-  html+=`<div class="ai-summary-box" id="aiBox_main"></div>`;
+  html+=``;
   // Poll
   html+=renderPoll(currentPollIdx);
   // Ad slot
@@ -657,15 +823,46 @@ function renderFeed(cat){
 
 // ── SLIDER ────────────────────────────────────────────────────────────────
 function renderSlider(){
-  const dots=sliderArticles.map((_,i)=>`<span class="slider-dot${i===0?' active':''}" onclick="goSlide(${i})"></span>`).join('');
+  const dots=sliderArticles.map((_,i)=>'<span class="slider-dot'+(i===0?' active':'')+' onclick="goSlide('+i+')"></span>').join('');
   return '<div class="slider-wrap" id="sliderWrap"><div class="slider-track" id="sliderTrack">'+sliderArticles.map(function(a,i){return renderSlide(a,i);}).join('')+'</div><button class="slider-prev" onclick="prevSlide()">&#8249;</button><button class="slider-next" onclick="nextSlide()">&#8250;</button><div class="slider-dots" id="sliderDots">'+dots+'</div><div class="slider-counter" id="sliderCounter">1 / '+sliderArticles.length+'</div></div>';
 }
 function renderSlide(a,i){
-  const bg=CAT_BG[a.cat]||CAT_BG.default;
-  const imgHtml=a.image?'<img src="'+esc(a.image)+'" alt="" onerror="this.style.display=\'none\'"/><div class="slide-fallback">'+(CAT_ICONS[a.cat]||'📰')+'</div>':'<div class="slide-fallback">'+(CAT_ICONS[a.cat]||'📰')+'</div>';
+  var bg=CAT_BG[a.cat]||CAT_BG.default;
   var catLabel=(a.cat||'FLASH').toUpperCase();
-  return '<div class="slide"><div class="slide-img" style="background:'+bg+'" onclick="openArticle(''+esc(a.link)+'',''+a.id+'')">'+imgHtml+'<div class="slide-overlay"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;"><span class="featured-badge" style="background:var(--gold);color:#000;font-size:10px;font-weight:700;padding:3px 8px;border-radius:3px;">⚡ '+catLabel+'</span><span style="background:rgba(0,0,0,0.6);color:var(--gold);font-size:10px;padding:3px 8px;border-radius:20px;font-weight:600;">'+esc(a.source)+'</span></div><div class="slide-title">'+esc(a.title)+'</div><div class="slide-meta"><span class="slide-time">🕐 '+timeAgo(a.pubDate)+'</span><div style="display:flex;gap:4px;"><button class="share-btn btn-wa" onclick="event.stopPropagation();shareWA(''+escJ(a.title)+'',''+escJ(a.link)+'')">📲</button><button class="share-btn btn-tg" onclick="event.stopPropagation();shareTG(''+escJ(a.title)+'',''+escJ(a.link)+'')">✈️</button><button class="ai-btn" style="background:rgba(255,215,0,0.15);color:var(--gold);border:none;padding:4px 10px;border-radius:20px;cursor:pointer;font-size:11px;font-weight:600;" onclick="event.stopPropagation();getAISummary('main',''+escJ(a.title)+'',''+escJ(a.description)+'')">✨ AI</button></div></div></div></div></div>';
+  var imgHtml=a.image
+    ? '<img src="'+esc(a.image)+'" alt="" onerror="this.style.display=\'none\'"/><div class="slide-fallback">'+(CAT_ICONS[a.cat]||'📰')+'</div>'
+    : '<div class="slide-fallback">'+(CAT_ICONS[a.cat]||'📰')+'</div>';
+  var html='<div class="slide">';
+  html+='<div class="slide-img" style="background:'+bg+'" onclick="openArticle(this)"';
+  html+=' data-link="'+esc(a.link)+'" data-id="'+a.id+'">';
+  html+=imgHtml;
+  html+='<div class="slide-overlay">';
+  html+='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">';
+  html+='<span class="featured-badge" style="background:var(--gold);color:#000;font-size:10px;font-weight:700;padding:3px 8px;border-radius:3px;">⚡ '+catLabel+'</span>';
+  html+='<span style="background:rgba(0,0,0,0.6);color:var(--gold);font-size:10px;padding:3px 8px;border-radius:20px;font-weight:600;">'+esc(a.source)+'</span>';
+  html+='</div>';
+  html+='<div class="slide-title">'+esc(a.title)+'</div>';
+  html+='<div class="slide-meta">';
+  html+='<span class="slide-time">🕐 '+timeAgo(a.pubDate)+'</span>';
+  html+='<div style="display:flex;gap:4px;">';
+  html+='<button class="share-btn btn-wa" data-title="'+escJ(a.title)+'" data-url="'+escJ(a.link)+'" onclick="event.stopPropagation();slideShareWA(this)">📲</button>';
+  html+='<button class="share-btn btn-tg" data-title="'+escJ(a.title)+'" data-url="'+escJ(a.link)+'" onclick="event.stopPropagation();slideShareTG(this)">✈️</button>';
+  html+='<button class="ai-btn" style="background:rgba(255,215,0,0.15);color:var(--gold);border:none;padding:4px 10px;border-radius:20px;cursor:pointer;font-size:11px;font-weight:600;" data-title="'+escJ(a.title)+'" data-desc="'+escJ(a.description)+'" onclick="event.stopPropagation();slideAI(this)">✨ AI</button>';
+  html+='';
+  html+='</div></div></div></div></div>';
+  return html;
 }
+function openArticle(el){
+  if(typeof el==='string'){if(el&&el!=='#')window.open(el,'_blank','noopener');return;}
+  var link=el.dataset?el.dataset.link:el;
+  var id=el.dataset?el.dataset.id:'';
+  if(id)markRead(id);
+  if(link&&link!=='#')window.open(link,'_blank','noopener');
+}
+function slideShareWA(btn){shareWA(btn.dataset.title,btn.dataset.url);}
+function slideShareTG(btn){shareTG(btn.dataset.title,btn.dataset.url);}
+
+
 function startSlider(){clearInterval(sliderTimer);sliderTimer=setInterval(()=>nextSlide(),5000);}
 function nextSlide(){sliderIndex=(sliderIndex+1)%sliderArticles.length;updateSlider();}
 function prevSlide(){sliderIndex=(sliderIndex-1+sliderArticles.length)%sliderArticles.length;updateSlider();}
@@ -673,10 +870,10 @@ function goSlide(i){sliderIndex=i;updateSlider();clearInterval(sliderTimer);slid
 function updateSlider(){
   const track=document.getElementById('sliderTrack');
   if(!track)return;
-  track.style.transform=`translateX(-${sliderIndex*100}%)`;
+  track.style.transform='translateX(-'+(sliderIndex*100)+'%)';
   document.querySelectorAll('.slider-dot').forEach((d,i)=>d.classList.toggle('active',i===sliderIndex));
   const c=document.getElementById('sliderCounter');
-  if(c)c.textContent=`${sliderIndex+1} / ${sliderArticles.length}`;
+  if(c)c.textContent=(sliderIndex+1)+' / '+sliderArticles.length;
   const aiBox=document.getElementById('aiBox_main');
   if(aiBox){aiBox.classList.remove('visible');aiBox.dataset.loaded='';aiBox.textContent='';}
 }
@@ -722,37 +919,37 @@ function votePoll(pollIdx,optIdx,el){
 
 // ── NEWS CARD ─────────────────────────────────────────────────────────────
 function renderCard(a){
-  const thumbClass=CAT_THUMB[a.cat]||'thumb-default';
-  const catClass='cat-'+(a.cat||'default');
-  const saved=savedArticles.some(s=>s.id===a.id);
-  const isRead=readArticles.has(a.id);
-  const imgHtml=a.image?'<img src="'+esc(a.image)+'" alt="" onerror="this.style.display=\'none\'"/><span class="thumb-emoji">'+(CAT_ICONS[a.cat]||'📰')+'</span>'none'"/>':`<span class="thumb-emoji">${CAT_ICONS[a.cat]||'📰'}</span>`;
-  const rxData=reactions[a.id]||{};
-  const RXEMOJIS=['😮','🔥','💔','😂'];
-  const rxBtns=RXEMOJIS.map(function(e){
-    const cnt=rxData[e]||0;
-    const reacted=rxData['_mine']===e;
+  var thumbClass=CAT_THUMB[a.cat]||'thumb-default';
+  var catClass='cat-'+(a.cat||'default');
+  var saved=savedArticles.some(function(s){return s.id===a.id;});
+  var isRead=readArticles.has(a.id);
+  var imgHtml=a.image
+    ? ('<img src="'+esc(a.image)+'" alt="" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:center top;"/><span class="thumb-emoji">'+(CAT_ICONS[a.cat]||'📰')+'</span>')
+    : ('<span class="thumb-emoji">'+(CAT_ICONS[a.cat]||'📰')+'</span>');
+  var rxData=reactions[a.id]||{};
+  var RXEMOJIS=['😮','🔥','💔','😂'];
+  var rxBtns=RXEMOJIS.map(function(e){
+    var cnt=rxData[e]||0;
+    var reacted=rxData['_mine']===e;
     return '<button class="reaction-btn'+(reacted?' reacted':'')+'" onclick="event.stopPropagation();reactTo(\'' +a.id+ '\',\'' +e+ '\',this)">'+e+' <span class="reaction-count">'+(cnt>0?cnt:'')+'</span></button>';
   }).join('');
-  return'\n  <div class="news-card'+(isRead?' read':'')+'">'
-    <div class="news-card-top" onclick="openArticle('${esc(a.link)}','${a.id}')">
-      <div class="news-thumb ${thumbClass}">${imgHtml}</div>
-      <div class="news-body">
-        <div class="news-cat ${catClass}">${(a.cat||'news').toUpperCase()}</div>
-        <div class="news-title">${esc(a.title)}</div>
-        <div class="news-foot">
-          <span class="news-source">${esc(a.source)} · ${timeAgo(a.pubDate)}</span>
-          <div class="news-actions">
-            <button onclick="event.stopPropagation();shareWA('${escJ(a.title)}','${escJ(a.link)}')" title="WhatsApp">📲</button>
-            <button onclick="event.stopPropagation();shareTG('${escJ(a.title)}','${escJ(a.link)}')" title="Telegram">✈️</button>
-            <button onclick="event.stopPropagation();copyLink('${escJ(a.link)}')" title="Copy">🔗</button>
-            <button onclick="event.stopPropagation();saveArticle(${safeJson(a)},'${a.id}',this)">${saved?'🔖':'➕'}</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="reactions" id="rx_${a.id}">${rxBtns}</div>
-  </div>`;
+  var html='<div class="news-card'+(isRead?' read':'')+'">';
+  html+='<div class="news-card-top" data-link="'+esc(a.link)+'" data-id="'+a.id+'" onclick="openArticle(this)">';
+  html+='<div class="news-thumb '+thumbClass+'">'+imgHtml+'</div>';
+  html+='<div class="news-body">';
+  html+='<div class="news-cat '+catClass+'">'+(a.cat||'news').toUpperCase()+'</div>';
+  html+='<div class="news-title">'+esc(a.title)+'</div>';
+  html+='<div class="news-foot">';
+  html+='<span class="news-source">'+esc(a.source)+' · '+timeAgo(a.pubDate)+'</span>';
+  html+='<div class="news-actions">';
+  html+='<button data-title="'+escJ(a.title)+'" data-url="'+escJ(a.link)+'" onclick="event.stopPropagation();shareWA(this.dataset.title,this.dataset.url)" title="WhatsApp">📲</button>';
+  html+='<button data-title="'+escJ(a.title)+'" data-url="'+escJ(a.link)+'" onclick="event.stopPropagation();shareTG(this.dataset.title,this.dataset.url)" title="Telegram">✈️</button>';
+  html+='<button data-url="'+escJ(a.link)+'" onclick="event.stopPropagation();copyLink(this.dataset.url)" title="Copy">🔗</button>';
+  html+='<button data-article="'+safeJson(a)+'" data-id="'+a.id+'" onclick="event.stopPropagation();saveArticle(JSON.parse(this.dataset.article),this.dataset.id,this)">'+(saved?'🔖':'➕')+'</button>';
+  html+='</div></div></div></div>';
+  html+='<div class="reactions" id="rx_'+a.id+'">'+rxBtns+'</div>';
+  html+='</div>';
+  return html;
 }
 
 // ── REACTIONS ─────────────────────────────────────────────────────────────
@@ -786,14 +983,14 @@ function reactTo(articleId,emoji,btn){
 function renderTrendingInline(){
   const keywords=extractTrending();
   if(!keywords.length)return'';
-  const tags=keywords.map(k=>`<span class="trend-tag" onclick="doSearchFromTag('${k}')">#${k}</span>`).join('');
-  return`<div class="trending-section"><div class="trend-header">🔥 Trending in Nigeria</div><div class="trend-tags">${tags}</div></div>`;
+  const tags=keywords.map(k=>'<span class="trend-tag" onclick="doSearchFromTag(\''+k+'\')">#'+k+'</span>').join('');
+  return'<div class="trending-section"><div class="trend-header">🔥 Trending in Nigeria</div><div class="trend-tags">'+tags+'</div></div>';
 }
 function renderTrending(){
   const keywords=extractTrending(24);
-  const tags=keywords.map(k=>`<span class="trend-tag" onclick="doSearchFromTag('${k}')">#${k}</span>`).join('');
-  const sources=RSS_SOURCES.map(s=>`<div class="source-card"><span class="source-dot"></span><span style="font-size:14px;font-weight:600;">${s.name}</span><span style="margin-left:auto;font-size:11px;color:var(--green);font-weight:600;">● LIVE</span></div>`).join('');
-  document.getElementById('trendingFull').innerHTML=`<p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Most talked-about topics in Nigerian news right now.</p><div class="trend-tags" style="gap:10px;margin-bottom:24px;">${tags}</div><div class="section-label" style="margin:0 0 8px;">📡 Live Sources</div>${sources}`;
+  const tags=keywords.map(k=>'<span class="trend-tag" onclick="doSearchFromTag(\''+k+'\')">#'+k+'</span>').join('');
+  const sources=RSS_SOURCES.map(s=>'<div class="source-card"><span class="source-dot"></span><span style="font-size:14px;font-weight:600;">'+s.name+'</span><span style="margin-left:auto;font-size:11px;color:var(--green);font-weight:600;">● LIVE</span></div>').join('');
+  document.getElementById('trendingFull').innerHTML='<p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Most talked-about topics in Nigerian news right now.</p><div class="trend-tags" style="gap:10px;margin-bottom:24px;">'+tags+'</div><div class="section-label" style="margin:0 0 8px;">📡 Live Sources</div>'+sources;
   updateSidebar();
 }
 function extractTrending(n=12){
@@ -809,13 +1006,15 @@ function extractTrending(n=12){
 }
 function updateSidebar(){
   const keywords=extractTrending(15);
-  const tags=keywords.map(k=>`<div class="trend-tag" style="margin-bottom:6px;display:block;" onclick="doSearchFromTag('${k}')">#${k}</div>`).join('');
+  const tags=keywords.map(k=>'<div class="trend-tag" style="margin-bottom:6px;display:block;" onclick="doSearchFromTag(\''+k+'\')">#'+k+'</div>').join('');
   const sb=document.getElementById('sidebarTrending');
   if(sb)sb.innerHTML=tags;
-  const sources=RSS_SOURCES.map(s=>`<div style="padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;display:flex;align-items:center;gap:8px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;flex-shrink:0;"></span>${s.name}</div>`).join('');
+  const sources=RSS_SOURCES.map(s=>'<div style="padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;display:flex;align-items:center;gap:8px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;flex-shrink:0;"></span>'+s.name+'</div>').join('');
   const ss=document.getElementById('sidebarSources');
   if(ss)ss.innerHTML=sources;
 }
+
+
 
 // ── AI SUMMARY ────────────────────────────────────────────────────────────
 async function getAISummary(id,title,desc){
@@ -824,12 +1023,13 @@ async function getAISummary(id,title,desc){
   if(box.classList.contains('visible')&&box.dataset.loaded){box.classList.remove('visible');return;}
   box.classList.add('visible');box.textContent='✨ Generating AI summary...';
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:'You are a concise Nigerian news summarizer. Summarize in 2-3 sentences, plain English. Start with the key fact.',messages:[{role:'user',content:`Title: ${title}\nSnippet: ${desc}\n\nSummarize in 2-3 sentences.`}]})});
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:'You are a concise Nigerian news summarizer. Summarize in 2-3 sentences, plain English. Start with the key fact.',messages:[{role:'user',content:'Title: '+title+'\nSnippet: '+desc+'\n\nSummarize in 2-3 sentences.'}]})});
     const data=await res.json();
     box.dataset.loaded='1';
-    box.innerHTML=`<strong>⚡ AI Summary:</strong> ${data.content?.[0]?.text||'Summary unavailable.'}`;
+    box.innerHTML='<strong>⚡ AI Summary:</strong> '+(data.content?.[0]?.text||'Summary unavailable.');
   }catch(e){box.textContent='Summary unavailable.';}
 }
+function slideAI(btn){getAISummary('main',btn.dataset.title,btn.dataset.desc);}
 
 // ── SHARE ─────────────────────────────────────────────────────────────────
 function shareWA(title,url){event.stopPropagation();var m=encodeURIComponent('\u26a1 *'+title+'*\n\nRead more: '+url+'\n\n_Via Flash Nigeria_');window.open('https://wa.me/?text='+m,'_blank');}
@@ -845,7 +1045,7 @@ function submitReport(){
   if(!text){showToast('Abeg enter the gist first!');return;}
   const name=document.getElementById('reportName').value.trim()||'Anonymous';
   const contact=document.getElementById('reportContact').value.trim();
-  const msg=`🚨 *News Tip from Flash Nigeria*\n\n*From:* ${name}\n*Contact:* ${contact||'Not provided'}\n\n*Report:*\n${text}`;
+  const msg='🚨 *News Tip from Flash Nigeria*\n\n*From:* '+name+'\n*Contact:* '+(contact||'Not provided')+'\n\n*Report:*\n'+text;
   window.open('https://wa.me/2348000000000?text='+encodeURIComponent(msg),'_blank');
   closeModal('ogaModal');
   document.getElementById('reportText').value='';
@@ -894,8 +1094,8 @@ async function loadYouTube(){
   const cards=YT_ITEMS.map(function(item){
     const thumb='https://img.youtube.com/vi/'+item.vid+'/mqdefault.jpg';
     const url='https://www.youtube.com/results?search_query='+encodeURIComponent(item.q);
-    return '<div class="yt-card-big" onclick="window.open(''+url+'','_blank')">'+
-      '<div class="yt-thumb-big"><img src="'+thumb+'" alt="" onerror="this.parentNode.innerHTML='▶️'"/><div class="yt-play-btn">▶</div></div>'+
+    return '<div class="yt-card-big" data-url="'+url+'" onclick="window.open(this.dataset.url,\'_blank\')">'+
+      '<div class="yt-thumb-big"><img src="'+thumb+'" alt="" onerror="this.parentNode.innerHTML=\'▶️\'"/><div class="yt-play-btn">▶</div></div>'+
       '<div class="yt-info"><div class="yt-title-big">'+item.title+'</div><div class="yt-channel">'+item.channel+' · Tap to watch on YouTube</div></div>'+
       '</div>';
   }).join('');
@@ -924,7 +1124,7 @@ document.getElementById('ogaModal').addEventListener('click',e=>{if(e.target===d
 function switchPage(page,btn){
   document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
   if(btn)btn.classList.add('active');
-  ['home','trending','search','saved','videos'].forEach(p=>{
+  ['home','trending','search','saved','videos','about'].forEach(p=>{
     const el=document.getElementById('page-'+p);
     if(el)el.style.display=p===page?'block':'none';
   });
@@ -935,7 +1135,7 @@ function switchPage(page,btn){
 function switchPageDesktop(page,el){
   document.querySelectorAll('.desktop-nav a').forEach(a=>a.classList.remove('active'));
   el.classList.add('active');
-  switchPage(page,document.querySelector(`[data-page="${page}"]`));
+  switchPage(page,document.querySelector('[data-page="'+page+'"]'));
 }
 document.getElementById('catBar').addEventListener('click',e=>{
   const btn=e.target.closest('.cat-btn');
@@ -952,6 +1152,211 @@ function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace
 function escJ(s){return(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'\\"').replace(/\n/g,' ').slice(0,300);}
 function safeJson(a){return JSON.stringify(a).replace(/"/g,'&quot;');}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+
+// ── VOICE NAVIGATION ─────────────────────────────────────────────────────
+const VOICE_SOURCES = {
+  'punch': 'Punch', 'vanguard': 'Vanguard', 'thecable': 'TheCable',
+  'the cable': 'TheCable', 'cable': 'TheCable',
+  'bellanaija': 'BellaNaija', 'bella naija': 'BellaNaija', 'bella': 'BellaNaija',
+  'legit': 'Legit.ng', 'legit ng': 'Legit.ng',
+  'premium times': 'Premium Times', 'premium': 'Premium Times',
+  'channels': 'Channels TV', 'channels tv': 'Channels TV',
+  'naijaloaded': 'Naijaloaded', 'naija loaded': 'Naijaloaded',
+  'tech cabal': 'Tech Cabal', 'techcabal': 'Tech Cabal',
+  'nairametrics': 'Nairametrics', 'naira metrics': 'Nairametrics',
+};
+
+const VOICE_CATS = {
+  'sport': 'sports', 'sports': 'sports', 'football': 'sports', 'soccer': 'sports', 'eagles': 'sports',
+  'politic': 'politics', 'politics': 'politics', 'government': 'politics', 'tinubu': 'politics',
+  'entertainment': 'entertainment', 'music': 'entertainment', 'nollywood': 'entertainment', 'celebrity': 'entertainment',
+  'business': 'business', 'economy': 'business', 'naira': 'business', 'finance': 'business',
+  'tech': 'tech', 'technology': 'tech', 'digital': 'tech',
+  'lifestyle': 'lifestyle', 'health': 'lifestyle', 'food': 'lifestyle',
+};
+
+const VOICE_PAGES = {
+  'trending': 'trending', 'trend': 'trending', 'flash': 'trending', 'hot': 'trending',
+  'saved': 'saved', 'bookmark': 'saved', 'save': 'saved',
+  'search': 'search', 'find': 'search',
+  'video': 'videos', 'videos': 'videos', 'youtube': 'videos',
+  'about': 'about', 'contact': 'about',
+  'home': 'home', 'main': 'home',
+};
+
+let recognition = null;
+let isListening = false;
+
+function startVoice() {
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    showToast('Voice not supported on this browser');
+    return;
+  }
+  openModal('voiceModal');
+  const btn = document.getElementById('voiceBtn');
+  btn.classList.add('listening');
+
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SpeechRecognition();
+  recognition.lang = 'en-NG';
+  recognition.continuous = false;
+  recognition.interimResults = true;
+  recognition.maxAlternatives = 3;
+
+  recognition.onstart = function() {
+    isListening = true;
+    document.getElementById('voiceStatus').textContent = 'Listening... Speak now!';
+    document.getElementById('voiceIcon').textContent = '🔴';
+  };
+
+  recognition.onresult = function(event) {
+    let interim = '';
+    let final = '';
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      if (event.results[i].isFinal) {
+        final += event.results[i][0].transcript;
+      } else {
+        interim += event.results[i][0].transcript;
+      }
+    }
+    const heard = final || interim;
+    document.getElementById('voiceHeard').textContent = '"' + heard + '"';
+    if (final) {
+      processVoiceCommand(final.toLowerCase().trim());
+    }
+  };
+
+  recognition.onerror = function(e) {
+    document.getElementById('voiceStatus').textContent = 'Could not hear you. Try again!';
+    document.getElementById('voiceIcon').textContent = '🎤';
+    btn.classList.remove('listening');
+    isListening = false;
+  };
+
+  recognition.onend = function() {
+    btn.classList.remove('listening');
+    isListening = false;
+    if (document.getElementById('voiceStatus').textContent === 'Listening... Speak now!') {
+      document.getElementById('voiceStatus').textContent = 'Nothing heard. Try again!';
+      document.getElementById('voiceIcon').textContent = '🎤';
+    }
+  };
+
+  recognition.start();
+}
+
+function processVoiceCommand(cmd) {
+  document.getElementById('voiceStatus').textContent = 'Got it! Navigating...';
+  document.getElementById('voiceIcon').textContent = '⚡';
+
+  // Check for source navigation: "take me to Punch", "show me Premium Times"
+  for (const [key, sourceName] of Object.entries(VOICE_SOURCES)) {
+    if (cmd.includes(key)) {
+      setTimeout(() => {
+        closeModal('voiceModal');
+        showToast('⚡ Showing ' + sourceName + ' news!');
+        // Filter feed by source
+        filterBySource(sourceName);
+      }, 800);
+      return;
+    }
+  }
+
+  // Check for search command: "search for Tinubu", "find elections"
+  if (cmd.includes('search') || cmd.includes('find') || cmd.includes('look for')) {
+    const searchTerms = ['search for ', 'search ', 'find ', 'look for '];
+    let query = cmd;
+    searchTerms.forEach(t => { query = query.replace(t, ''); });
+    query = query.trim();
+    if (query.length > 1) {
+      setTimeout(() => {
+        closeModal('voiceModal');
+        switchPage('search', document.querySelector('[data-page="search"]'));
+        document.getElementById('searchInput').value = query;
+        doSearch(query);
+        showToast('🔍 Searching: ' + query);
+      }, 800);
+      return;
+    }
+  }
+
+  // Check for category navigation
+  for (const [key, cat] of Object.entries(VOICE_CATS)) {
+    if (cmd.includes(key)) {
+      setTimeout(() => {
+        closeModal('voiceModal');
+        switchPage('home', document.querySelector('[data-page="home"]'));
+        document.querySelectorAll('.cat-btn').forEach(b => {
+          b.classList.toggle('active', b.dataset.cat === cat);
+        });
+        renderFeed(cat);
+        showToast('⚡ Showing ' + cat + ' news!');
+      }, 800);
+      return;
+    }
+  }
+
+  // Check for page navigation
+  for (const [key, page] of Object.entries(VOICE_PAGES)) {
+    if (cmd.includes(key)) {
+      setTimeout(() => {
+        closeModal('voiceModal');
+        const navBtn = document.querySelector('[data-page="'+page+'"]');
+        if (navBtn) switchPage(page, navBtn);
+        showToast('⚡ Going to ' + page + '!');
+      }, 800);
+      return;
+    }
+  }
+
+  // Check for "all news" / "home"
+  if (cmd.includes('all') || cmd.includes('latest') || cmd.includes('breaking')) {
+    setTimeout(() => {
+      closeModal('voiceModal');
+      switchPage('home', document.querySelector('[data-page="home"]'));
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === 'all'));
+      renderFeed('all');
+      showToast('⚡ Showing all latest news!');
+    }, 800);
+    return;
+  }
+
+  // Not understood
+  document.getElementById('voiceStatus').textContent = 'No understand. Try again!';
+  document.getElementById('voiceIcon').textContent = '🤔';
+  document.getElementById('voiceHeard').textContent = 'Say something like "Take me to Punch" or "Show sports news"';
+}
+
+function filterBySource(sourceName) {
+  switchPage('home', document.querySelector('[data-page="home"]'));
+  // Reset cat to all
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === 'all'));
+  currentCat = 'all';
+  // Filter articles by source
+  const filtered = allArticles.filter(a => a.source === sourceName);
+  if (filtered.length === 0) {
+    showToast('No ' + sourceName + ' articles loaded yet');
+    return;
+  }
+  // Render filtered
+  const sliderArts = filtered.slice(0, 5);
+  const rest = filtered.slice(5);
+  sliderArticles = sliderArts;
+  sliderIndex = 0;
+  let html = '<div class="section-label">📰 ' + sourceName + ' — Latest Stories</div>';
+  html += renderSlider();
+  html += '';
+  html += '<div class="section-label">📰 More from ' + sourceName + '</div>';
+  rest.forEach(function(a){ html += renderCard(a); });
+  document.getElementById('mainFeed').innerHTML = html;
+  startSlider();
+}
+
+
+document.addEventListener('click', function(e){
+  var sotd = e.target.closest('#sotdCard');
+  if(sotd){ openArticle(sotd.dataset.link, sotd.dataset.id); }
+});
 </script>
 </body>
 </html>
