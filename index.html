@@ -9,6 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="Flash Nigeria"/>
 <link rel="manifest" href="manifest.json"/>
 <title>Flash Nigeria ⚡</title>
+<!-- category-fix-v3 -->
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 :root{--black:#0d0d0d;--gold:#FFD700;--green:#1a6e3c;--red:#c0392b;--purple:#6b1a6e;--brown:#8b4000;--bg:#fff;--bg2:#f5f5f5;--text:#111;--text2:#666;--border:#e0e0e0;}
@@ -282,14 +283,14 @@ body.dark .bnav-item.on{color:#FFD700;}
 <div class="page on" id="pg-home">
   <div style="position:relative;">
     <div class="cats-bar" id="catBar">
-      <button class="cat on" data-cat="all" onclick="selectCat('all', this)">All</button>
-      <button class="cat" data-cat="politics" onclick="selectCat('politics', this)">Politics</button>
-      <button class="cat" data-cat="entertainment" onclick="selectCat('entertainment', this)">Entertainment</button>
-      <button class="cat" data-cat="sports" onclick="selectCat('sports', this)">Sports</button>
-      <button class="cat" data-cat="business" onclick="selectCat('business', this)">Business</button>
-      <button class="cat" data-cat="lifestyle" onclick="selectCat('lifestyle', this)">Lifestyle</button>
-      <button class="cat" data-cat="tech" onclick="selectCat('tech', this)">Tech</button>
-      <button class="filter-btn" onclick="toggleTDrop()">🕐 Filter</button>
+      <button type="button" class="cat on" data-cat="all" onclick="selectCat('all', this); return false;">All</button>
+      <button type="button" class="cat" data-cat="politics" onclick="selectCat('politics', this); return false;">Politics</button>
+      <button type="button" class="cat" data-cat="entertainment" onclick="selectCat('entertainment', this); return false;">Entertainment</button>
+      <button type="button" class="cat" data-cat="sports" onclick="selectCat('sports', this); return false;">Sports</button>
+      <button type="button" class="cat" data-cat="business" onclick="selectCat('business', this); return false;">Business</button>
+      <button type="button" class="cat" data-cat="lifestyle" onclick="selectCat('lifestyle', this); return false;">Lifestyle</button>
+      <button type="button" class="cat" data-cat="tech" onclick="selectCat('tech', this); return false;">Tech</button>
+      <button type="button" class="filter-btn" onclick="toggleTDrop(); return false;">🕐 Filter</button>
     </div>
     <div class="tdrop" id="tdrop">
       <div class="topt on" onclick="setTime('all',this)">📅 All time</div>
@@ -491,6 +492,9 @@ var refreshTimer=null;
 
 // INIT
 window.addEventListener('load', function(){
+  // Emergency cache refresh: remove old PWA cache/service worker so new buttons work
+  try{ if('serviceWorker' in navigator){ navigator.serviceWorker.getRegistrations().then(function(regs){regs.forEach(function(r){r.unregister();});}); } }catch(e){}
+  try{ if(window.caches){ caches.keys().then(function(keys){keys.forEach(function(k){caches.delete(k);});}); } }catch(e){}
   if(isDark) document.body.classList.add('dark');
   updateDarkBtn(); updateNotifBtn(); updateSavedBadge();
   loadYT();
@@ -994,11 +998,31 @@ function goPage(page,btn){
 
 // CAT FILTER
 function selectCat(cat, btn){
-  document.querySelectorAll('.cat').forEach(function(b){b.classList.remove('on');});
+  cat = cat || 'all';
+  curCat = cat;
+  document.querySelectorAll('.cat').forEach(function(b){
+    b.classList.toggle('on', (b.dataset.cat || 'all') === cat);
+  });
   if(btn) btn.classList.add('on');
-  curCat = cat || 'all';
-  renderFeed(curCat);
+  if(!articles || !articles.length){
+    showToast('Loading news...');
+    return;
+  }
+  renderFeed(cat);
+  showToast(cat === 'all' ? 'Showing all news' : 'Showing '+cat+' news');
 }
+
+
+// Strong fallback: catches category taps even if inline click is blocked
+try{
+  document.addEventListener('click', function(ev){
+    var b = ev.target.closest && ev.target.closest('.cat');
+    if(!b) return;
+    ev.preventDefault();
+    ev.stopPropagation();
+    selectCat(b.dataset.cat || 'all', b);
+  }, true);
+}catch(e){}
 
 var catBarEl = document.getElementById('catBar');
 if(catBarEl){
