@@ -89,8 +89,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .slider-wrap{position:relative;margin:0 16px 4px;border-radius:12px;overflow:hidden;border:1px solid var(--border);}
 .slider-track{display:flex;transition:transform 0.45s cubic-bezier(.4,0,.2,1);}
 .slide{min-width:100%;flex-shrink:0;}
-.slide-img{height:220px;display:flex;align-items:flex-end;position:relative;overflow:hidden;background:#1a1a1a;cursor:pointer;}
-.slide-img img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;}
+.slide-img{height:240px;display:flex;align-items:flex-end;position:relative;overflow:hidden;background:#1a1a1a;cursor:pointer;}
+.slide-img img{width:100%;height:100%;object-fit:cover;object-position:center top;position:absolute;top:0;left:0;}
 .slide-fallback{font-size:64px;position:absolute;top:40%;left:50%;transform:translate(-50%,-50%);opacity:0.3;z-index:1;}
 .slide-overlay{position:relative;z-index:2;width:100%;background:linear-gradient(transparent,rgba(0,0,0,0.92));padding:12px 14px 14px;}
 .slide-title{color:#fff;font-size:14px;font-weight:700;line-height:1.4;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
@@ -192,9 +192,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .modal-close{float:right;background:none;border:none;font-size:22px;cursor:pointer;color:var(--text2);}
 
 /* WHATSAPP CHANNEL */
-.wa-channel-bar{background:#25D366;padding:10px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;}
-.wa-channel-text{color:#fff;font-size:13px;font-weight:600;flex:1;}
-.wa-channel-btn{background:#fff;color:#25D366;font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;border:none;cursor:pointer;font-family:inherit;}
+
 
 /* TRENDING */
 .trending-section{padding:14px 16px 10px;}
@@ -244,6 +242,17 @@ body.dark .nav-item.active{color:var(--gold);}
 .ptr-indicator.show{display:block;}
 .source-card{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);}
 .source-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0;}
+
+.yt-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:480px){.yt-grid{grid-template-columns:1fr;}}
+.yt-card-big{border-radius:10px;overflow:hidden;border:1px solid var(--border);cursor:pointer;background:var(--bg);transition:transform 0.15s;}
+.yt-card-big:hover{transform:translateY(-2px);}
+.yt-thumb-big{width:100%;height:120px;background:#111;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.yt-thumb-big img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;}
+.yt-play-btn{position:relative;z-index:2;width:40px;height:40px;background:rgba(255,0,0,0.85);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;padding-left:3px;}
+.yt-info{padding:8px 10px 10px;}
+.yt-title-big{font-size:13px;font-weight:600;color:var(--text);line-height:1.3;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.yt-channel{font-size:11px;color:var(--text2);}
 </style>
 </head>
 <body>
@@ -295,12 +304,7 @@ body.dark .nav-item.active{color:var(--gold);}
   <div class="breaking-ticker"><span class="breaking-ticker-inner" id="breakingTicker">Loading breaking news...</span></div>
 </div>
 
-<!-- WHATSAPP CHANNEL BAR -->
-<div class="wa-channel-bar" onclick="window.open('https://whatsapp.com/channel/0029VakflashNigeria','_blank')">
-  <span style="font-size:20px;">📢</span>
-  <span class="wa-channel-text">Join Flash Nigeria on WhatsApp Channel — Get breaking news first!</span>
-  <button class="wa-channel-btn">Join</button>
-</div>
+
 
 <div class="refresh-bar" id="refreshBar" onclick="applyNewArticles()">⚡ New stories — tap to load</div>
 
@@ -631,7 +635,7 @@ function renderFeed(cat){
   let html='';
   // Story of the Day
   const sotd=allArticles[0];
-  if(sotd) html+=`<div class="sotd-banner" onclick="openArticle('${esc(sotd.link)}','${sotd.id}')"><div class="sotd-label">⭐ STORY OF THE DAY</div><div class="sotd-title">${esc(sotd.title)}</div><div class="sotd-meta"><span>${esc(sotd.source)}</span><span>🕐 ${timeAgo(sotd.pubDate)}</span></div></div>`;
+  if(sotd) html+='<div class="sotd-banner" onclick="openArticle(''+esc(sotd.link)+'',''+sotd.id+'')"><div class="sotd-label">⭐ STORY OF THE DAY</div><div class="sotd-title">'+esc(sotd.title)+'</div><div class="sotd-meta"><span>'+esc(sotd.source)+'</span><span>🕐 '+timeAgo(sotd.pubDate)+'</span></div></div>';
   html+=`<div class="section-label">⚡ Breaking stories</div>`;
   html+=renderSlider();
   html+=`<div class="ai-summary-box" id="aiBox_main"></div>`;
@@ -654,12 +658,13 @@ function renderFeed(cat){
 // ── SLIDER ────────────────────────────────────────────────────────────────
 function renderSlider(){
   const dots=sliderArticles.map((_,i)=>`<span class="slider-dot${i===0?' active':''}" onclick="goSlide(${i})"></span>`).join('');
-  return`<div class="slider-wrap" id="sliderWrap"><div class="slider-track" id="sliderTrack">${sliderArticles.map((a,i)=>renderSlide(a,i)).join('')}</div><button class="slider-prev" onclick="prevSlide()">&#8249;</button><button class="slider-next" onclick="nextSlide()">&#8250;</button><div class="slider-dots" id="sliderDots">${dots}</div><div class="slider-counter" id="sliderCounter">1 / ${sliderArticles.length}</div></div>`;
+  return '<div class="slider-wrap" id="sliderWrap"><div class="slider-track" id="sliderTrack">'+sliderArticles.map(function(a,i){return renderSlide(a,i);}).join('')+'</div><button class="slider-prev" onclick="prevSlide()">&#8249;</button><button class="slider-next" onclick="nextSlide()">&#8250;</button><div class="slider-dots" id="sliderDots">'+dots+'</div><div class="slider-counter" id="sliderCounter">1 / '+sliderArticles.length+'</div></div>';
 }
 function renderSlide(a,i){
   const bg=CAT_BG[a.cat]||CAT_BG.default;
-  const imgHtml=a.image?`<img src="${esc(a.image)}" alt="" onerror="this.style.display='none'"/><div class="slide-fallback">${CAT_ICONS[a.cat]||'📰'}</div>`:`<div class="slide-fallback">${CAT_ICONS[a.cat]||'📰'}</div>`;
-  return`<div class="slide"><div class="slide-img" style="background:${bg}" onclick="openArticle('${esc(a.link)}','${a.id}')">${imgHtml}<div class="slide-overlay"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;"><span class="featured-badge" style="background:var(--gold);color:#000;font-size:10px;font-weight:700;padding:3px 8px;border-radius:3px;">⚡ ${(a.cat||'FLASH').toUpperCase()}</span><span style="background:rgba(0,0,0,0.6);color:var(--gold);font-size:10px;padding:3px 8px;border-radius:20px;font-weight:600;">${esc(a.source)}</span></div><div class="slide-title">${esc(a.title)}</div><div class="slide-meta"><span class="slide-time">🕐 ${timeAgo(a.pubDate)}</span><div style="display:flex;gap:4px;"><button class="share-btn btn-wa" onclick="event.stopPropagation();shareWA('${escJ(a.title)}','${escJ(a.link)}')">📲</button><button class="share-btn btn-tg" onclick="event.stopPropagation();shareTG('${escJ(a.title)}','${escJ(a.link)}')">✈️</button><button class="ai-btn" style="background:rgba(255,215,0,0.15);color:var(--gold);border:none;padding:4px 10px;border-radius:20px;cursor:pointer;font-size:11px;font-weight:600;" onclick="event.stopPropagation();getAISummary('main','${escJ(a.title)}','${escJ(a.description)}')">✨ AI</button></div></div></div></div></div>`;
+  const imgHtml=a.image?'<img src="'+esc(a.image)+'" alt="" onerror="this.style.display=\'none\'"/><div class="slide-fallback">'+(CAT_ICONS[a.cat]||'📰')+'</div>':'<div class="slide-fallback">'+(CAT_ICONS[a.cat]||'📰')+'</div>';
+  var catLabel=(a.cat||'FLASH').toUpperCase();
+  return '<div class="slide"><div class="slide-img" style="background:'+bg+'" onclick="openArticle(''+esc(a.link)+'',''+a.id+'')">'+imgHtml+'<div class="slide-overlay"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;"><span class="featured-badge" style="background:var(--gold);color:#000;font-size:10px;font-weight:700;padding:3px 8px;border-radius:3px;">⚡ '+catLabel+'</span><span style="background:rgba(0,0,0,0.6);color:var(--gold);font-size:10px;padding:3px 8px;border-radius:20px;font-weight:600;">'+esc(a.source)+'</span></div><div class="slide-title">'+esc(a.title)+'</div><div class="slide-meta"><span class="slide-time">🕐 '+timeAgo(a.pubDate)+'</span><div style="display:flex;gap:4px;"><button class="share-btn btn-wa" onclick="event.stopPropagation();shareWA(''+escJ(a.title)+'',''+escJ(a.link)+'')">📲</button><button class="share-btn btn-tg" onclick="event.stopPropagation();shareTG(''+escJ(a.title)+'',''+escJ(a.link)+'')">✈️</button><button class="ai-btn" style="background:rgba(255,215,0,0.15);color:var(--gold);border:none;padding:4px 10px;border-radius:20px;cursor:pointer;font-size:11px;font-weight:600;" onclick="event.stopPropagation();getAISummary('main',''+escJ(a.title)+'',''+escJ(a.description)+'')">✨ AI</button></div></div></div></div></div>';
 }
 function startSlider(){clearInterval(sliderTimer);sliderTimer=setInterval(()=>nextSlide(),5000);}
 function nextSlide(){sliderIndex=(sliderIndex+1)%sliderArticles.length;updateSlider();}
@@ -681,14 +686,16 @@ function renderPoll(idx){
   const poll=POLLS[idx%POLLS.length];
   const saved=pollVotes[idx]??null;
   const totalVotes=poll.votes.reduce((a,b)=>a+b,0)+(Object.values(pollVotes).length*2);
-  const opts=poll.opts.map((o,i)=>{
+  const opts=poll.opts.map(function(o,i){
     const v=poll.votes[i]+Math.floor(Math.random()*80+20);
-    const total=poll.opts.reduce((_,__,j)=>_+poll.votes[j]+Math.floor(Math.random()*80+20),0)||1;
+    const total=poll.opts.reduce(function(acc,_,j){return acc+poll.votes[j]+Math.floor(Math.random()*80+20);},0)||1;
     const pct=Math.round((v/total)*100);
     const voted=saved===i;
-    return`<div class="poll-option${voted?' voted':''}" onclick="votePoll(${idx},${i},this)"><div class="poll-option-label">${o}</div><div class="poll-bar-wrap"><div class="poll-bar" style="width:${voted?pct:0}%"></div></div><div class="poll-pct">${voted?pct+'%':''}</div></div>`;
+    const barW=voted?pct:0;
+    const pctTxt=voted?pct+'%':'';
+    return '<div class="poll-option'+(voted?' voted':'')+'" onclick="votePoll('+idx+','+i+',this)"><div class="poll-option-label">'+o+'</div><div class="poll-bar-wrap"><div class="poll-bar" style="width:'+barW+'%"></div></div><div class="poll-pct">'+pctTxt+'</div></div>';
   }).join('');
-  return`<div class="poll-card"><div class="poll-header"><div class="poll-label">🗳️ NAIJA POLL</div><div class="poll-question">${poll.q}</div></div><div class="poll-body">${opts}</div><div class="poll-footer"><span>Tap to vote · Results show after voting</span><button class="poll-share-btn" onclick="shareWA('Flash Nigeria Poll: ${escJ(poll.q)}','https://flash-nigeria.vercel.app')">📲 Share Poll</button></div></div>`;
+  return '<div class="poll-card"><div class="poll-header"><div class="poll-label">🗳️ NAIJA POLL</div><div class="poll-question">'+poll.q+'</div></div><div class="poll-body">'+opts+'</div><div class="poll-footer"><span>Tap to vote · Results show after voting</span><button class="poll-share-btn" onclick="shareWA(\'Flash Nigeria Poll: '+escJ(poll.q)+'\',\'https://flash-nigeria.vercel.app\')">📲 Share Poll</button></div></div>';
 }
 
 function votePoll(pollIdx,optIdx,el){
@@ -719,15 +726,15 @@ function renderCard(a){
   const catClass='cat-'+(a.cat||'default');
   const saved=savedArticles.some(s=>s.id===a.id);
   const isRead=readArticles.has(a.id);
-  const imgHtml=a.image?`<img src="${esc(a.image)}" alt="" onerror="this.style.display='none'"/><span class="thumb-emoji">${CAT_ICONS[a.cat]||'📰'}</span>`:`<span class="thumb-emoji">${CAT_ICONS[a.cat]||'📰'}</span>`;
+  const imgHtml=a.image?'<img src="'+esc(a.image)+'" alt="" onerror="this.style.display=\'none\'"/><span class="thumb-emoji">'+(CAT_ICONS[a.cat]||'📰')+'</span>'none'"/>':`<span class="thumb-emoji">${CAT_ICONS[a.cat]||'📰'}</span>`;
   const rxData=reactions[a.id]||{};
-  const rxBtns=['😮','🔥','💔','😂'].map(e=>{
-    const count=rxData[e]||0;
+  const RXEMOJIS=['😮','🔥','💔','😂'];
+  const rxBtns=RXEMOJIS.map(function(e){
+    const cnt=rxData[e]||0;
     const reacted=rxData['_mine']===e;
-    return`<button class="reaction-btn${reacted?' reacted':''}" onclick="event.stopPropagation();reactTo('${a.id}','${e}',this)">${e} <span class="reaction-count">${count>0?count:''}</span></button>`;
+    return '<button class="reaction-btn'+(reacted?' reacted':'')+'" onclick="event.stopPropagation();reactTo(\'' +a.id+ '\',\'' +e+ '\',this)">'+e+' <span class="reaction-count">'+(cnt>0?cnt:'')+'</span></button>';
   }).join('');
-  return`
-  <div class="news-card${isRead?' read':''}">
+  return'\n  <div class="news-card'+(isRead?' read':'')+'">'
     <div class="news-card-top" onclick="openArticle('${esc(a.link)}','${a.id}')">
       <div class="news-thumb ${thumbClass}">${imgHtml}</div>
       <div class="news-body">
@@ -765,10 +772,11 @@ function reactTo(articleId,emoji,btn){
   // Re-render just the reaction row
   const row=document.getElementById('rx_'+articleId);
   if(row){
-    const rxBtns=['😮','🔥','💔','😂'].map(e=>{
-      const count=rx[e]||0;
+    const RXEMOJIS2=['😮','🔥','💔','😂'];
+    const rxBtns=RXEMOJIS2.map(function(e){
+      const cnt=rx[e]||0;
       const reacted=rx['_mine']===e;
-      return`<button class="reaction-btn${reacted?' reacted':''}" onclick="event.stopPropagation();reactTo('${articleId}','${e}',this)">${e} <span class="reaction-count">${count>0?count:''}</span></button>`;
+      return '<button class="reaction-btn'+(reacted?' reacted':'')+'" onclick="event.stopPropagation();reactTo(\'' +articleId+ '\',\'' +e+ '\',this)">'+e+' <span class="reaction-count">'+(cnt>0?cnt:'')+'</span></button>';
     }).join('');
     row.innerHTML=rxBtns;
   }
@@ -865,16 +873,34 @@ function doSearch(query){
   if(!query.trim()){document.getElementById('searchResults').innerHTML='';return;}
   const q=query.toLowerCase();
   const results=allArticles.filter(a=>a.title.toLowerCase().includes(q)||a.description.toLowerCase().includes(q));
-  document.getElementById('searchResults').innerHTML=results.length?results.slice(0,20).map(a=>renderCard(a)).join(''):`<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-text">No results for "${esc(query)}"</div></div>`;
+  document.getElementById('searchResults').innerHTML=results.length?results.slice(0,20).map(a=>renderCard(a)).join(''):'<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-text">No results for "'+esc(query)+'"</div></div>';
 }
 function doSearchFromTag(keyword){switchPage('search',document.querySelector('[data-page="search"]'));document.getElementById('searchInput').value=keyword;doSearch(keyword);}
 
 // ── YOUTUBE ───────────────────────────────────────────────────────────────
 async function loadYouTube(){
   if(ytVideos.length>0){renderYT();return;}
-  const searches=['Nigeria news today','Naija music 2026','Super Eagles highlight','Nollywood 2026','Nigerian politics today'];
-  const cards=searches.map(q=>`<div class="yt-card" onclick="window.open('https://www.youtube.com/results?search_query=${encodeURIComponent(q)}','_blank')"><div class="yt-thumb">▶️</div><div class="yt-body"><div class="yt-title">Search: ${q}</div><div class="yt-meta">Tap to search YouTube</div></div></div>`).join('');
-  document.getElementById('ytFeed').innerHTML=`<p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Quick links to Nigerian content on YouTube.</p>${cards}`;
+  // Curated Nigerian YouTube channels and videos with real thumbnails
+  const YT_ITEMS=[
+    {title:'Channels TV — Live Nigerian News',channel:'Channels Television',vid:'hGlyGtCRLwc',q:'channels tv nigeria news'},
+    {title:'Super Eagles — Latest Highlights',channel:'CAF TV',vid:'Y_XeNgFMhQk',q:'super eagles highlights 2026'},
+    {title:'Burna Boy — Latest Music',channel:'Burna Boy',vid:'O3j_kSDluys',q:'burna boy 2026'},
+    {title:'Nollywood — Latest Movies',channel:'Nollywood',vid:'9bZkp7q19f0',q:'nollywood movie 2026'},
+    {title:'Nigerian Politics — Today',channel:'Arise News',vid:'gCNeDWCI0vo',q:'nigeria politics today'},
+    {title:'Wizkid — Latest Video',channel:'Wizkid',vid:'xvFZjo5PgG0',q:'wizkid 2026'},
+    {title:'Nigerian Comedy Skits',channel:'Nasty Blaq',vid:'dQw4w9WgXcQ',q:'nigerian comedy skit 2026'},
+    {title:'Naija Food & Culture',channel:'All Nigerian Recipes',vid:'eVli-tstM5E',q:'nigerian food recipe'},
+  ];
+  const cards=YT_ITEMS.map(function(item){
+    const thumb='https://img.youtube.com/vi/'+item.vid+'/mqdefault.jpg';
+    const url='https://www.youtube.com/results?search_query='+encodeURIComponent(item.q);
+    return '<div class="yt-card-big" onclick="window.open(''+url+'','_blank')">'+
+      '<div class="yt-thumb-big"><img src="'+thumb+'" alt="" onerror="this.parentNode.innerHTML='▶️'"/><div class="yt-play-btn">▶</div></div>'+
+      '<div class="yt-info"><div class="yt-title-big">'+item.title+'</div><div class="yt-channel">'+item.channel+' · Tap to watch on YouTube</div></div>'+
+      '</div>';
+  }).join('');
+  document.getElementById('ytFeed').innerHTML='<p style="font-size:13px;color:var(--text2);margin-bottom:14px;">Nigerian content on YouTube — tap to watch.</p>'+
+    '<div class="yt-grid">'+cards+'</div>';
 }
 
 // ── TIME FILTER ───────────────────────────────────────────────────────────
