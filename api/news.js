@@ -14,10 +14,15 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  // Cache 5 minutes on Vercel edge
-  res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600');
-
   const { category, page, q } = req.query;
+
+  // Only cache the first page with no filters
+  if (!page && !q && !category) {
+    res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600');
+  } else {
+    // Paginated / search / category requests — never cache
+    res.setHeader('Cache-Control', 'no-store');
+  }
 
   try {
     const params = new URLSearchParams({
