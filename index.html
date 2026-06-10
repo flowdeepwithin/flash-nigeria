@@ -179,11 +179,9 @@
     .retry:hover{background:var(--ink);color:#fff;border-color:var(--ink);}
 
     /* NAV */
-    #nav{height:var(--nav-h);background:#fff;border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(3,1fr);flex-shrink:0;z-index:10;}
     .ni{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--ink4);transition:color .15s;position:relative;}
     .ni.on{color:var(--ink);}
     .ni svg{width:20px;height:20px;}
-    .ni-lbl{font-family:var(--font-hd);font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;}
     .ni-badge{position:absolute;top:6px;right:calc(50% - 17px);background:var(--red);color:#fff;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 4px;}
 
     /* TOAST */
@@ -345,6 +343,90 @@
       .nc{flex-direction:column;}
       .nc-img{width:100%;min-height:130px;}
     }
+
+    /* ── ABOUT PAGE ── */
+    #about-view{padding:0 0 calc(var(--nav-h) + 16px);}
+    .ab-wrap{display:flex;flex-direction:column;gap:14px;padding:16px 16px 0;}
+
+    .ab-hero{
+      background:var(--ink);color:#fff;
+      border-radius:var(--radius);
+      padding:32px 20px 28px;
+      text-align:center;
+      position:relative;overflow:hidden;
+    }
+    .ab-hero::before{
+      content:'';position:absolute;inset:0;
+      background:radial-gradient(circle at 70% 30%, rgba(217,119,6,.3) 0%, transparent 60%);
+    }
+    .ab-bolt{font-size:40px;margin-bottom:8px;position:relative;}
+    .ab-brand{
+      font-family:var(--font-hd);font-size:32px;font-weight:900;
+      letter-spacing:.03em;text-transform:uppercase;
+      position:relative;margin-bottom:6px;
+    }
+    .ab-brand span{color:var(--gold);}
+    .ab-tagline{
+      font-size:13px;color:rgba(255,255,255,.6);
+      letter-spacing:.05em;text-transform:uppercase;
+      position:relative;
+    }
+
+    .ab-card{
+      background:var(--card);border-radius:var(--radius);
+      box-shadow:var(--shadow-s);padding:16px;
+      display:flex;gap:14px;align-items:flex-start;
+    }
+    .ab-card-icon{font-size:24px;flex-shrink:0;margin-top:2px;}
+    .ab-card-body{flex:1;min-width:0;}
+    .ab-card-title{
+      font-family:var(--font-hd);font-size:16px;font-weight:800;
+      letter-spacing:.02em;color:var(--ink);margin-bottom:8px;
+    }
+    .ab-card-text{font-size:13px;color:var(--ink2);line-height:1.65;}
+
+    .ab-tags{display:flex;flex-wrap:wrap;gap:6px;}
+    .ab-tag{
+      font-size:12px;font-weight:600;color:var(--ink2);
+      padding:4px 10px;border-radius:20px;
+      background:var(--bg);border:1px solid var(--border2);
+    }
+
+    .ab-features{display:flex;flex-direction:column;gap:10px;}
+    .ab-feat{display:flex;gap:10px;align-items:flex-start;}
+    .ab-feat-ico{font-size:18px;flex-shrink:0;margin-top:1px;}
+    .ab-feat div{font-size:13px;color:var(--ink2);line-height:1.5;}
+    .ab-feat strong{color:var(--ink);}
+
+    .ab-contact-btn{
+      display:inline-flex;align-items:center;gap:7px;
+      margin-top:12px;padding:10px 16px;border-radius:9px;
+      background:var(--ink);color:#fff;
+      font-size:13px;font-weight:600;
+      transition:opacity .15s;
+    }
+    .ab-contact-btn:hover{opacity:.85;}
+
+    .ab-footer{
+      text-align:center;padding:20px 0 8px;
+    }
+    .ab-footer-logo{
+      font-family:var(--font-hd);font-size:22px;font-weight:900;
+      color:var(--ink);letter-spacing:.03em;margin-bottom:6px;
+    }
+    .ab-footer-copy{font-size:12px;color:var(--ink4);line-height:1.8;}
+
+    /* NAV — 4 items */
+    #nav{
+      height:var(--nav-h);background:#fff;
+      border-top:1px solid var(--border);
+      display:grid;grid-template-columns:repeat(4,1fr);
+      flex-shrink:0;z-index:10;
+    }
+    .ni-lbl{
+      font-family:var(--font-hd);font-size:9px;font-weight:700;
+      letter-spacing:.05em;text-transform:uppercase;
+    }
   </style>
 </head>
 <body>
@@ -439,8 +521,86 @@
       </div>
       <div id="sv-list"></div>
     </div>
-  </main>
 
+    <!-- ABOUT VIEW -->
+    <div id="about-view" class="view">
+      <div class="ab-wrap">
+
+        <!-- HERO -->
+        <div class="ab-hero">
+          <div class="ab-bolt">⚡</div>
+          <div class="ab-brand">Flash Nigeria</div>
+          <div class="ab-tagline">Breaking Nigeria. Every Second.</div>
+        </div>
+
+        <!-- MISSION -->
+        <div class="ab-card">
+          <div class="ab-card-icon">🎯</div>
+          <div class="ab-card-body">
+            <div class="ab-card-title">Our Mission</div>
+            <div class="ab-card-text">Flash Nigeria exists to keep Nigerians informed — fast, clearly, and without noise. We aggregate breaking news from the most trusted Nigerian sources and deliver it in seconds, so you never miss what matters.</div>
+          </div>
+        </div>
+
+        <!-- WHAT WE COVER -->
+        <div class="ab-card">
+          <div class="ab-card-icon">📰</div>
+          <div class="ab-card-body">
+            <div class="ab-card-title">What We Cover</div>
+            <div class="ab-tags">
+              <span class="ab-tag">🏛️ Politics</span>
+              <span class="ab-tag">💼 Business</span>
+              <span class="ab-tag">⚽ Sports</span>
+              <span class="ab-tag">🎬 Entertainment</span>
+              <span class="ab-tag">💻 Technology</span>
+              <span class="ab-tag">🏥 Health</span>
+            </div>
+            <div class="ab-card-text" style="margin-top:10px">Stories sourced from Vanguard, Punch, Sahara Reporters, Channels TV, Guardian, Premium Times, Daily Trust, Thisday, BusinessDay and more.</div>
+          </div>
+        </div>
+
+        <!-- FEATURES -->
+        <div class="ab-card">
+          <div class="ab-card-icon">✨</div>
+          <div class="ab-card-body">
+            <div class="ab-card-title">App Features</div>
+            <div class="ab-features">
+              <div class="ab-feat"><span class="ab-feat-ico">🎙️</span><div><strong>Flash Voice</strong> — speak or type to get headlines read aloud</div></div>
+              <div class="ab-feat"><span class="ab-feat-ico">🔔</span><div><strong>Smart Alerts</strong> — max 2 notifications per day, only truly breaking news</div></div>
+              <div class="ab-feat"><span class="ab-feat-ico">📌</span><div><strong>Save Stories</strong> — bookmark articles to read later, offline</div></div>
+              <div class="ab-feat"><span class="ab-feat-ico">📲</span><div><strong>Install as App</strong> — add to home screen, works like a native app</div></div>
+              <div class="ab-feat"><span class="ab-feat-ico">🟢</span><div><strong>WhatsApp Share</strong> — share any story instantly</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTACT -->
+        <div class="ab-card">
+          <div class="ab-card-icon">✉️</div>
+          <div class="ab-card-body">
+            <div class="ab-card-title">Contact Us</div>
+            <div class="ab-card-text">Have a tip, feedback, or partnership inquiry? We'd love to hear from you.</div>
+            <a href="mailto:therealmrcommander@gmail.com" class="ab-contact-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+              </svg>
+              therealmrcommander@gmail.com
+            </a>
+          </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="ab-footer">
+          <div class="ab-footer-logo">⚡ Flash Nigeria</div>
+          <div class="ab-footer-copy">© 2026 Flash Nigeria. All rights reserved.</div>
+          <div class="ab-footer-copy">Built with ❤️ for Nigerians everywhere.</div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
   <nav id="nav">
     <button class="ni on" data-v="feed">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -460,6 +620,12 @@
       </svg>
       <span class="ni-lbl">Saved</span>
       <span class="ni-badge" id="sv-badge" style="display:none">0</span>
+    </button>
+    <button class="ni" data-v="about">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <span class="ni-lbl">About</span>
     </button>
   </nav>
 </div>
@@ -484,7 +650,7 @@
     <!-- MAIN INPUT — always visible -->
     <div class="vp-input-wrap">
       <div class="vp-input-bar" id="vp-input-bar">
-        <input type="text" id="vp-inp" placeholder="e.g. Vanguard breaking news…" autocomplete="off"/>
+        <input type="text" id="vp-inp" placeholder="Type: Vanguard breaking, Sahara Reporters…" autocomplete="off"/>
         <button class="vp-inp-mic" id="vp-inp-mic" title="Speak">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
@@ -563,6 +729,10 @@ function switchView(v){
   document.getElementById(v+'-view').classList.add('on');
   document.querySelector(`.ni[data-v="${v}"]`).classList.add('on');
   document.getElementById('main').scrollTop=0;
+  // Hide ticker + cats on About page
+  const hide = v === 'about';
+  document.getElementById('ticker').style.display = hide ? 'none' : '';
+  document.getElementById('cats').style.display = hide ? 'none' : '';
 }
 
 // CATS
@@ -943,15 +1113,18 @@ function submitVPQuery(){
 function toggleMic(){
   if(vpListening){stopListen(); return;}
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){setStatus('Voice not supported — please type','err'); return;}
+  if(!SR){setStatus('Voice not supported in this browser — please type','err'); return;}
   stopSpeak();
   recog=new SR();
-  recog.lang='en-NG'; recog.continuous=false; recog.interimResults=true; recog.maxAlternatives=1;
+  recog.lang='en-US'; // en-US is more reliable than en-NG for Google servers
+  recog.continuous=false;
+  recog.interimResults=true;
+  recog.maxAlternatives=3;
   vpListening=true;
   document.getElementById('vp-inp-mic').classList.add('on');
   document.getElementById('vp-input-bar').classList.add('listening');
   document.getElementById('voice-fab').classList.add('listening');
-  setStatus('🎤 Listening — speak now…','');
+  setStatus('🎤 Listening — speak clearly…','');
   recog.onresult=e=>{
     const tx=Array.from(e.results).map(r=>r[0].transcript).join('');
     document.getElementById('vp-inp').value=tx;
@@ -959,11 +1132,27 @@ function toggleMic(){
   };
   recog.onerror=e=>{
     stopListen();
-    const msgs={'not-allowed':'Mic permission denied — please type','network':'Voice needs Google servers — type instead','no-speech':'No speech heard — try again or type','audio-capture':'No microphone found'};
-    setStatus(msgs[e.error]||'Mic error — please type your query','err');
+    if(e.error==='not-allowed'){
+      setStatus('🔒 Mic blocked — tap the 🔒 in your address bar to allow','err');
+    } else if(e.error==='network'){
+      // Network error — silently fall back to typing, no scary message
+      setStatus('💡 Tip: Type your query and tap ➤ — works perfectly!','');
+      document.getElementById('vp-inp').focus();
+    } else if(e.error==='no-speech'){
+      setStatus('No speech detected — try again or type below','');
+    } else {
+      setStatus('Try typing your query instead','');
+      document.getElementById('vp-inp').focus();
+    }
   };
   recog.onend=()=>stopListen();
-  try{recog.start();}catch(e){stopListen(); setStatus('Could not start mic — please type','err');}
+  try{
+    recog.start();
+  }catch(e){
+    stopListen();
+    setStatus('💡 Type your query and tap ➤','');
+    document.getElementById('vp-inp').focus();
+  }
 }
 
 function stopListen(){
