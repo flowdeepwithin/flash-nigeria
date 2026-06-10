@@ -286,6 +286,15 @@
     .vp-stop{height:50px;padding:0 16px;border-radius:12px;background:var(--bg);color:var(--ink3);font-family:var(--font-hd);font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;transition:all .15s;cursor:pointer;}
     .vp-stop:hover{background:#fff;color:var(--ink);}
 
+    /* TYPE FALLBACK */
+    .vp-type-row{margin-bottom:12px;}
+    .vp-type-bar{display:flex;align-items:center;gap:8px;background:var(--bg);border:1.5px solid var(--gold-border);border-radius:10px;padding:0 12px;transition:border-color .2s;}
+    .vp-type-bar:focus-within{border-color:var(--gold);}
+    .vp-type-bar input{flex:1;background:none;border:none;outline:none;font:inherit;font-size:14px;color:var(--ink);padding:11px 0;}
+    .vp-type-bar input::placeholder{color:var(--ink4);}
+    .vp-type-bar button{background:var(--gold);color:#fff;border:none;width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:opacity .15s;}
+    .vp-type-bar button:hover{opacity:.85;}
+
     /* TABLET */
     @media(min-width:540px){
       .card-list{display:grid;grid-template-columns:1fr 1fr;}
@@ -426,6 +435,19 @@
     </div>
     <div class="vp-tx" id="vp-tx"><span class="vp-ph">Your voice query will appear here…</span></div>
     <div class="vp-results" id="vp-results" style="display:none"></div>
+
+    <!-- TYPE FALLBACK -->
+    <div class="vp-type-row" id="vp-type-row" style="display:none">
+      <div class="vp-type-bar">
+        <input type="text" id="vp-type-inp" placeholder="Type your query e.g. Vanguard politics…" autocomplete="off"/>
+        <button id="vp-type-go">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
     <div class="vp-acts">
       <button class="vp-mic" id="vp-mic">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -768,6 +790,14 @@ function bindVoice(){
   document.getElementById('vp-hints').querySelectorAll('.vp-hint').forEach(b=>{
     b.addEventListener('click',()=>{setTx(b.textContent); processQ(b.textContent);});
   });
+  // Type fallback
+  document.getElementById('vp-type-go').addEventListener('click',()=>{
+    const q=document.getElementById('vp-type-inp').value.trim();
+    if(q){setTx(q); processQ(q);}
+  });
+  document.getElementById('vp-type-inp').addEventListener('keydown',e=>{
+    if(e.key==='Enter'){const q=e.target.value.trim(); if(q){setTx(q); processQ(q);}}
+  });
   if(synth&&synth.onvoiceschanged!==undefined) synth.onvoiceschanged=()=>synth.getVoices();
 }
 
@@ -787,9 +817,19 @@ function startListen(){
   };
   recog.onerror=e=>{
     setVPS('idle');
-    if(e.error==='not-allowed') toast('🎤 Mic permission denied');
-    else if(e.error==='no-speech') toast('No speech detected. Try again.');
-    else toast('Voice error: '+e.error);
+    if(e.error==='not-allowed'){
+      toast('🎤 Mic permission denied');
+      showTypeFallback('Mic blocked — type your query below:');
+    } else if(e.error==='network'){
+      toast('🌐 Voice needs Google servers — type instead');
+      showTypeFallback('Voice unavailable — type your query:');
+    } else if(e.error==='no-speech'){
+      toast('No speech detected. Try again or type below.');
+      showTypeFallback();
+    } else {
+      toast('Voice error: '+e.error+' — try typing below');
+      showTypeFallback();
+    }
   };
   recog.onend=()=>{if(vpState==='listening')setVPS('idle'); document.getElementById('voice-fab').classList.remove('listening');};
   recog.start();
@@ -846,6 +886,13 @@ function speakHeadlines(results,srcQ,catQ,isBreaking){
   let intro=`Here are ${isBreaking?'the breaking ':''}${catQ?catQ+' ':''}headlines${src?' from '+src:''}. ${results.length} stories found. `;
   const hls=results.map((a,i)=>`Story ${i+1}: ${a.title}.`).join(' ');
   speak(intro+hls+' Tap any story to read more.');
+}
+
+function showTypeFallback(msg){
+  const row=document.getElementById('vp-type-row');
+  row.style.display='block';
+  if(msg) setTx(msg);
+  setTimeout(()=>document.getElementById('vp-type-inp').focus(),100);
 }
 
 function speak(text){
