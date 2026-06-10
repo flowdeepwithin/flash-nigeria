@@ -318,6 +318,27 @@
     }
     .vp-stop:hover{background:#fee2e2;}
 
+    /* NOTIFICATION BANNER */
+    #notif-bar{
+      margin:10px 16px 0;
+      background:#fff;border:1.5px solid var(--border2);
+      border-radius:var(--radius-s);padding:11px 13px;
+      display:flex;align-items:center;gap:10px;
+      box-shadow:var(--shadow-s);
+    }
+    .nb-icon{font-size:22px;flex-shrink:0;}
+    .nb-txt{flex:1;font-size:12px;color:var(--ink3);line-height:1.45;}
+    .nb-txt strong{color:var(--ink);font-size:13px;display:block;margin-bottom:1px;}
+    .nb-allow{
+      font-family:var(--font-hd);font-size:12px;font-weight:700;
+      letter-spacing:.04em;text-transform:uppercase;
+      background:var(--red);color:#fff;
+      padding:6px 12px;border-radius:6px;white-space:nowrap;
+      transition:opacity .15s;flex-shrink:0;
+    }
+    .nb-allow:hover{opacity:.85;}
+    .nb-x{color:var(--ink4);font-size:15px;padding:2px 4px;flex-shrink:0;}
+
     /* TABLET */
     @media(min-width:540px){
       .card-list{display:grid;grid-template-columns:1fr 1fr;}
@@ -373,6 +394,17 @@
         <div class="ib-txt"><strong>Add to Home Screen</strong>Read Nigeria's news offline</div>
         <button class="ib-go" id="ib-go">Install</button>
         <button class="ib-x" id="ib-x">✕</button>
+      </div>
+
+      <!-- NOTIFICATION PERMISSION BANNER -->
+      <div id="notif-bar" style="display:none">
+        <div class="nb-icon">🔔</div>
+        <div class="nb-txt">
+          <strong>Breaking News Alerts</strong>
+          Get notified for truly trending stories — max 2 per day
+        </div>
+        <button class="nb-allow" id="nb-allow">Allow</button>
+        <button class="nb-x" id="nb-x">✕</button>
       </div>
       <div id="hero-box"></div>
       <div class="sec-hd">
@@ -516,8 +548,7 @@ let deferredInstall=null, curArt=null;
 
 document.addEventListener('DOMContentLoaded',()=>{
   bindNav(); bindCats(); bindSearch(); bindInstall(); bindPTR(); bindModal(); bindVoice();
-  renderSaved(); loadNews();
-  window.addEventListener('beforeinstallprompt',e=>{
+  renderSaved(); loadNews();  window.addEventListener('beforeinstallprompt',e=>{
     e.preventDefault(); deferredInstall=e;
     document.getElementById('install-bar').style.display='flex';
   });
@@ -780,6 +811,80 @@ function catEmoji(c){return{politics:'🏛️',business:'💼',sports:'⚽',ente
 function catColors(c){return{politics:{cc:'red'},business:{cc:''},sports:{cc:'teal'},entertainment:{cc:'purple'},technology:{cc:'blue'},health:{cc:''}}[c]||{cc:''};}
 function waIco(){return`<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>`;}
 
+
+// ═══════════════════════════════════════
+// NOTIFICATIONS — max 2 per day, trending only
+// ═══════════════════════════════════════
+const NOTIF_DISMISSED_K = 'fn_notif_dismissed';
+const NOTIF_CHECK_K = 'fn_notif_last_check';
+const CHECK_EVERY = 30 * 60 * 1000; // 30 min
+
+function initNotifications() {
+  // Don't show if already granted or permanently dismissed
+  if (localStorage.getItem(NOTIF_DISMISSED_K)) return;
+  if (!('Notification' in window) || !('serviceWorker' in navigator)) return;
+  if (Notification.permission === 'granted') {
+    scheduleNewsCheck(); return;
+  }
+  if (Notification.permission === 'denied') return;
+
+  // Show the banner after 30 seconds (let user engage first)
+  setTimeout(() => {
+    document.getElementById('notif-bar').style.display = 'flex';
+  }, 30000);
+}
+
+document.getElementById('nb-allow').addEventListener('click', async () => {
+  document.getElementById('notif-bar').style.display = 'none';
+  try {
+    const permission = await Notification.requestPermission();
+    if (permission === 'granted') {
+      toast('🔔 Breaking news alerts enabled — max 2 per day');
+      scheduleNewsCheck();
+    } else {
+      toast('Notifications blocked in browser settings');
+    }
+  } catch (e) {
+    console.error('Notification permission error:', e);
+  }
+});
+
+document.getElementById('nb-x').addEventListener('click', () => {
+  document.getElementById('notif-bar').style.display = 'none';
+  localStorage.setItem(NOTIF_DISMISSED_K, '1');
+});
+
+function scheduleNewsCheck() {
+  // Check immediately on load, then every 30 min
+  checkForTrending();
+  setInterval(checkForTrending, CHECK_EVERY);
+}
+
+async function checkForTrending() {
+  if (Notification.permission !== 'granted') return;
+
+  // Throttle — don't check too often
+  const lastCheck = parseInt(localStorage.getItem(NOTIF_CHECK_K) || '0');
+  if (Date.now() - lastCheck < CHECK_EVERY - 5000) return;
+  localStorage.setItem(NOTIF_CHECK_K, Date.now().toString());
+
+  // Tell service worker to check
+  if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+    navigator.serviceWorker.controller.postMessage({ type: 'CHECK_NEWS' });
+  }
+}
+
+// Register service worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => {
+        console.log('Flash Nigeria SW registered');
+        initNotifications();
+      })
+      .catch(err => console.error('SW registration failed:', err));
+  });
+}
 
 // ═══════════════════════════════════════
 // VOICE ASSISTANT — type-first, mic bonus
