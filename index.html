@@ -213,7 +213,6 @@
     /* ═══════════════════════════════
        VOICE ASSISTANT
     ═══════════════════════════════ */
-    /* Floating mic button */
     #voice-fab{
       position:fixed;bottom:calc(var(--nav-h) + 16px);right:16px;
       width:54px;height:54px;border-radius:50%;
@@ -231,8 +230,6 @@
       70%{box-shadow:0 0 0 16px rgba(220,38,38,0);}
       100%{box-shadow:0 0 0 0 rgba(220,38,38,0);}
     }
-
-    /* Voice panel overlay */
     #vp{
       position:fixed;inset:0;z-index:250;
       display:none;align-items:flex-end;justify-content:center;
@@ -252,22 +249,55 @@
     .vp-handle{width:40px;height:4px;border-radius:2px;background:var(--border2);margin:0 auto 16px;}
     .vp-close{position:absolute;top:16px;right:16px;width:30px;height:30px;border-radius:50%;background:var(--bg);color:var(--ink3);display:flex;align-items:center;justify-content:center;font-size:14px;border:none;cursor:pointer;transition:background .15s;}
     .vp-close:hover{background:var(--border);}
-    .vp-title{font-family:var(--font-hd);font-size:20px;font-weight:900;letter-spacing:.02em;text-align:center;margin-bottom:4px;}
-    .vp-sub{font-size:12px;color:var(--ink3);text-align:center;margin-bottom:14px;line-height:1.55;}
-    .vp-sub em{color:var(--gold);font-style:normal;font-weight:600;}
+    .vp-title{font-family:var(--font-hd);font-size:20px;font-weight:900;letter-spacing:.02em;text-align:center;margin-bottom:3px;}
+    .vp-sub{font-size:12px;color:var(--ink3);text-align:center;margin-bottom:14px;}
 
-    /* Hint chips */
+    /* Input bar — type + mic + send in one row */
+    .vp-input-wrap{margin-bottom:12px;}
+    .vp-input-bar{
+      display:flex;align-items:center;gap:6px;
+      background:var(--bg);border:2px solid var(--border2);
+      border-radius:12px;padding:0 8px 0 14px;
+      transition:border-color .2s;
+    }
+    .vp-input-bar:focus-within{border-color:var(--ink);}
+    .vp-input-bar.listening{border-color:var(--red);}
+    .vp-input-bar.speaking{border-color:var(--gold);}
+    .vp-input-bar input{
+      flex:1;background:none;border:none;outline:none;
+      font:inherit;font-size:14px;color:var(--ink);padding:13px 0;
+    }
+    .vp-input-bar input::placeholder{color:var(--ink4);}
+    .vp-inp-mic{
+      width:34px;height:34px;border-radius:8px;flex-shrink:0;
+      display:flex;align-items:center;justify-content:center;
+      color:var(--ink3);transition:all .15s;border:none;cursor:pointer;
+      background:transparent;
+    }
+    .vp-inp-mic:hover{background:var(--border);color:var(--ink);}
+    .vp-inp-mic.on{background:var(--red);color:#fff;animation:pulse 1.2s infinite;}
+    .vp-inp-go{
+      width:36px;height:36px;border-radius:9px;flex-shrink:0;
+      background:var(--ink);color:#fff;
+      display:flex;align-items:center;justify-content:center;
+      transition:background .15s;border:none;cursor:pointer;
+    }
+    .vp-inp-go:hover{background:#333;}
+    .vp-inp-go.loading{background:var(--gold);}
+    .vp-status{
+      font-size:12px;color:var(--ink3);padding:4px 2px;
+      min-height:20px;transition:color .2s;
+    }
+    .vp-status.err{color:var(--red);}
+    .vp-status.ok{color:var(--green);}
+
+    /* Hints */
     .vp-hints{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
     .vp-hint{font-size:11px;font-weight:600;color:var(--ink3);padding:4px 11px;border-radius:20px;background:var(--bg);border:1px solid var(--border2);cursor:pointer;transition:all .15s;white-space:nowrap;}
     .vp-hint:hover{background:var(--gold-bg);border-color:var(--gold-border);color:var(--gold);}
 
-    /* Transcript box */
-    .vp-tx{min-height:48px;background:var(--bg);border-radius:10px;padding:12px 14px;font-size:15px;color:var(--ink);line-height:1.5;margin-bottom:14px;border:1.5px solid var(--border);transition:border-color .2s;}
-    .vp-tx.active{border-color:var(--gold);}
-    .vp-ph{color:var(--ink4);font-style:italic;}
-
     /* Results */
-    .vp-results{max-height:220px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;margin-bottom:14px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+    .vp-results{max-height:230px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;margin-bottom:12px;scrollbar-width:thin;}
     .vpc{background:var(--bg);border-radius:10px;padding:10px 12px;border:1.5px solid var(--border);cursor:pointer;transition:border-color .15s,background .15s;display:flex;gap:10px;align-items:flex-start;}
     .vpc:hover{border-color:var(--gold);background:var(--gold-bg);}
     .vpc-num{font-family:var(--font-hd);font-size:20px;font-weight:900;color:var(--gold);flex-shrink:0;line-height:1;margin-top:2px;}
@@ -277,23 +307,16 @@
     .vpc-play{flex-shrink:0;width:28px;height:28px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;transition:background .15s;margin-top:2px;}
     .vpc:hover .vpc-play{background:var(--gold);}
 
-    /* Action row */
-    .vp-acts{display:flex;gap:10px;}
-    .vp-mic{flex:1;height:50px;border-radius:12px;background:var(--ink);color:#fff;font-family:var(--font-hd);font-size:15px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .15s;border:none;cursor:pointer;}
-    .vp-mic:hover{background:#333;}
-    .vp-mic.listening{background:var(--red);}
-    .vp-mic.speaking{background:var(--gold);color:#000;}
-    .vp-stop{height:50px;padding:0 16px;border-radius:12px;background:var(--bg);color:var(--ink3);font-family:var(--font-hd);font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;transition:all .15s;cursor:pointer;}
-    .vp-stop:hover{background:#fff;color:var(--ink);}
-
-    /* TYPE FALLBACK */
-    .vp-type-row{margin-bottom:12px;}
-    .vp-type-bar{display:flex;align-items:center;gap:8px;background:var(--bg);border:1.5px solid var(--gold-border);border-radius:10px;padding:0 12px;transition:border-color .2s;}
-    .vp-type-bar:focus-within{border-color:var(--gold);}
-    .vp-type-bar input{flex:1;background:none;border:none;outline:none;font:inherit;font-size:14px;color:var(--ink);padding:11px 0;}
-    .vp-type-bar input::placeholder{color:var(--ink4);}
-    .vp-type-bar button{background:var(--gold);color:#fff;border:none;width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:opacity .15s;}
-    .vp-type-bar button:hover{opacity:.85;}
+    /* Stop button */
+    .vp-stop{
+      display:block;width:100%;padding:11px;border-radius:10px;
+      background:var(--red-bg);color:var(--red);
+      border:1.5px solid #fecaca;
+      font-family:var(--font-hd);font-size:14px;font-weight:700;
+      letter-spacing:.04em;text-transform:uppercase;
+      cursor:pointer;transition:background .15s;
+    }
+    .vp-stop:hover{background:#fee2e2;}
 
     /* TABLET */
     @media(min-width:540px){
@@ -424,7 +447,29 @@
     <button class="vp-close" id="vp-close">✕</button>
     <div class="vp-handle"></div>
     <div class="vp-title">⚡ Flash Voice</div>
-    <div class="vp-sub">Ask for news by source or topic.<br>e.g. <em>"Vanguard breaking news"</em> · <em>"Sahara Reporters politics"</em></div>
+    <div class="vp-sub">Speak or type — get headlines read aloud</div>
+
+    <!-- MAIN INPUT — always visible -->
+    <div class="vp-input-wrap">
+      <div class="vp-input-bar" id="vp-input-bar">
+        <input type="text" id="vp-inp" placeholder="e.g. Vanguard breaking news…" autocomplete="off"/>
+        <button class="vp-inp-mic" id="vp-inp-mic" title="Speak">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+            <line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/>
+          </svg>
+        </button>
+        <button class="vp-inp-go" id="vp-inp-go">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+          </svg>
+        </button>
+      </div>
+      <div class="vp-status" id="vp-status"></div>
+    </div>
+
+    <!-- HINT CHIPS -->
     <div class="vp-hints" id="vp-hints">
       <button class="vp-hint">Vanguard breaking</button>
       <button class="vp-hint">Sahara Reporters</button>
@@ -432,33 +477,15 @@
       <button class="vp-hint">Sports headlines</button>
       <button class="vp-hint">Business news</button>
       <button class="vp-hint">Channels TV</button>
+      <button class="vp-hint">Entertainment</button>
+      <button class="vp-hint">Health news</button>
     </div>
-    <div class="vp-tx" id="vp-tx"><span class="vp-ph">Your voice query will appear here…</span></div>
+
+    <!-- RESULTS -->
     <div class="vp-results" id="vp-results" style="display:none"></div>
 
-    <!-- TYPE FALLBACK -->
-    <div class="vp-type-row" id="vp-type-row" style="display:none">
-      <div class="vp-type-bar">
-        <input type="text" id="vp-type-inp" placeholder="Type your query e.g. Vanguard politics…" autocomplete="off"/>
-        <button id="vp-type-go">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
-          </svg>
-        </button>
-      </div>
-    </div>
-
-    <div class="vp-acts">
-      <button class="vp-mic" id="vp-mic">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-          <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-          <line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/>
-        </svg>
-        <span id="vp-lbl">Tap to Speak</span>
-      </button>
-      <button class="vp-stop" id="vp-stop">Stop</button>
-    </div>
+    <!-- STOP READING -->
+    <button class="vp-stop" id="vp-stop" style="display:none">⏹ Stop Reading</button>
   </div>
 </div>
 
@@ -753,97 +780,106 @@ function catEmoji(c){return{politics:'🏛️',business:'💼',sports:'⚽',ente
 function catColors(c){return{politics:{cc:'red'},business:{cc:''},sports:{cc:'teal'},entertainment:{cc:'purple'},technology:{cc:'blue'},health:{cc:''}}[c]||{cc:''};}
 function waIco(){return`<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>`;}
 
+
 // ═══════════════════════════════════════
-// VOICE ASSISTANT
+// VOICE ASSISTANT — type-first, mic bonus
 // ═══════════════════════════════════════
 const SRC_MAP={
   'vanguard':'vanguard','sahara':'saharareporters','sahara reporters':'saharareporters',
-  'saharareporters':'saharareporters','punch':'punch','the punch':'punch',
-  'channels':'channels','channels tv':'channels','thisday':'thisday','this day':'thisday',
-  'guardian':'guardian','the guardian':'guardian','premium times':'premiumtimes',
-  'premium':'premiumtimes','daily trust':'dailytrust','trust':'dailytrust',
-  'leadership':'leadership','nation':'thenation','the nation':'thenation',
+  'punch':'punch','the punch':'punch','channels':'channels','channels tv':'channels',
+  'thisday':'thisday','this day':'thisday','guardian':'guardian','the guardian':'guardian',
+  'premium times':'premiumtimes','premium':'premiumtimes','daily trust':'dailytrust',
+  'trust':'dailytrust','leadership':'leadership','nation':'thenation','the nation':'thenation',
   'tribune':'tribune','businessday':'businessday','business day':'businessday',
-  'arise':'arise','arise tv':'arise',
+  'arise':'arise','arise tv':'arise','naija news':'naijanews','tvc':'tvc',
 };
 const CAT_WORDS={
-  'politics':'politics','political':'politics','government':'politics','president':'politics','senate':'politics',
+  'politics':'politics','political':'politics','government':'politics','president':'politics','senate':'politics','tinubu':'politics',
   'business':'business','economy':'business','finance':'business','naira':'business','market':'business','stock':'business',
-  'sports':'sports','football':'sports','eagles':'sports','soccer':'sports','nfl':'sports','nba':'sports',
-  'entertainment':'entertainment','nollywood':'entertainment','music':'entertainment','celebrity':'entertainment','movies':'entertainment',
+  'sports':'sports','football':'sports','eagles':'sports','soccer':'sports','premier league':'sports',
+  'entertainment':'entertainment','nollywood':'entertainment','music':'entertainment','celebrity':'entertainment',
   'technology':'technology','tech':'technology','startup':'technology',
-  'health':'health','medical':'health','hospital':'health','covid':'health',
+  'health':'health','medical':'health','hospital':'health',
 };
 
-let recog=null, synth=window.speechSynthesis, vpState='idle', vpArts=[];
+let recog=null, synth=window.speechSynthesis, vpArts=[], vpListening=false;
 
 function bindVoice(){
   document.getElementById('voice-fab').addEventListener('click',openVP);
   document.getElementById('vp-close').addEventListener('click',closeVP);
   document.getElementById('vp').addEventListener('click',e=>{if(e.target===document.getElementById('vp'))closeVP();});
-  document.getElementById('vp-mic').addEventListener('click',()=>{
-    if(vpState==='listening'){stopListen(); setVPS('idle'); return;}
-    if(vpState==='speaking'){stopSpeak(); setVPS('idle'); return;}
-    startListen();
-  });
-  document.getElementById('vp-stop').addEventListener('click',()=>{stopSpeak(); stopListen(); setVPS('idle');});
+  document.getElementById('vp-inp-go').addEventListener('click',submitVPQuery);
+  document.getElementById('vp-inp').addEventListener('keydown',e=>{if(e.key==='Enter')submitVPQuery();});
+  document.getElementById('vp-inp-mic').addEventListener('click',toggleMic);
+  document.getElementById('vp-stop').addEventListener('click',()=>{stopSpeak(); document.getElementById('vp-stop').style.display='none';});
   document.getElementById('vp-hints').querySelectorAll('.vp-hint').forEach(b=>{
-    b.addEventListener('click',()=>{setTx(b.textContent); processQ(b.textContent);});
-  });
-  // Type fallback
-  document.getElementById('vp-type-go').addEventListener('click',()=>{
-    const q=document.getElementById('vp-type-inp').value.trim();
-    if(q){setTx(q); processQ(q);}
-  });
-  document.getElementById('vp-type-inp').addEventListener('keydown',e=>{
-    if(e.key==='Enter'){const q=e.target.value.trim(); if(q){setTx(q); processQ(q);}}
+    b.addEventListener('click',()=>{document.getElementById('vp-inp').value=b.textContent; submitVPQuery();});
   });
   if(synth&&synth.onvoiceschanged!==undefined) synth.onvoiceschanged=()=>synth.getVoices();
 }
 
-function openVP(){document.getElementById('vp').classList.add('on'); document.body.style.overflow='hidden';}
-function closeVP(){stopSpeak(); stopListen(); document.getElementById('vp').classList.remove('on'); document.body.style.overflow=''; setVPS('idle');}
+function openVP(){
+  document.getElementById('vp').classList.add('on');
+  document.body.style.overflow='hidden';
+  setTimeout(()=>document.getElementById('vp-inp').focus(),300);
+}
+function closeVP(){
+  stopSpeak(); stopListen();
+  document.getElementById('vp').classList.remove('on');
+  document.body.style.overflow='';
+}
 
-function startListen(){
+function submitVPQuery(){
+  const q=document.getElementById('vp-inp').value.trim();
+  if(!q){setStatus('Type or speak a query first','err'); return;}
+  processVPQuery(q);
+}
+
+function toggleMic(){
+  if(vpListening){stopListen(); return;}
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){toast('⚠️ Voice not supported. Try Chrome.'); return;}
+  if(!SR){setStatus('Voice not supported — please type','err'); return;}
   stopSpeak();
-  recog=new SR(); recog.lang='en-NG'; recog.continuous=false; recog.interimResults=true; recog.maxAlternatives=1;
-  setVPS('listening'); setTx('',true);
+  recog=new SR();
+  recog.lang='en-NG'; recog.continuous=false; recog.interimResults=true; recog.maxAlternatives=1;
+  vpListening=true;
+  document.getElementById('vp-inp-mic').classList.add('on');
+  document.getElementById('vp-input-bar').classList.add('listening');
+  document.getElementById('voice-fab').classList.add('listening');
+  setStatus('🎤 Listening — speak now…','');
   recog.onresult=e=>{
     const tx=Array.from(e.results).map(r=>r[0].transcript).join('');
-    setTx(tx);
-    if(e.results[e.results.length-1].isFinal){recog.stop(); processQ(tx);}
+    document.getElementById('vp-inp').value=tx;
+    if(e.results[e.results.length-1].isFinal){stopListen(); processVPQuery(tx);}
   };
   recog.onerror=e=>{
-    setVPS('idle');
-    if(e.error==='not-allowed'){
-      toast('🎤 Mic permission denied');
-      showTypeFallback('Mic blocked — type your query below:');
-    } else if(e.error==='network'){
-      toast('🌐 Voice needs Google servers — type instead');
-      showTypeFallback('Voice unavailable — type your query:');
-    } else if(e.error==='no-speech'){
-      toast('No speech detected. Try again or type below.');
-      showTypeFallback();
-    } else {
-      toast('Voice error: '+e.error+' — try typing below');
-      showTypeFallback();
-    }
+    stopListen();
+    const msgs={'not-allowed':'Mic permission denied — please type','network':'Voice needs Google servers — type instead','no-speech':'No speech heard — try again or type','audio-capture':'No microphone found'};
+    setStatus(msgs[e.error]||'Mic error — please type your query','err');
   };
-  recog.onend=()=>{if(vpState==='listening')setVPS('idle'); document.getElementById('voice-fab').classList.remove('listening');};
-  recog.start();
+  recog.onend=()=>stopListen();
+  try{recog.start();}catch(e){stopListen(); setStatus('Could not start mic — please type','err');}
 }
-function stopListen(){if(recog){try{recog.stop();}catch(e){} recog=null;}}
 
-async function processQ(query){
-  if(!query.trim())return;
-  setVPS('fetching'); setTx(query);
+function stopListen(){
+  vpListening=false;
+  document.getElementById('vp-inp-mic').classList.remove('on');
+  document.getElementById('vp-input-bar').classList.remove('listening');
+  document.getElementById('voice-fab').classList.remove('listening');
+  if(recog){try{recog.stop();}catch(e){} recog=null;}
+}
+
+async function processVPQuery(query){
+  stopSpeak();
+  setStatus('⚡ Searching…','');
+  setGoLoading(true);
+  document.getElementById('vp-results').style.display='none';
+  document.getElementById('vp-stop').style.display='none';
   const q=query.toLowerCase().trim();
   let srcQ=null;
-  for(const[k,v]of Object.entries(SRC_MAP)){if(q.includes(k)){srcQ=v; break;}}
+  for(const[k,v]of Object.entries(SRC_MAP)){if(q.includes(k)){srcQ=v;break;}}
   let catQ=null;
-  for(const[k,v]of Object.entries(CAT_WORDS)){if(q.includes(k)){catQ=v; break;}}
+  for(const[k,v]of Object.entries(CAT_WORDS)){if(q.includes(k)){catQ=v;break;}}
   let searchTerm=srcQ||'';
   if(!searchTerm&&!catQ) searchTerm=query.replace(/give me|show me|what('s| is)|the|news|headlines|breaking|latest|today|please/gi,'').trim();
   try{
@@ -851,24 +887,26 @@ async function processQ(query){
     if(searchTerm) p.set('q',searchTerm);
     if(catQ&&!srcQ) p.set('category',catQ);
     const r=await fetch(`${API}?${p}`);
+    if(!r.ok) throw new Error('HTTP '+r.status);
     const d=await r.json();
     if(d.status==='ok'&&d.articles?.length){
       let res=d.articles;
-      if(srcQ){const f=res.filter(a=>a.source.toLowerCase().includes(srcQ.replace(/([a-z])([A-Z])/g,'$1 $2').toLowerCase())); if(f.length)res=f;}
-      vpArts=res.slice(0,5); renderVPCards(vpArts);
-      setVPS('speaking'); speakHeadlines(vpArts,srcQ,catQ,q.includes('break')||q.includes('latest'));
+      if(srcQ){const f=res.filter(a=>a.source.toLowerCase().replace(/\s/g,'').includes(srcQ.replace(/\s/g,''))); if(f.length)res=f;}
+      vpArts=res.slice(0,5);
+      renderVPCards(vpArts);
+      setStatus('✅ Found '+vpArts.length+' stories — reading now…','ok');
+      speakHeadlines(vpArts,srcQ,catQ,q.includes('break')||q.includes('latest'));
     }else{
-      setVPS('idle'); setTx('No results found for: '+query);
-      document.getElementById('vp-results').style.display='none';
-      speak("Sorry, I couldn't find any news for that query. Please try again.");
+      setStatus('No results. Try different keywords.','err');
     }
-  }catch(e){setVPS('idle'); speak("Sorry, there was a network error. Please check your connection.");}
+  }catch(e){setStatus('Error: '+e.message,'err');}
+  setGoLoading(false);
 }
 
 function renderVPCards(results){
   const box=document.getElementById('vp-results'); box.style.display='flex';
   box.innerHTML=results.map((a,i)=>`
-    <div class="vpc" data-i="${i}">
+    <div class="vpc">
       <div class="vpc-num">${i+1}</div>
       <div class="vpc-body">
         <div class="vpc-src">${a.source} · ${ago(a.pub)}</div>
@@ -883,16 +921,9 @@ function renderVPCards(results){
 
 function speakHeadlines(results,srcQ,catQ,isBreaking){
   const src=srcQ?srcQ.replace('saharareporters','Sahara Reporters').replace('premiumtimes','Premium Times').replace('dailytrust','Daily Trust'):'';
-  let intro=`Here are ${isBreaking?'the breaking ':''}${catQ?catQ+' ':''}headlines${src?' from '+src:''}. ${results.length} stories found. `;
+  const intro=`Here are ${isBreaking?'the breaking ':''}${catQ||''} headlines${src?' from '+src:''}. ${results.length} stories. `;
   const hls=results.map((a,i)=>`Story ${i+1}: ${a.title}.`).join(' ');
   speak(intro+hls+' Tap any story to read more.');
-}
-
-function showTypeFallback(msg){
-  const row=document.getElementById('vp-type-row');
-  row.style.display='block';
-  if(msg) setTx(msg);
-  setTimeout(()=>document.getElementById('vp-type-inp').focus(),100);
 }
 
 function speak(text){
@@ -902,28 +933,14 @@ function speak(text){
   const voices=synth.getVoices();
   const best=voices.find(v=>v.name.includes('Google UK English Female')||v.name.includes('Samantha')||v.name.includes('Karen')||(v.lang==='en-GB'&&v.localService));
   if(best)u.voice=best;
-  u.onstart=()=>setVPS('speaking');
-  u.onend=()=>setVPS('idle');
-  u.onerror=()=>setVPS('idle');
+  u.onstart=()=>{document.getElementById('voice-fab').classList.add('speaking'); document.getElementById('vp-stop').style.display='block';};
+  u.onend=()=>{document.getElementById('voice-fab').classList.remove('speaking');};
+  u.onerror=()=>{document.getElementById('voice-fab').classList.remove('speaking');};
   synth.speak(u);
 }
-function stopSpeak(){if(synth)synth.cancel();}
-
-function setVPS(state){
-  vpState=state;
-  const fab=document.getElementById('voice-fab'), mic=document.getElementById('vp-mic'), lbl=document.getElementById('vp-lbl'), tx=document.getElementById('vp-tx');
-  fab.classList.remove('listening','speaking'); mic.classList.remove('listening','speaking'); tx.classList.remove('active');
-  if(state==='listening'){fab.classList.add('listening'); mic.classList.add('listening'); lbl.textContent='Listening…'; tx.classList.add('active');}
-  else if(state==='fetching'){lbl.textContent='Searching…';}
-  else if(state==='speaking'){fab.classList.add('speaking'); mic.classList.add('speaking'); lbl.textContent='🔊 Reading…';}
-  else{lbl.textContent='Tap to Speak';}
-}
-function setTx(text,listening=false){
-  const el=document.getElementById('vp-tx');
-  if(!text&&listening) el.innerHTML=`<span class="vp-ph" style="color:var(--red);font-style:normal;font-weight:600">🎤 Listening…</span>`;
-  else if(!text) el.innerHTML=`<span class="vp-ph">Your voice query will appear here…</span>`;
-  else el.textContent=text;
-}
+function stopSpeak(){if(synth)synth.cancel(); document.getElementById('voice-fab').classList.remove('speaking');}
+function setStatus(msg,type){const el=document.getElementById('vp-status'); el.textContent=msg; el.className='vp-status'+(type?' '+type:'');}
+function setGoLoading(on){document.getElementById('vp-inp-go').classList.toggle('loading',on);}
 </script>
 </body>
 </html>
