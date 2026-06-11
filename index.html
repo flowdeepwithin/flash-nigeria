@@ -500,6 +500,57 @@
     .related-src{font-size:11px;color:var(--ink3);font-weight:600;margin-bottom:3px;}
     .related-hl{font-family:var(--font-hd);font-size:15px;font-weight:800;line-height:1.2;color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 
+
+    /* AI SUMMARY */
+    .ai-summary-btn{
+      display:flex;align-items:center;gap:5px;
+      font-size:11px;font-weight:600;
+      color:#7c3aed;padding:3px 8px;border-radius:5px;
+      border:1px solid #e9d5ff;background:#f5f3ff;
+      transition:all .15s;white-space:nowrap;cursor:pointer;
+    }
+    .ai-summary-btn:hover{background:#ede9fe;border-color:#c4b5fd;}
+    body.dark .ai-summary-btn{color:#a78bfa;border-color:rgba(167,139,250,.3);background:rgba(124,58,237,.1);}
+
+    /* SUMMARY PANEL in modal */
+    .ai-summary-box{
+      background:#f5f3ff;border:1.5px solid #e9d5ff;
+      border-radius:var(--radius);padding:14px;
+      margin-bottom:20px;position:relative;
+    }
+    body.dark .ai-summary-box{background:rgba(124,58,237,.08);border-color:rgba(167,139,250,.2);}
+    .ai-summary-hd{
+      display:flex;align-items:center;gap:7px;
+      margin-bottom:10px;
+    }
+    .ai-summary-badge{
+      font-family:var(--font-hd);font-size:11px;font-weight:800;
+      letter-spacing:.06em;text-transform:uppercase;
+      background:#7c3aed;color:#fff;
+      padding:2px 8px;border-radius:4px;
+    }
+    .ai-summary-src{font-size:11px;color:var(--ink3);}
+    .ai-summary-text{
+      font-size:14px;line-height:1.7;color:var(--ink2);
+    }
+    .ai-summary-loading{
+      display:flex;align-items:center;gap:8px;
+      font-size:13px;color:var(--ink3);
+    }
+    .ai-spin{
+      width:16px;height:16px;border:2px solid #e9d5ff;
+      border-top-color:#7c3aed;border-radius:50%;
+      animation:spin .7s linear infinite;flex-shrink:0;
+    }
+    .ai-summary-err{font-size:13px;color:var(--red);}
+    .ai-summary-close{
+      position:absolute;top:10px;right:10px;
+      font-size:14px;color:var(--ink4);cursor:pointer;
+      background:none;border:none;padding:2px 6px;
+      transition:color .15s;
+    }
+    .ai-summary-close:hover{color:var(--ink);}
+
     /* TABLET */
     @media(min-width:540px){
       .card-list{display:grid;grid-template-columns:1fr 1fr;}
@@ -1315,6 +1366,7 @@ function renderFeed(){
     trackClick(arts[0].id); openArt(arts[0]);
   });
   document.getElementById('hero-wa').addEventListener('click',e=>{e.stopPropagation(); shareWA(arts[0]);});
+  document.getElementById('hero-ai').addEventListener('click',e=>{e.stopPropagation(); openArt(arts[0]); setTimeout(()=>triggerAISummary(arts[0]),300);});
   document.getElementById('hero-xi').addEventListener('click',e=>{e.stopPropagation(); shareX(arts[0]);});
   document.getElementById('hero-img-share').addEventListener('click',e=>{e.stopPropagation(); shareAsImage(arts[0]);});
   const rest=arts.slice(1);
@@ -1346,6 +1398,7 @@ function heroHTML(a){
       <div class="hero-foot">
         <span class="more-lnk">Read more →</span>
         <div class="share-group hero-share">
+          <button class="ai-summary-btn" id="hero-ai">✨ AI Summary</button>
           <button class="wa-btn" id="hero-wa">${waIco()} WA</button>
           <button class="x-btn" id="hero-xi">${xIco()} X</button>
           <button class="img-btn" id="hero-img-share">🖼️</button>
@@ -1377,6 +1430,7 @@ function cardHTML(a,i){
         <button class="nc-act sv-act ${isSv?'sv':''}">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="${isSv?'currentColor':'none'}" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>${isSv?'Saved':'Save'}
         </button>
+        <button class="nc-act ai-summary-btn nc-ai">✨ Summary</button>
         <button class="nc-act wa nc-wa">${waIco()} WA</button>
         <button class="nc-act xi nc-xi">${xIco()} X</button>
         <button class="nc-act cp nc-cp">🖼️ Card</button>
@@ -1389,6 +1443,7 @@ function bindCard(el,a){
   el.addEventListener('click',e=>{if(e.target.closest('.nc-act'))return; trackClick(a.id); openArt(a);});
   el.querySelector('.sv-act').addEventListener('click',e=>{e.stopPropagation(); toggleSave(a,el.querySelector('.sv-act'));});
   el.querySelector('.nc-wa').addEventListener('click',e=>{e.stopPropagation(); shareWA(a);});
+  if(el.querySelector('.nc-ai')) el.querySelector('.nc-ai').addEventListener('click',e=>{e.stopPropagation(); openArt(a); setTimeout(()=>triggerAISummary(a),300);});
   el.querySelector('.nc-xi').addEventListener('click',e=>{e.stopPropagation(); shareX(a);});
   el.querySelector('.nc-cp').addEventListener('click',e=>{e.stopPropagation(); shareAsImage(a);});
   el.addEventListener('touchstart',()=>{if(navigator.vibrate) navigator.vibrate(8);},{passive:true});
@@ -1467,6 +1522,7 @@ function openArt(a){
     ${renderRelated(a)}`;
   document.getElementById('mo-sv-btn').addEventListener('click',function(){toggleSave(a,null); const ns=saved.some(s=>s.id===a.id); this.textContent=ns?'📌 Saved':'📌 Save'; this.classList.toggle('on',ns);});
   document.getElementById('mo-cp-btn').addEventListener('click',()=>copyLink(a));
+  document.getElementById('mo-ai-btn').addEventListener('click',()=>triggerAISummary(a));
   // Reset reading progress
   document.getElementById('modal-progress').style.width='0%';
   document.getElementById('modal').classList.add('on'); document.body.style.overflow='hidden';
@@ -1678,6 +1734,80 @@ function renderRelated(currentArt){
   });
   out += '</div>';
   return out;
+}
+
+
+// ── AI NEWS SUMMARY (Claude API) ──
+async function triggerAISummary(article){
+  const wrap = document.getElementById('mo-ai-wrap');
+  if(!wrap) return;
+
+  // Show loading state
+  wrap.innerHTML = `
+    <div class="ai-summary-box">
+      <button class="ai-summary-close" onclick="document.getElementById('mo-ai-wrap').innerHTML=''">✕</button>
+      <div class="ai-summary-hd">
+        <span class="ai-summary-badge">✨ AI Summary</span>
+        <span class="ai-summary-src">Powered by Claude</span>
+      </div>
+      <div class="ai-summary-loading">
+        <div class="ai-spin"></div>
+        Summarising this story…
+      </div>
+    </div>`;
+
+  const title = article.title || '';
+  const desc = article.desc || '';
+  const source = article.source || 'Nigeria News';
+
+  if(!desc && !title){
+    wrap.querySelector('.ai-summary-loading').outerHTML = '<div class="ai-summary-err">Not enough content to summarise this article.</div>';
+    return;
+  }
+
+  const prompt = `You are a Nigerian news summariser. Summarise the following news story in exactly 3 clear, concise sentences for a Nigerian audience. Be direct, factual and use simple English. Do not add any intro like "Here is a summary" — just give the 3 sentences directly.
+
+Headline: ${title}
+Source: ${source}
+Content: ${desc}`;
+
+  try{
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 200,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    const data = await response.json();
+    const summary = data.content?.[0]?.text || 'Could not generate summary.';
+
+    wrap.innerHTML = `
+      <div class="ai-summary-box">
+        <button class="ai-summary-close" onclick="document.getElementById('mo-ai-wrap').innerHTML=''">✕</button>
+        <div class="ai-summary-hd">
+          <span class="ai-summary-badge">✨ AI Summary</span>
+          <span class="ai-summary-src">Powered by Claude · ${source}</span>
+        </div>
+        <div class="ai-summary-text">${summary}</div>
+      </div>`;
+
+    // Track with analytics
+    if(typeof gtag !== 'undefined') gtag('event', 'ai_summary', {article_id: article.id});
+
+  } catch(err){
+    wrap.innerHTML = `
+      <div class="ai-summary-box">
+        <button class="ai-summary-close" onclick="document.getElementById('mo-ai-wrap').innerHTML=''">✕</button>
+        <div class="ai-summary-hd">
+          <span class="ai-summary-badge">✨ AI Summary</span>
+        </div>
+        <div class="ai-summary-err">⚠️ Could not generate summary. Check your connection.</div>
+      </div>`;
+  }
 }
 
 </script>
