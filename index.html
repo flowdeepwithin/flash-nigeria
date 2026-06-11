@@ -810,9 +810,8 @@ const SRCH_HIST_K='fn5_sh', NOTIF_K='fn5_notif', POLL_K='fn5_poll', CLICKS_K='fn
 const RATE_K='fn5_rates', RATE_TTL=60*60*1000; // rates cache 1hr
 
 let arts=[], saved=JSON.parse(localStorage.getItem(SAVED_K)||'[]');
-const pidginOn=false; // Pidgin mode disabled
 let cat='', view='feed', nextPg=null, busy=false;
-let deferredInstall=null, curArt=null, pendingArts=[];
+let deferredInstall=null, curArt=null, pendingArts=[], pidginOn=false;
 let clickCounts=JSON.parse(localStorage.getItem(CLICKS_K)||'{}');
 
 // ── SVG ICONS ──
@@ -823,7 +822,7 @@ function xIco(){return`<svg width="13" height="13" viewBox="0 0 24 24" fill="cur
 document.addEventListener('DOMContentLoaded',()=>{
   applyTheme(); initWelcomeBar();
   bindNav(); bindCats(); bindSearch(); bindInstall(); bindPTR();
-  bindModal(); bindVoice(); bindDarkMode(); bindPidgin();
+  bindModal(); bindVoice(); bindDarkMode();
   bindNotifications(); bindOffline();
   renderSaved(); loadNews();
   loadRates(); initPoll(); startNewCheck();
@@ -1089,21 +1088,6 @@ function applyPidgin(){
   pidginOn=localStorage.getItem(PIDGIN_K)==='1';
   const btn=document.getElementById('pidgin-btn');
   btn.classList.toggle('on',pidginOn);
-}
-function bindPidgin(){
-  document.getElementById('pidgin-btn').addEventListener('click',()=>{
-    pidginOn=!pidginOn;
-    localStorage.setItem(PIDGIN_K,pidginOn?'1':'0');
-    document.getElementById('pidgin-btn').classList.toggle('on',pidginOn);
-    toast(pidginOn?'🗣️ Pidgin mode on!':'Pidgin mode off');
-    if(typeof gtag!=='undefined') gtag('event','pidgin_toggle',{state:pidginOn?'on':'off'});
-    // Redraw everything with new language
-    renderFeed();
-    updateTicker(arts);
-    renderMostRead();
-    if(view==='saved') renderSaved();
-  });   renderFeed();
-  });
 }
 function getTitle(a){return pidginOn?toPidgin(a.title):a.title;}
 
@@ -1684,26 +1668,26 @@ async function shareAsImage(a){
 function renderRelated(currentArt){
   const related = arts
     .filter(a => a.id !== currentArt.id && (
-      a.cat === currentArt.cat ||
-      a.source === currentArt.source
+      a.cat === currentArt.cat || a.source === currentArt.source
     ))
     .slice(0, 3);
   if(!related.length) return '';
-  // Store related in a temp map accessible by id
-  related.forEach(a => { window._relMap = window._relMap||{}; window._relMap[a.id]=a; });
-  return '<div class="related-wrap">' +
-    '<div class="related-hd"><em>📰</em>Related Stories</div>' +
-    related.map(a=>
-      '<div class="related-card" data-rid="'+a.id+'">' +
-        (a.img ? '<img class="related-thumb" src="'+a.img+'" alt="" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">' : '') +
-        '<div class="related-thumb-ph" style="'+(a.img?'display:none':'')+'">' + catEmoji(a.cat) + '</div>' +
-        '<div class="related-body">' +
-          '<div class="related-src">'+a.source+' · '+ago(a.pub)+'</div>' +
-          '<div class="related-hl">'+getTitle(a)+'</div>' +
-        '</div>' +
-      '</div>'
-    ).join('') +
-  '</div>';
+  related.forEach(a => { window._rel = window._rel||{}; window._rel[a.id]=a; });
+  let out = '<div class="related-wrap"><div class="related-hd"><em>📰</em>Related Stories</div>';
+  related.forEach(function(a){
+    out += '<div class="related-card" data-rid="' + a.id + '">';
+    if(a.img){
+      out += '<img class="related-thumb" src="' + a.img + '" alt="" loading="lazy">';
+    } else {
+      out += '<div class="related-thumb-ph">' + catEmoji(a.cat) + '</div>';
+    }
+    out += '<div class="related-body">';
+    out += '<div class="related-src">' + a.source + ' · ' + ago(a.pub) + '</div>';
+    out += '<div class="related-hl">' + getTitle(a) + '</div>';
+    out += '</div></div>';
+  });
+  out += '</div>';
+  return out;
 }
 
 </script>
