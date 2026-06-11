@@ -1,0 +1,1815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+  <meta name="apple-mobile-web-app-title" content="Flash Nigeria"/>
+  <meta name="description" content="Flash Nigeria — Flash. News. Nigeria."/>
+  <meta name="theme-color" content="#ffffff" id="theme-meta"/>
+  <title>Flash Nigeria ⚡</title>
+  <!-- SEO -->
+  <meta property="og:title" content="Flash Nigeria ⚡ — Flash. News. Nigeria."/>
+  <meta property="og:description" content="Nigeria's fastest news app. Flash headlines from Vanguard, Punch, Channels TV, Guardian and more."/>
+  <meta property="og:image" content="https://flash-nigeria.vercel.app/icons/icon-512x512.png"/>
+  <meta property="og:url" content="https://flash-nigeria.vercel.app"/>
+  <meta property="og:type" content="website"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Flash Nigeria ⚡"/>
+  <meta name="twitter:description" content="Flash. News. Nigeria."/>
+  <meta name="twitter:image" content="https://flash-nigeria.vercel.app/icons/icon-512x512.png"/>
+  <meta name="keywords" content="Nigeria news, breaking news Nigeria, Naija news, Vanguard, Punch, Sahara Reporters, Channels TV, Nigerian politics, Nigerian sports"/>
+  <meta name="author" content="Flash Nigeria"/>
+  <link rel="canonical" href="https://flash-nigeria.vercel.app"/>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8F71YEBLS3"></script>
+  <script>
+    window.dataLayer=window.dataLayer||[];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js',new Date());
+    gtag('config','G-8F71YEBLS3');
+  </script>
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png"/>
+  <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root{
+      --bg:#f4f4f4;--card:#fff;--border:#e8e8e8;--border2:#d4d4d4;
+      --hdr:#fff;--nav-bg:#fff;
+      --gold:#16a34a;--gold-bg:#f0fdf4;--gold-border:#bbf7d0;
+      --ink:#111;--ink2:#444;--ink3:#888;--ink4:#bbb;
+      --red:#dc2626;--red-bg:#fef2f2;
+      --green:#16a34a;--green-bg:#f0fdf4;--green-border:#bbf7d0;
+      --radius:12px;--radius-s:8px;--nav-h:62px;--hdr-h:56px;
+      --shadow-s:0 1px 3px rgba(0,0,0,.06),0 0 0 1px var(--border);
+      --shadow-m:0 4px 14px rgba(0,0,0,.09);
+      --font-hd:'Barlow Condensed',sans-serif;--font-bd:'Inter',sans-serif;
+    }
+    body.dark{
+      --bg:#0f0f0f;--card:#1a1a1a;--border:#2a2a2a;--border2:#333;
+      --hdr:#141414;--nav-bg:#141414;
+      --gold:#22c55e;--gold-bg:rgba(34,197,94,.1);--gold-border:rgba(34,197,94,.3);
+      --ink:#f0f0f0;--ink2:#bbb;--ink3:#777;--ink4:#444;
+      --red:#ef4444;--red-bg:rgba(239,68,68,.1);
+      --green:#22c55e;--green-bg:rgba(34,197,94,.1);--green-border:rgba(34,197,94,.3);
+      --shadow-s:0 1px 3px rgba(0,0,0,.3),0 0 0 1px var(--border);
+      --shadow-m:0 4px 14px rgba(0,0,0,.4);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{height:100%;-webkit-tap-highlight-color:transparent;}
+    body{background:var(--bg);color:var(--ink);font-family:var(--font-bd);font-size:14px;line-height:1.5;height:100%;overflow:hidden;transition:background .2s,color .2s;}
+    a{color:inherit;text-decoration:none;}
+    button{border:none;background:none;cursor:pointer;font:inherit;color:inherit;}
+    img{display:block;}
+    #app{display:flex;flex-direction:column;height:100dvh;}
+
+    /* HEADER */
+    #hdr{height:var(--hdr-h);background:var(--hdr);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 16px;flex-shrink:0;z-index:10;transition:background .2s;}
+    .logo{display:flex;align-items:center;gap:8px;}
+    .logo-bolt{width:28px;height:28px;background:var(--gold);clip-path:polygon(60% 0%,28% 46%,54% 46%,38% 100%,72% 54%,46% 54%);flex-shrink:0;}
+    .logo-text{font-family:var(--font-hd);font-size:23px;font-weight:900;letter-spacing:.03em;text-transform:uppercase;color:var(--ink);}
+    .logo-text b{color:var(--gold);}
+    .logo-sub{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink4);margin-top:-3px;padding-left:1px;}
+    .hdr-actions{display:flex;align-items:center;gap:2px;}
+    .hdr-btn{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--ink3);transition:background .15s,color .15s;}
+    .hdr-btn:hover{background:var(--bg);color:var(--ink);}
+    /* Pidgin toggle */
+    #pidgin-btn{font-family:var(--font-hd);font-size:12px;font-weight:800;letter-spacing:.04em;padding:4px 9px;border-radius:6px;border:1.5px solid var(--border2);color:var(--ink3);transition:all .15s;}
+    #pidgin-btn.on{background:var(--gold);border-color:var(--gold);color:#fff;}
+
+    /* TICKER */
+    #ticker{background:var(--ink);color:#fff;height:30px;display:flex;align-items:center;overflow:hidden;flex-shrink:0;transition:background .2s;}
+    .ticker-lbl{font-family:var(--font-hd);font-weight:900;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:0 12px;white-space:nowrap;background:linear-gradient(90deg,#16a34a,#eab308);color:#fff;height:100%;display:flex;align-items:center;flex-shrink:0;}
+    .ticker-wrap{flex:1;overflow:hidden;}
+    .ticker-track{display:flex;white-space:nowrap;animation:tick 50s linear infinite;}
+    .ticker-track:hover{animation-play-state:paused;}
+    .ticker-item{font-size:12px;font-weight:500;padding:0 22px;opacity:.9;}
+    @keyframes tick{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+    /* WELCOME BANNER */
+    #welcome-bar{
+      background:linear-gradient(90deg,var(--ink) 0%,#2a2a2a 100%);
+      color:#fff;padding:8px 16px;
+      display:none;align-items:center;justify-content:space-between;
+      font-size:12px;font-weight:500;flex-shrink:0;
+    }
+    #welcome-bar.show{display:flex;}
+    #welcome-bar span{opacity:.8;}
+    #welcome-bar strong{color:var(--gold);}
+    #welcome-bar button{color:var(--ink4);font-size:14px;background:none;border:none;cursor:pointer;}
+
+    /* NEW STORIES BANNER */
+    #new-banner{background:var(--gold);color:#000;padding:8px 16px;font-size:13px;font-weight:700;display:none;align-items:center;justify-content:space-between;cursor:pointer;flex-shrink:0;}
+    #new-banner.show{display:flex;}
+
+    /* NAIRA RATE BAR */
+    #rate-bar{background:var(--card);border-bottom:1px solid var(--border);padding:8px 16px;display:flex;gap:16px;overflow-x:auto;flex-shrink:0;scrollbar-width:none;}
+    #rate-bar::-webkit-scrollbar{display:none;}
+    .rate-item{display:flex;align-items:center;gap:5px;white-space:nowrap;flex-shrink:0;}
+    .rate-pair{font-family:var(--font-hd);font-size:12px;font-weight:700;letter-spacing:.04em;color:var(--ink3);text-transform:uppercase;}
+    .rate-val{font-family:var(--font-hd);font-size:14px;font-weight:900;color:var(--ink);}
+    .rate-chg{font-size:10px;font-weight:600;padding:1px 5px;border-radius:4px;}
+    .rate-chg.up{background:#dcfce7;color:#16a34a;}
+    .rate-chg.dn{background:#fef2f2;color:#dc2626;}
+    body.dark .rate-chg.up{background:rgba(34,197,94,.15);color:#22c55e;}
+    body.dark .rate-chg.dn{background:rgba(239,68,68,.15);color:#ef4444;}
+    .rate-divider{width:1px;height:24px;background:var(--border);flex-shrink:0;}
+
+    /* CATS */
+    #cats{background:var(--hdr);padding:9px 16px;display:flex;gap:7px;overflow-x:auto;flex-shrink:0;scrollbar-width:none;border-bottom:1px solid var(--border);transition:background .2s;}
+    #cats::-webkit-scrollbar{display:none;}
+    .pill{font-family:var(--font-hd);font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:5px 14px;border-radius:20px;border:1.5px solid var(--border2);color:var(--ink3);white-space:nowrap;background:transparent;transition:all .15s;flex-shrink:0;position:relative;}
+    .pill:hover{border-color:var(--ink);color:var(--ink);}
+    .pill.on{background:var(--ink);border-color:var(--ink);color:var(--card);}
+    .pill-count{font-size:9px;opacity:.7;margin-left:2px;}
+
+    /* MAIN */
+    #main{flex:1;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:var(--border) transparent;-webkit-overflow-scrolling:touch;}
+    #main::-webkit-scrollbar{width:3px;}
+    #main::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+    .view{display:none;}.view.on{display:block;}
+
+    /* FEED */
+    #feed-view{padding:0 0 calc(var(--nav-h) + 8px);}
+
+    /* INSTALL */
+    #install-bar{margin:12px 16px 0;background:var(--gold-bg);border:1px solid var(--gold-border);border-radius:var(--radius-s);padding:10px 12px;display:flex;align-items:center;gap:10px;}
+    .ib-txt{flex:1;font-size:12px;color:var(--ink3);}
+    .ib-txt strong{color:var(--ink);font-size:13px;display:block;}
+    .ib-go{font-family:var(--font-hd);font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;background:var(--gold);color:#fff;padding:5px 11px;border-radius:6px;white-space:nowrap;}
+    .ib-x{color:var(--ink4);font-size:15px;padding:2px 4px;}
+
+    /* NOTIFICATION */
+    #notif-bar{margin:10px 16px 0;background:var(--card);border:1.5px solid var(--border2);border-radius:var(--radius-s);padding:11px 13px;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow-s);}
+    .nb-icon{font-size:22px;flex-shrink:0;}
+    .nb-txt{flex:1;font-size:12px;color:var(--ink3);line-height:1.45;}
+    .nb-txt strong{color:var(--ink);font-size:13px;display:block;margin-bottom:1px;}
+    .nb-allow{font-family:var(--font-hd);font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;background:var(--red);color:#fff;padding:6px 12px;border-radius:6px;white-space:nowrap;flex-shrink:0;}
+    .nb-x{color:var(--ink4);font-size:15px;padding:2px 4px;flex-shrink:0;}
+
+    /* PTR */
+    #ptr{height:0;overflow:hidden;transition:height .2s;display:flex;align-items:center;justify-content:center;gap:6px;font-size:12px;color:var(--ink4);}
+    #ptr.on{height:44px;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+
+    /* MOST READ STRIP */
+    #most-read{margin:14px 0 0;padding:0 16px;}
+    .mr-hd{font-family:var(--font-hd);font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;}
+    .mr-hd em{color:var(--gold);font-style:normal;margin-right:4px;}
+    .mr-strip{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;}
+    .mr-strip::-webkit-scrollbar{display:none;}
+    .mr-card{background:var(--card);border-radius:var(--radius-s);box-shadow:var(--shadow-s);width:160px;flex-shrink:0;cursor:pointer;overflow:hidden;transition:box-shadow .15s;}
+    .mr-card:hover{box-shadow:var(--shadow-m);}
+    .mr-img{width:100%;height:90px;object-fit:cover;object-position:center 20%;background:var(--border);}
+    .mr-img-ph{width:100%;height:90px;display:flex;align-items:center;justify-content:center;font-size:24px;background:linear-gradient(135deg,var(--border),var(--border2));}
+    .mr-body{padding:8px;}
+    .mr-num{font-family:var(--font-hd);font-size:18px;font-weight:900;color:var(--gold);line-height:1;}
+    .mr-hl{font-family:var(--font-hd);font-size:13px;font-weight:800;line-height:1.2;color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-top:3px;}
+
+    /* POLL */
+    #poll-wrap{margin:14px 16px 0;}
+    .poll-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow-s);padding:14px;}
+    .poll-hd{display:flex;align-items:center;gap:7px;margin-bottom:10px;}
+    .poll-badge{font-family:var(--font-hd);font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:var(--gold);color:#000;padding:2px 8px;border-radius:4px;}
+    .poll-q{font-family:var(--font-hd);font-size:17px;font-weight:800;line-height:1.2;color:var(--ink);margin-bottom:12px;}
+    .poll-opts{display:flex;flex-direction:column;gap:7px;}
+    .poll-opt{
+      width:100%;padding:10px 14px;border-radius:var(--radius-s);
+      border:1.5px solid var(--border2);background:var(--bg);
+      font-family:var(--font-hd);font-size:15px;font-weight:700;
+      letter-spacing:.02em;color:var(--ink);text-align:left;
+      transition:all .15s;position:relative;overflow:hidden;cursor:pointer;
+    }
+    .poll-opt:hover{border-color:var(--gold);}
+    .poll-opt.voted{border-color:var(--gold);background:var(--gold-bg);color:#15803d;}
+    .poll-opt.losing{border-color:var(--border);color:var(--ink3);}
+    .poll-bar{position:absolute;left:0;top:0;height:100%;background:var(--gold-bg);z-index:0;transition:width .5s ease;}
+    body.dark .poll-bar{background:rgba(245,158,11,.12);}
+    .poll-opt-inner{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:center;}
+    .poll-pct{font-size:13px;font-weight:700;color:var(--gold);}
+    .poll-total{font-size:11px;color:var(--ink4);margin-top:8px;text-align:right;}
+
+    /* HERO */
+    .hero-wrap{margin:14px 16px 0;}
+    .hero{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow-s);overflow:hidden;cursor:pointer;transition:box-shadow .15s;}
+    .hero:hover{box-shadow:var(--shadow-m);}
+    .hero-img{width:100%;height:215px;overflow:hidden;position:relative;background:var(--border);flex-shrink:0;}
+    .hero-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 20%;}
+    .hero-img-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:54px;background:linear-gradient(135deg,var(--border),var(--border2));}
+    .cat-badge{position:absolute;top:12px;left:12px;font-family:var(--font-hd);font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;padding:3px 9px;border-radius:5px;background:var(--gold);color:#fff;}
+    .cat-badge.red{background:var(--red);}.cat-badge.blue{background:#1d4ed8;}.cat-badge.purple{background:#7c3aed;}.cat-badge.teal{background:#0f766e;}
+    .trending-badge{position:absolute;top:12px;right:12px;font-family:var(--font-hd);font-size:11px;font-weight:800;letter-spacing:.05em;background:rgba(0,0,0,.7);color:#fff;padding:3px 8px;border-radius:5px;backdrop-filter:blur(4px);}
+    .hero-body{padding:14px 14px 12px;}
+    .hero-meta{display:flex;align-items:center;gap:7px;margin-bottom:9px;}
+    .src-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0;}
+    .src-dot.red{background:var(--red);}
+    .hero-src{font-size:12px;font-weight:600;color:var(--ink3);}
+    .hero-time{font-size:11px;color:var(--ink4);margin-left:auto;}
+    .read-time{font-size:11px;color:var(--ink4);display:flex;align-items:center;gap:3px;}
+    .hero-hl{font-family:var(--font-hd);font-size:23px;font-weight:900;line-height:1.1;letter-spacing:.01em;color:var(--ink);margin-bottom:8px;}
+    .hero-hl.pidgin{font-style:italic;}
+    .hero-desc{font-size:13px;color:var(--ink2);line-height:1.55;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+    .hero-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;}
+    .more-lnk{font-size:12px;font-weight:600;color:var(--ink4);}
+    .share-group{display:flex;gap:6px;}
+    .wa-btn{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--green);padding:6px 10px;border-radius:7px;border:1.5px solid var(--green-border);background:var(--green-bg);transition:background .15s;}
+    .wa-btn:hover{background:#dcfce7;}
+    .x-btn{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--ink);padding:6px 10px;border-radius:7px;border:1.5px solid var(--border2);background:var(--card);transition:background .15s;}
+    .x-btn:hover{background:var(--bg);}
+    .img-btn{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--ink3);padding:6px 10px;border-radius:7px;border:1.5px solid var(--border2);background:var(--card);transition:background .15s;}
+    .img-btn:hover{background:var(--bg);}
+
+    /* SECTION HD */
+    .sec-hd{display:flex;align-items:center;justify-content:space-between;padding:18px 16px 10px;}
+    .sec-hd h2{font-family:var(--font-hd);font-size:13px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--ink3);}
+    .sec-hd h2 em{color:var(--gold);font-style:normal;margin-right:4px;}
+    .rfsh-btn{font-size:11px;font-weight:600;color:var(--ink4);display:flex;align-items:center;gap:4px;padding:3px 9px;border-radius:5px;border:1px solid var(--border);background:var(--card);transition:all .15s;}
+    .rfsh-btn:hover{color:var(--ink);border-color:var(--border2);}
+
+    /* CARD LIST */
+    .card-list{padding:0 16px;display:flex;flex-direction:column;gap:10px;}
+    .nc{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow-s);display:flex;overflow:hidden;cursor:pointer;transition:box-shadow .15s;}
+    .nc:hover{box-shadow:var(--shadow-m);}
+    .nc:active{opacity:.95;}
+    .nc-img{width:108px;flex-shrink:0;position:relative;overflow:hidden;background:var(--border);min-height:108px;}
+    .nc-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 20%;}
+    .nc-img-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:26px;background:linear-gradient(135deg,var(--border),var(--border2));}
+    .nc-fire{position:absolute;top:4px;right:4px;font-size:14px;}
+    .nc-body{flex:1;min-width:0;padding:11px 12px 10px;display:flex;flex-direction:column;gap:4px;}
+    .nc-meta{display:flex;align-items:center;gap:5px;}
+    .nc-src{font-size:11px;color:var(--ink3);font-weight:600;}
+    .nc-dot{width:2px;height:2px;border-radius:50%;background:var(--ink4);flex-shrink:0;}
+    .nc-time{font-size:11px;color:var(--ink4);}
+    .nc-rt{font-size:10px;color:var(--ink4);margin-left:auto;}
+    .nc-hl{font-family:var(--font-hd);font-size:16px;font-weight:800;line-height:1.2;color:var(--ink);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+    .nc-hl.pidgin{font-style:italic;}
+    .nc-tag{font-family:var(--font-hd);font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:4px;align-self:flex-start;background:var(--gold-bg);color:#166534;}
+    .nc-tag.red{background:var(--red-bg);color:var(--red);}.nc-tag.blue{background:#eff6ff;color:#1d4ed8;}.nc-tag.purple{background:#f5f3ff;color:#7c3aed;}.nc-tag.teal{background:#f0fdfa;color:#0f766e;}
+    body.dark .nc-tag{color:var(--gold);}
+    .nc-acts{display:flex;gap:5px;margin-top:4px;flex-wrap:wrap;}
+    .nc-act{font-size:11px;color:var(--ink4);padding:3px 7px;border-radius:5px;display:flex;align-items:center;gap:3px;transition:all .15s;border:1px solid transparent;white-space:nowrap;}
+    .nc-act:hover{background:var(--bg);color:var(--ink);border-color:var(--border);}
+    .nc-act.sv{color:var(--gold);}
+    .nc-act.wa{color:var(--green);}
+    .nc-act.wa:hover{background:var(--green-bg);border-color:var(--green-border);}
+
+    /* LOAD MORE */
+    #load-more{display:block;width:calc(100% - 32px);margin:16px auto 0;padding:12px;border-radius:var(--radius);border:1.5px solid var(--border2);background:var(--card);font-family:var(--font-hd);font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink3);box-shadow:var(--shadow-s);transition:all .15s;}
+    #load-more:hover{border-color:var(--ink);color:var(--ink);}
+
+    /* SKELETON */
+    .sk{background:linear-gradient(90deg,var(--border) 25%,var(--border2) 50%,var(--border) 75%);background-size:200% 100%;animation:shim 1.4s infinite;border-radius:6px;}
+    @keyframes shim{from{background-position:200% 0;}to{background-position:-200% 0;}}
+    .sk-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow-s);display:flex;overflow:hidden;}
+    .sk-img{width:108px;flex-shrink:0;min-height:108px;}
+    .sk-bd{flex:1;padding:12px;display:flex;flex-direction:column;gap:9px;}
+    .sk-ln{height:10px;}.sk-ln.s{width:38%;}.sk-ln.m{width:68%;}.sk-ln.f{width:100%;}.sk-ln.t{height:14px;}
+
+    /* SEARCH */
+    #search-view{padding:14px 16px calc(var(--nav-h) + 16px);}
+    .srch-bar{display:flex;align-items:center;gap:10px;background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:0 14px;margin-bottom:10px;transition:border-color .15s;box-shadow:var(--shadow-s);}
+    .srch-bar:focus-within{border-color:var(--ink);}
+    .srch-bar svg{color:var(--ink4);flex-shrink:0;}
+    .srch-bar input{flex:1;background:none;border:none;outline:none;color:var(--ink);font:inherit;font-size:15px;padding:13px 0;}
+    .srch-bar input::placeholder{color:var(--ink4);}
+    .srch-x{color:var(--ink4);font-size:17px;display:none;}
+    #srch-history{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;}
+    .sh-chip{font-size:11px;font-weight:600;color:var(--ink3);padding:4px 10px;border-radius:20px;background:var(--card);border:1px solid var(--border2);cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .15s;}
+    .sh-chip:hover{background:var(--gold-bg);border-color:var(--gold-border);color:var(--gold);}
+    #srch-res{display:flex;flex-direction:column;gap:10px;}
+
+    /* SAVED */
+    #saved-view{padding:16px 16px calc(var(--nav-h) + 16px);}
+    .sv-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+    .sv-hd h2{font-family:var(--font-hd);font-size:20px;font-weight:900;letter-spacing:.02em;}
+    .sv-clr{font-size:12px;color:var(--red);padding:4px 9px;border-radius:5px;border:1px solid #fecaca;background:var(--red-bg);}
+    #sv-list{display:flex;flex-direction:column;gap:10px;}
+
+    /* EMPTY/ERROR */
+    .mty{text-align:center;padding:52px 24px;color:var(--ink3);}
+    .mty .ico{font-size:42px;margin-bottom:14px;}
+    .mty p{font-size:14px;line-height:1.65;}
+    .err-s{text-align:center;padding:44px 24px;}
+    .err-s .ico{font-size:40px;margin-bottom:12px;}
+    .err-s p{color:var(--ink3);font-size:14px;margin-bottom:16px;line-height:1.6;}
+    .retry{padding:10px 22px;border-radius:8px;border:1.5px solid var(--border2);background:var(--card);font-family:var(--font-hd);font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);box-shadow:var(--shadow-s);transition:all .15s;}
+    .retry:hover{background:var(--ink);color:var(--card);border-color:var(--ink);}
+
+    /* ABOUT */
+    #about-view{padding:0 0 calc(var(--nav-h) + 16px);}
+    .ab-wrap{display:flex;flex-direction:column;gap:14px;padding:16px 16px 0;}
+    .ab-hero{background:var(--ink);color:#fff;border-radius:var(--radius);padding:32px 20px 28px;text-align:center;position:relative;overflow:hidden;}
+    .ab-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 70% 30%,rgba(217,119,6,.35) 0%,transparent 60%);}
+    .ab-bolt{font-size:40px;margin-bottom:8px;position:relative;}
+    .ab-brand{font-family:var(--font-hd);font-size:32px;font-weight:900;letter-spacing:.03em;text-transform:uppercase;position:relative;margin-bottom:6px;}
+    .ab-brand b{color:var(--gold);}
+    .ab-tagline{font-size:12px;color:rgba(255,255,255,.55);letter-spacing:.06em;text-transform:uppercase;position:relative;}
+    .ab-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow-s);padding:16px;display:flex;gap:14px;align-items:flex-start;}
+    .ab-card-icon{font-size:24px;flex-shrink:0;margin-top:2px;}
+    .ab-card-body{flex:1;min-width:0;}
+    .ab-card-title{font-family:var(--font-hd);font-size:16px;font-weight:800;letter-spacing:.02em;color:var(--ink);margin-bottom:8px;}
+    .ab-card-text{font-size:13px;color:var(--ink2);line-height:1.65;}
+    .ab-tags{display:flex;flex-wrap:wrap;gap:6px;}
+    .ab-tag{font-size:12px;font-weight:600;color:var(--ink2);padding:4px 10px;border-radius:20px;background:var(--bg);border:1px solid var(--border2);}
+    .ab-features{display:flex;flex-direction:column;gap:10px;}
+    .ab-feat{display:flex;gap:10px;align-items:flex-start;}
+    .ab-feat-ico{font-size:18px;flex-shrink:0;margin-top:1px;}
+    .ab-feat div{font-size:13px;color:var(--ink2);line-height:1.5;}
+    .ab-feat strong{color:var(--ink);}
+    .ab-contact-btn{display:inline-flex;align-items:center;gap:7px;margin-top:12px;padding:10px 16px;border-radius:9px;background:var(--ink);color:var(--card);font-size:13px;font-weight:600;transition:opacity .15s;}
+    .ab-contact-btn:hover{opacity:.85;}
+    .ab-footer{text-align:center;padding:20px 0 8px;}
+    .ab-footer-logo{font-family:var(--font-hd);font-size:22px;font-weight:900;color:var(--ink);letter-spacing:.03em;margin-bottom:6px;}
+    .ab-footer-copy{font-size:12px;color:var(--ink4);line-height:1.8;}
+    .ab-founder{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow-s);padding:20px 16px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;}
+    .ab-founder-img-wrap{width:110px;height:110px;border-radius:50%;overflow:hidden;border:3px solid var(--gold);box-shadow:0 0 0 4px var(--gold-bg);flex-shrink:0;}
+    .ab-founder-img-wrap img{width:100%;height:100%;object-fit:cover;object-position:center top;}
+    .ab-founder-name{font-family:var(--font-hd);font-size:22px;font-weight:900;letter-spacing:.02em;color:var(--ink);margin-bottom:3px;}
+    .ab-founder-title{font-size:12px;font-weight:600;color:var(--gold);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
+    .ab-founder-bio{font-size:13px;color:var(--ink2);line-height:1.65;}
+    .ab-founder-socials{display:flex;gap:8px;justify-content:center;margin-top:10px;}
+    .ab-social-btn{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:6px 12px;border-radius:20px;border:1.5px solid var(--border2);color:var(--ink3);background:var(--bg);transition:all .15s;}
+    .ab-social-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-bg);}
+    .ab-social-btn.wa{color:var(--green);border-color:var(--green-border);background:var(--green-bg);}
+
+    /* NAV */
+    #nav{height:var(--nav-h);background:var(--nav-bg);border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(4,1fr);flex-shrink:0;z-index:10;transition:background .2s;}
+    .ni{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--ink4);transition:color .15s;position:relative;}
+    .ni.on{color:var(--ink);}
+    .ni svg{width:20px;height:20px;}
+    .ni-lbl{font-family:var(--font-hd);font-size:9px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;}
+    .ni-badge{position:absolute;top:6px;right:calc(50% - 17px);background:var(--red);color:#fff;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 4px;}
+
+    /* TOAST */
+    #toast{position:fixed;bottom:calc(var(--nav-h) + 14px);left:50%;transform:translateX(-50%) translateY(16px);background:var(--ink);color:var(--card);font-size:13px;font-weight:500;padding:9px 18px;border-radius:20px;white-space:nowrap;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;z-index:400;box-shadow:var(--shadow-m);}
+    #toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
+
+    /* ARTICLE MODAL */
+    #modal{position:fixed;inset:0;z-index:300;display:none;flex-direction:column;background:var(--card);}
+    #modal.on{display:flex;}
+    .mo-hd{height:var(--hdr-h);display:flex;align-items:center;gap:12px;padding:0 16px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--card);}
+    .mo-back{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--ink3);transition:background .15s;}
+    .mo-back:hover{background:var(--bg);}
+    .mo-src{font-size:13px;font-weight:600;color:var(--ink3);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .mo-share-group{display:flex;gap:5px;flex-shrink:0;}
+    .mo-wa{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--green);padding:5px 9px;border-radius:7px;border:1.5px solid var(--green-border);background:var(--green-bg);}
+    .mo-xi{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--ink);padding:5px 9px;border-radius:7px;border:1.5px solid var(--border2);background:var(--card);}
+    .mo-img-share{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--ink3);padding:5px 9px;border-radius:7px;border:1.5px solid var(--border2);background:var(--card);}
+    .mo-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 16px 40px;}
+    .mo-tag-row{display:flex;gap:8px;margin-bottom:12px;align-items:center;}
+    .mo-hl{font-family:var(--font-hd);font-size:26px;font-weight:900;line-height:1.1;letter-spacing:.01em;margin-bottom:14px;}
+    .mo-img{width:100%;height:200px;overflow:hidden;border-radius:var(--radius);margin-bottom:16px;background:var(--border);position:relative;}
+    .mo-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 20%;}
+    .mo-desc{font-size:15px;line-height:1.7;color:var(--ink2);margin-bottom:24px;}
+    .mo-cta{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+    .mo-sv{flex:1;min-width:100px;padding:11px;border-radius:var(--radius);border:1.5px solid var(--border);background:var(--bg);font-family:var(--font-hd);font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink3);transition:all .15s;}
+    .mo-sv.on{color:var(--gold);border-color:var(--gold-border);background:var(--gold-bg);}
+    .mo-cp{flex:1;min-width:100px;padding:11px;border-radius:var(--radius);border:1.5px solid var(--border);background:var(--bg);font-family:var(--font-hd);font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink3);transition:all .15s;}
+    .mo-cp:hover{border-color:var(--ink);color:var(--ink);}
+    .mo-read{display:block;width:100%;padding:14px;background:var(--ink);color:var(--card);font-family:var(--font-hd);font-size:15px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;border-radius:var(--radius);text-align:center;transition:opacity .15s;}
+    .mo-read:hover{opacity:.88;}
+
+    /* IMAGE SHARE CANVAS (hidden) */
+    #share-canvas{display:none;}
+
+    /* VOICE */
+    #voice-fab{position:fixed;bottom:calc(var(--nav-h) + 16px);right:16px;width:54px;height:54px;border-radius:50%;background:var(--ink);color:var(--card);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(0,0,0,.28);z-index:150;border:none;cursor:pointer;transition:transform .2s,background .2s;}
+    #voice-fab:hover{transform:scale(1.08);}
+    #voice-fab.listening{background:var(--red);animation:pulse 1.2s infinite;}
+    #voice-fab.speaking{background:var(--gold);}
+    @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(220,38,38,.5);}70%{box-shadow:0 0 0 16px rgba(220,38,38,0);}100%{box-shadow:0 0 0 0 rgba(220,38,38,0);}}
+    #vp{position:fixed;inset:0;z-index:250;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.5);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);}
+    #vp.on{display:flex;}
+    .vp-sheet{width:100%;max-width:480px;background:var(--card);border-radius:24px 24px 0 0;padding:18px 20px 36px;box-shadow:0 -4px 24px rgba(0,0,0,.2);animation:slideup .25s ease;position:relative;}
+    @keyframes slideup{from{transform:translateY(60px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+    .vp-handle{width:40px;height:4px;border-radius:2px;background:var(--border2);margin:0 auto 16px;}
+    .vp-close{position:absolute;top:16px;right:16px;width:30px;height:30px;border-radius:50%;background:var(--bg);color:var(--ink3);display:flex;align-items:center;justify-content:center;font-size:14px;border:none;cursor:pointer;}
+    .vp-title{font-family:var(--font-hd);font-size:20px;font-weight:900;letter-spacing:.02em;text-align:center;margin-bottom:3px;color:var(--ink);}
+    .vp-sub{font-size:12px;color:var(--ink3);text-align:center;margin-bottom:14px;}
+    .vp-input-wrap{margin-bottom:12px;}
+    .vp-input-bar{display:flex;align-items:center;gap:6px;background:var(--bg);border:2px solid var(--border2);border-radius:12px;padding:0 8px 0 14px;transition:border-color .2s;}
+    .vp-input-bar:focus-within{border-color:var(--ink);}
+    .vp-input-bar.listening{border-color:var(--red);}
+    .vp-input-bar input{flex:1;background:none;border:none;outline:none;font:inherit;font-size:14px;color:var(--ink);padding:13px 0;}
+    .vp-input-bar input::placeholder{color:var(--ink4);}
+    .vp-inp-mic{width:34px;height:34px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--ink3);border:none;cursor:pointer;background:transparent;transition:all .15s;}
+    .vp-inp-mic.on{background:var(--red);color:#fff;animation:pulse 1.2s infinite;}
+    .vp-inp-go{width:36px;height:36px;border-radius:9px;flex-shrink:0;background:var(--ink);color:var(--card);display:flex;align-items:center;justify-content:center;transition:background .15s;border:none;cursor:pointer;}
+    .vp-inp-go.loading{background:var(--gold);}
+    .vp-status{font-size:12px;color:var(--ink3);padding:4px 2px;min-height:20px;}
+    .vp-status.err{color:var(--red);}.vp-status.ok{color:var(--green);}
+    .vp-hints{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+    .vp-hint{font-size:11px;font-weight:600;color:var(--ink3);padding:4px 11px;border-radius:20px;background:var(--bg);border:1px solid var(--border2);cursor:pointer;transition:all .15s;white-space:nowrap;}
+    .vp-hint:hover{background:var(--gold-bg);border-color:var(--gold-border);color:var(--gold);}
+    .vp-results{max-height:230px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;margin-bottom:12px;scrollbar-width:thin;}
+    .vpc{background:var(--bg);border-radius:10px;padding:10px 12px;border:1.5px solid var(--border);cursor:pointer;transition:border-color .15s,background .15s;display:flex;gap:10px;align-items:flex-start;}
+    .vpc:hover{border-color:var(--gold);background:var(--gold-bg);}
+    .vpc-num{font-family:var(--font-hd);font-size:20px;font-weight:900;color:var(--gold);flex-shrink:0;line-height:1;margin-top:2px;}
+    .vpc-body{flex:1;min-width:0;}
+    .vpc-src{font-size:11px;font-weight:600;color:var(--ink3);margin-bottom:3px;}
+    .vpc-hl{font-family:var(--font-hd);font-size:15px;font-weight:800;line-height:1.2;color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+    .vpc-play{flex-shrink:0;width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--card);display:flex;align-items:center;justify-content:center;transition:background .15s;margin-top:2px;}
+    .vpc:hover .vpc-play{background:var(--gold);}
+    .vp-stop{display:block;width:100%;padding:11px;border-radius:10px;background:var(--red-bg);color:var(--red);border:1.5px solid #fecaca;font-family:var(--font-hd);font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;}
+
+    /* OFFLINE BANNER */
+    #offline-bar{position:fixed;top:0;left:0;right:0;background:#1a1a1a;color:#fff;font-size:12px;font-weight:600;padding:8px 16px;text-align:center;z-index:500;display:none;align-items:center;justify-content:center;gap:6px;}
+    #offline-bar.show{display:flex;}
+
+
+    /* WHATSAPP CHANNEL BANNER */
+    #wa-banner{
+      margin:14px 16px 0;
+      background:linear-gradient(135deg,#0f4c2a,#16a34a);
+      border-radius:var(--radius);padding:14px 16px;
+      display:flex;align-items:center;gap:12px;cursor:pointer;
+      transition:opacity .15s;
+    }
+    #wa-banner:hover{opacity:.92;}
+    .wa-ban-ico{font-size:28px;flex-shrink:0;}
+    .wa-ban-txt{flex:1;}
+    .wa-ban-txt strong{color:#fff;font-size:14px;font-weight:700;display:block;margin-bottom:2px;}
+    .wa-ban-txt span{color:rgba(255,255,255,.75);font-size:12px;}
+    .wa-ban-btn{
+      font-family:var(--font-hd);font-size:12px;font-weight:800;
+      letter-spacing:.05em;text-transform:uppercase;
+      background:#fff;color:#16a34a;
+      padding:7px 13px;border-radius:7px;white-space:nowrap;flex-shrink:0;
+    }
+
+    /* FEED FOOTER */
+    .feed-footer{
+      text-align:center;padding:24px 16px 8px;
+      color:var(--ink4);font-size:12px;line-height:1.8;
+    }
+    .feed-footer strong{color:var(--ink3);display:block;font-family:var(--font-hd);font-size:14px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;margin-bottom:6px;}
+    .feed-footer-links{display:flex;justify-content:center;gap:12px;margin-top:8px;flex-wrap:wrap;}
+    .feed-footer-link{font-size:12px;font-weight:600;color:var(--ink3);padding:4px 10px;border-radius:20px;border:1px solid var(--border2);background:var(--card);transition:all .15s;}
+    .feed-footer-link:hover{color:var(--gold);border-color:var(--gold-border);background:var(--gold-bg);}
+
+
+    /* BACK TO TOP */
+    #btt{
+      position:fixed;bottom:calc(var(--nav-h) + 76px);right:16px;
+      width:38px;height:38px;border-radius:50%;
+      background:var(--card);color:var(--ink3);
+      border:1.5px solid var(--border2);
+      display:none;align-items:center;justify-content:center;
+      box-shadow:var(--shadow-m);z-index:140;
+      transition:opacity .2s,transform .2s;cursor:pointer;
+    }
+    #btt.show{display:flex;}
+    #btt:hover{background:var(--bg);color:var(--ink);}
+
+    /* SCROLL PROGRESS BAR */
+    #scroll-bar{
+      position:fixed;top:0;left:0;height:3px;
+      background:linear-gradient(90deg,#16a34a,#eab308);width:0%;
+      z-index:999;transition:width .1s;
+    }
+
+
+    /* FONT SIZE CONTROL */
+    body.text-lg { font-size: 16px; }
+    body.text-lg .nc-hl { font-size: 18px; }
+    body.text-lg .hero-hl { font-size: 26px; }
+    body.text-lg .mo-hl { font-size: 28px; }
+    body.text-lg .mo-desc { font-size: 17px; }
+
+    /* READING PROGRESS BAR on modal */
+    #modal-progress{
+      position:absolute;bottom:0;left:0;height:3px;
+      background:var(--gold);width:0%;transition:width .1s;
+    }
+
+    /* RELATED STORIES */
+    .related-wrap{margin-top:24px;padding-top:20px;border-top:1px solid var(--border);}
+    .related-hd{font-family:var(--font-hd);font-size:14px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);margin-bottom:12px;}
+    .related-hd em{color:var(--gold);font-style:normal;margin-right:4px;}
+    .related-card{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:opacity .15s;}
+    .related-card:hover{opacity:.75;}
+    .related-card:last-child{border-bottom:none;}
+    .related-thumb{width:72px;height:72px;border-radius:8px;object-fit:cover;object-position:center 20%;flex-shrink:0;background:var(--border);}
+    .related-thumb-ph{width:72px;height:72px;border-radius:8px;flex-shrink:0;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:20px;}
+    .related-body{flex:1;min-width:0;}
+    .related-src{font-size:11px;color:var(--ink3);font-weight:600;margin-bottom:3px;}
+    .related-hl{font-family:var(--font-hd);font-size:15px;font-weight:800;line-height:1.2;color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+
+
+    /* AI SUMMARY */
+    .ai-summary-btn{
+      display:flex;align-items:center;gap:5px;
+      font-size:11px;font-weight:600;
+      color:#7c3aed;padding:3px 8px;border-radius:5px;
+      border:1px solid #e9d5ff;background:#f5f3ff;
+      transition:all .15s;white-space:nowrap;cursor:pointer;
+    }
+    .ai-summary-btn:hover{background:#ede9fe;border-color:#c4b5fd;}
+    body.dark .ai-summary-btn{color:#a78bfa;border-color:rgba(167,139,250,.3);background:rgba(124,58,237,.1);}
+
+    /* SUMMARY PANEL in modal */
+    .ai-summary-box{
+      background:#f5f3ff;border:1.5px solid #e9d5ff;
+      border-radius:var(--radius);padding:14px;
+      margin-bottom:20px;position:relative;
+    }
+    body.dark .ai-summary-box{background:rgba(124,58,237,.08);border-color:rgba(167,139,250,.2);}
+    .ai-summary-hd{
+      display:flex;align-items:center;gap:7px;
+      margin-bottom:10px;
+    }
+    .ai-summary-badge{
+      font-family:var(--font-hd);font-size:11px;font-weight:800;
+      letter-spacing:.06em;text-transform:uppercase;
+      background:#7c3aed;color:#fff;
+      padding:2px 8px;border-radius:4px;
+    }
+    .ai-summary-src{font-size:11px;color:var(--ink3);}
+    .ai-summary-text{
+      font-size:14px;line-height:1.7;color:var(--ink2);
+    }
+    .ai-summary-loading{
+      display:flex;align-items:center;gap:8px;
+      font-size:13px;color:var(--ink3);
+    }
+    .ai-spin{
+      width:16px;height:16px;border:2px solid #e9d5ff;
+      border-top-color:#7c3aed;border-radius:50%;
+      animation:spin .7s linear infinite;flex-shrink:0;
+    }
+    .ai-summary-err{font-size:13px;color:var(--red);}
+    .ai-summary-close{
+      position:absolute;top:10px;right:10px;
+      font-size:14px;color:var(--ink4);cursor:pointer;
+      background:none;border:none;padding:2px 6px;
+      transition:color .15s;
+    }
+    .ai-summary-close:hover{color:var(--ink);}
+
+    /* TABLET */
+    @media(min-width:540px){
+      .card-list{display:grid;grid-template-columns:1fr 1fr;}
+      .nc{flex-direction:column;}
+      .nc-img{width:100%;min-height:130px;}
+    }
+  </style>
+  <!-- Structured Data for Google -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Flash Nigeria",
+    "url": "https://flash-nigeria.vercel.app",
+    "description": "Nigeria's fastest news app. Breaking headlines from Vanguard, Punch, Sahara Reporters, Channels TV and more.",
+    "applicationCategory": "NewsApplication",
+    "operatingSystem": "Any",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+    "author": {"@type": "Person", "name": "Igbinosa"},
+    "publisher": {"@type": "Organization", "name": "Flash Nigeria", "url": "https://flash-nigeria.vercel.app"}
+  }
+  </script>
+</head>
+<body>
+
+<!-- OFFLINE BANNER -->
+<div id="offline-bar">
+  <span>📡</span> You're offline — showing cached stories
+</div>
+
+<div id="app">
+  <header id="hdr">
+    <div class="logo">
+      <div class="logo-bolt"></div>
+      <div>
+        <div class="logo-text">Flash <b>Nigeria</b></div>
+        <div class="logo-sub">Est. 2026</div>
+      </div>
+    </div>
+    <div class="hdr-actions">
+      <a href="#" id="wa-channel-btn" style="display:none" title="Join WhatsApp Channel" style="width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#16a34a;transition:background .15s;text-decoration:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg></a>
+      <button class="hdr-btn" id="font-btn" title="Toggle text size" style="font-size:13px;font-weight:700;">Aa</button>
+      <button class="hdr-btn" id="dark-btn" title="Toggle dark mode">
+        <svg id="dark-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+      <button class="hdr-btn" id="rfsh-btn" title="Refresh">
+        <svg id="rfsh-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <div id="ticker">
+    <div class="ticker-lbl">🇳🇬 ⚡ BREAKING</div>
+    <div class="ticker-wrap">
+      <div class="ticker-track" id="ticker-track">
+        <span class="ticker-item">Loading latest Nigeria headlines…</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- WELCOME BAR -->
+  <div id="welcome-bar">
+    <span>🇳🇬 Welcome to <strong>Flash Nigeria</strong> — Flash. News. Nigeria.</span>
+    <button id="wb-x">✕</button>
+  </div>
+
+  <div id="new-banner">
+    <span id="new-banner-txt">⚡ New stories available</span>
+    <span style="font-size:12px;opacity:.7">Tap to load</span>
+  </div>
+
+  <!-- NAIRA RATE BAR -->
+  <div id="rate-bar">
+    <div class="rate-item">
+      <span class="rate-pair">USD/NGN</span>
+      <span class="rate-val" id="rate-usd">—</span>
+      <span class="rate-chg" id="rate-usd-chg"></span>
+    </div>
+    <div class="rate-divider"></div>
+    <div class="rate-item">
+      <span class="rate-pair">EUR/NGN</span>
+      <span class="rate-val" id="rate-eur">—</span>
+      <span class="rate-chg" id="rate-eur-chg"></span>
+    </div>
+    <div class="rate-divider"></div>
+    <div class="rate-item">
+      <span class="rate-pair">GBP/NGN</span>
+      <span class="rate-val" id="rate-gbp">—</span>
+      <span class="rate-chg" id="rate-gbp-chg"></span>
+    </div>
+    <div class="rate-divider"></div>
+    <div class="rate-item">
+      <span class="rate-pair">BTC/USD</span>
+      <span class="rate-val" id="rate-btc">—</span>
+    </div>
+  </div>
+
+  <div id="cats">
+    <button class="pill on" data-cat="">All</button>
+    <button class="pill" data-cat="politics">Politics</button>
+    <button class="pill" data-cat="business">Business</button>
+    <button class="pill" data-cat="sports">Sports</button>
+    <button class="pill" data-cat="entertainment">Entertainment</button>
+    <button class="pill" data-cat="technology">Tech</button>
+    <button class="pill" data-cat="health">Health</button>
+  </div>
+
+  <main id="main">
+    <div id="feed-view" class="view on">
+      <div id="ptr">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="animation:spin .8s linear infinite">
+          <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4"/>
+        </svg>Refreshing…
+      </div>
+      <div id="install-bar" style="display:none">
+        <span style="font-size:20px">⚡</span>
+        <div class="ib-txt"><strong>Add to Home Screen</strong>Read Nigeria's news offline</div>
+        <button class="ib-go" id="ib-go">Install</button>
+        <button class="ib-x" id="ib-x">✕</button>
+      </div>
+      <div id="notif-bar" style="display:none">
+        <div class="nb-icon">🔔</div>
+        <div class="nb-txt"><strong>Breaking News Alerts</strong>Get notified — max 2 per day</div>
+        <button class="nb-allow" id="nb-allow">Allow</button>
+        <button class="nb-x" id="nb-x">✕</button>
+      </div>
+
+      <!-- MOST READ -->
+      <div id="most-read" style="display:none">
+        <div class="mr-hd"><em>🔥</em>Most Read Today</div>
+        <div class="mr-strip" id="mr-strip"></div>
+      </div>
+
+      <!-- POLL -->
+      <div id="poll-wrap" style="display:none"></div>
+
+      <div id="hero-box"></div>
+      <div class="sec-hd">
+        <h2><em>⚡</em>Latest Stories</h2>
+        <button class="rfsh-btn" id="feed-rfsh">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4"/>
+          </svg>Refresh
+        </button>
+      </div>
+      <div class="card-list" id="card-list"></div>
+      <button id="load-more" style="display:none">Load More Stories</button>
+
+      
+      <!-- FEED FOOTER -->
+      <div class="feed-footer">
+        <strong>⚡ Flash Nigeria</strong>
+        Flash. News. Nigeria.
+        <div class="feed-footer-links">
+          <a href="mailto:therealmrcommander@gmail.com" class="feed-footer-link">✉️ Contact</a>
+          <a href="#" onclick="switchView('about');return false;" class="feed-footer-link">ℹ️ About</a>
+          <a href="https://x.com/FlashNigeriaNG" target="_blank" rel="noopener" class="feed-footer-link">𝕏 Follow</a>
+        </div>
+      </div>
+    </div>
+
+    <div id="search-view" class="view">
+      <div class="srch-bar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="search" id="srch-inp" placeholder="Search Nigerian news…" autocomplete="off"/>
+        <button class="srch-x" id="srch-x">✕</button>
+      </div>
+      <div id="srch-history"></div>
+      <div id="srch-res"><div class="mty"><div class="ico">🔍</div><p>Search headlines, topics<br>or sources from Nigeria</p></div></div>
+    </div>
+
+    <div id="saved-view" class="view">
+      <div class="sv-hd"><h2>📌 Saved</h2><button class="sv-clr" id="sv-clr">Clear all</button></div>
+      <div id="sv-list"></div>
+    </div>
+
+    <div id="about-view" class="view">
+      <div class="ab-wrap">
+        <div class="ab-hero">
+          <div class="ab-bolt">⚡</div>
+          <div class="ab-brand">Flash <b>Nigeria</b></div>
+          <div class="ab-tagline">Flash. News. Nigeria.</div>
+          <div style="margin-top:10px;font-size:11px;color:rgba(255,255,255,.35);letter-spacing:.1em;text-transform:uppercase;">Est. 2026 · Nigeria</div>
+        </div>
+        <div class="ab-founder">
+          <div style="font-size:52px;margin-bottom:4px;">⚡</div>
+          <div class="ab-founder-body" style="text-align:center">
+            <div class="ab-founder-name">The Flash Nigeria Editorial Team</div>
+            <div class="ab-founder-title">📰 News · Speed · Truth</div>
+            <div class="ab-founder-bio">We are a dedicated team of journalists and technologists passionate about keeping Nigerians informed in real time. Flash Nigeria was built with one goal — to be the fastest, cleanest source of breaking news for 200 million Nigerians and the diaspora worldwide.</div>
+            <div class="ab-founder-socials">
+              <a href="mailto:therealmrcommander@gmail.com" class="ab-social-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                Email Us
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="ab-card"><div class="ab-card-icon">🎯</div><div class="ab-card-body"><div class="ab-card-title">Our Mission</div><div class="ab-card-text">Flash Nigeria exists to keep Nigerians informed — fast, clearly, and without noise. We aggregate breaking news from the most trusted Nigerian sources and deliver it in seconds.</div></div></div>
+        <div class="ab-card"><div class="ab-card-icon">📰</div><div class="ab-card-body"><div class="ab-card-title">What We Cover</div><div class="ab-tags"><span class="ab-tag">🏛️ Politics</span><span class="ab-tag">💼 Business</span><span class="ab-tag">⚽ Sports</span><span class="ab-tag">🎬 Entertainment</span><span class="ab-tag">💻 Technology</span><span class="ab-tag">🏥 Health</span></div><div class="ab-card-text" style="margin-top:10px">Vanguard, Punch, Channels TV, Guardian, Premium Times, Daily Trust, Thisday, BusinessDay, Tribune, Leadership and more.</div></div></div>
+        <div class="ab-card"><div class="ab-card-icon">✨</div><div class="ab-card-body"><div class="ab-card-title">App Features</div><div class="ab-features">
+          <div class="ab-feat"><span class="ab-feat-ico">🗣️</span><div><strong>Naija Pidgin Mode</strong> — read headlines in Nigerian Pidgin</div></div>
+          <div class="ab-feat"><span class="ab-feat-ico">🎙️</span><div><strong>Flash Voice</strong> — speak or type to get headlines read aloud</div></div>
+          <div class="ab-feat"><span class="ab-feat-ico">💱</span><div><strong>Live Naira Rate</strong> — USD, EUR, GBP exchange rates updated daily</div></div>
+          <div class="ab-feat"><span class="ab-feat-ico">🔔</span><div><strong>Smart Alerts</strong> — max 2 per day, only truly breaking news</div></div>
+          <div class="ab-feat"><span class="ab-feat-ico">🌙</span><div><strong>Dark Mode</strong> — easy on the eyes at night</div></div>
+          <div class="ab-feat"><span class="ab-feat-ico">📌</span><div><strong>Save Stories</strong> — bookmark articles offline</div></div>
+          <div class="ab-feat"><span class="ab-feat-ico">🖼️</span><div><strong>Share as Image</strong> — generate branded news cards for social media</div></div>
+        </div></div></div>
+        <div class="ab-card"><div class="ab-card-icon">✉️</div><div class="ab-card-body"><div class="ab-card-title">Contact Us</div><div class="ab-card-text">Have a tip, feedback, or partnership inquiry?</div><a href="mailto:therealmrcommander@gmail.com" class="ab-contact-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>therealmrcommander@gmail.com</a></div></div>
+        <div class="ab-footer">
+          <div class="ab-footer-logo">⚡ Flash Nigeria</div>
+          <div class="ab-footer-copy">© 2026 Flash Nigeria. All rights reserved.</div>
+          <div class="ab-footer-copy">Built with ❤️ for Nigerians everywhere.</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <nav id="nav">
+    <button class="ni on" data-v="feed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span class="ni-lbl">Home</span></button>
+    <button class="ni" data-v="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span class="ni-lbl">Search</span></button>
+    <button class="ni" data-v="saved"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span class="ni-lbl">Saved</span><span class="ni-badge" id="sv-badge" style="display:none">0</span></button>
+    <button class="ni" data-v="about"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span class="ni-lbl">About</span></button>
+  </nav>
+</div>
+
+<!-- SCROLL PROGRESS BAR -->
+<div id="scroll-bar"></div>
+
+<!-- BACK TO TOP -->
+<button id="btt" title="Back to top" aria-label="Back to top">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="18 15 12 9 6 15"/>
+  </svg>
+</button>
+
+<button id="voice-fab" title="Flash Voice" aria-label="Voice news assistant">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+    <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+    <line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/>
+  </svg>
+</button>
+
+<div id="vp">
+  <div class="vp-sheet">
+    <button class="vp-close" id="vp-close">✕</button>
+    <div class="vp-handle"></div>
+    <div class="vp-title">⚡ Flash Voice</div>
+    <div class="vp-sub">Speak or type — get headlines read aloud</div>
+    <div class="vp-input-wrap">
+      <div class="vp-input-bar" id="vp-input-bar">
+        <input type="text" id="vp-inp" placeholder="Type: Vanguard breaking, Sahara Reporters…" autocomplete="off"/>
+        <button class="vp-inp-mic" id="vp-inp-mic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button>
+        <button class="vp-inp-go" id="vp-inp-go"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+      </div>
+      <div class="vp-status" id="vp-status"></div>
+    </div>
+    <div class="vp-hints" id="vp-hints">
+      <button class="vp-hint">Vanguard breaking</button>
+      <button class="vp-hint">Punch politics</button>
+      <button class="vp-hint">Channels TV</button>
+      <button class="vp-hint">Sports headlines</button>
+      <button class="vp-hint">Business news</button>
+      <button class="vp-hint">Daily Trust</button>
+      <button class="vp-hint">Sahara Reporters</button>
+    </div>
+    <div class="vp-results" id="vp-results" style="display:none"></div>
+    <button class="vp-stop" id="vp-stop" style="display:none">⏹ Stop Reading</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+<canvas id="share-canvas"></canvas>
+
+<div id="modal">
+  <div class="mo-hd">
+    <button class="mo-back" id="mo-back"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+    <div class="mo-src" id="mo-src"></div>
+    <div class="mo-share-group">
+      <button class="mo-wa" id="mo-wa">WA</button>
+      <button class="mo-xi" id="mo-xi">X</button>
+      <button class="mo-img-share" id="mo-img-share">🖼️</button>
+    </div>
+  </div>
+  <div class="mo-body" id="mo-body"></div>
+</div>
+
+<script>
+const API='/api/news', CACHE_K='fn5_c', OFFLINE_K='fn5_off', CACHE_TTL=8*60*1000;
+const SAVED_K='fn5_sv', THEME_K='fn5_theme', PIDGIN_K='fn5_pidgin';
+const SRCH_HIST_K='fn5_sh', NOTIF_K='fn5_notif', POLL_K='fn5_poll', CLICKS_K='fn5_clicks';
+const RATE_K='fn5_rates', RATE_TTL=60*60*1000; // rates cache 1hr
+
+let arts=[], saved=JSON.parse(localStorage.getItem(SAVED_K)||'[]');
+let cat='', view='feed', nextPg=null, busy=false;
+let deferredInstall=null, curArt=null, pendingArts=[], pidginOn=false;
+let clickCounts=JSON.parse(localStorage.getItem(CLICKS_K)||'{}');
+
+// ── SVG ICONS ──
+function waIco(){return`<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>`;}
+function xIco(){return`<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.252 5.622 5.912-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`;}
+
+// ── BOOT ──
+document.addEventListener('DOMContentLoaded',()=>{
+  applyTheme(); initWelcomeBar();
+  bindNav(); bindCats(); bindSearch(); bindInstall(); bindPTR();
+  bindModal(); bindVoice(); bindDarkMode();
+  bindNotifications(); bindOffline();
+  renderSaved(); loadNews();
+  loadRates(); initPoll(); startNewCheck();
+  document.getElementById('mo-wa').innerHTML=waIco()+' WA';
+  document.getElementById('mo-xi').innerHTML=xIco()+' X';
+  window.addEventListener('beforeinstallprompt',e=>{
+    e.preventDefault(); deferredInstall=e;
+    document.getElementById('install-bar').style.display='flex';
+  });
+});
+
+// ── WELCOME BAR ──
+function initWelcomeBar(){
+  if(localStorage.getItem('fn_wb')) return;
+  setTimeout(()=>{
+    document.getElementById('welcome-bar').classList.add('show');
+    setTimeout(()=>document.getElementById('welcome-bar').classList.remove('show'), 5000);
+  }, 2000);
+  document.getElementById('wb-x').addEventListener('click',()=>{
+    document.getElementById('welcome-bar').classList.remove('show');
+    localStorage.setItem('fn_wb','1');
+  });
+  localStorage.setItem('fn_wb','1');
+}
+
+// ── OFFLINE ──
+function bindOffline(){
+  window.addEventListener('offline',()=>{
+    document.getElementById('offline-bar').classList.add('show');
+    serveOfflineCache();
+  });
+  window.addEventListener('online',()=>{
+    document.getElementById('offline-bar').classList.remove('show');
+    toast('✅ Back online!');
+    hardRefresh();
+  });
+}
+function saveOfflineCache(articles){
+  const top20=articles.slice(0,20);
+  localStorage.setItem(OFFLINE_K,JSON.stringify({ts:Date.now(),d:top20}));
+}
+function serveOfflineCache(){
+  try{
+    const c=JSON.parse(localStorage.getItem(OFFLINE_K));
+    if(c&&c.d?.length){arts=c.d; renderFeed(); toast('📡 Showing cached stories');}
+  }catch(e){}
+}
+
+// ── DARK MODE ──
+function applyTheme(){
+  const dark=localStorage.getItem(THEME_K)==='dark';
+  document.body.classList.toggle('dark',dark);
+  document.getElementById('theme-meta').content=dark?'#0f0f0f':'#ffffff';
+  updateDarkIcon(dark);
+}
+function updateDarkIcon(dark){
+  document.getElementById('dark-ico').innerHTML=dark
+    ?'<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>'
+    :'<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+}
+function bindDarkMode(){
+  document.getElementById('dark-btn').addEventListener('click',()=>{
+    const isDark=document.body.classList.toggle('dark');
+    localStorage.setItem(THEME_K,isDark?'dark':'light');
+    document.getElementById('theme-meta').content=isDark?'#0f0f0f':'#ffffff';
+    // Also update apple status bar
+    document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]').content=isDark?'black':'default';
+    updateDarkIcon(isDark);
+    toast(isDark?'🌙 Dark mode on':'☀️ Light mode on');
+  });
+}
+
+// ── PIDGIN MODE ──
+const PIDGIN_MAP=[
+  // ENTITIES
+  [/\bFederal Government\b/gi,'Federal Goment'],
+  [/\bFG\b/g,'Federal Goment'],
+  [/\bPresident Tinubu\b/gi,'Oga Tinubu'],
+  [/\bPresident\b/gi,'Oga President'],
+  [/\bGovernor\b/gi,'Govnor'],
+  [/\bSenate\b/gi,'Senate'],
+  [/\bHouse of Representatives\b/gi,'House of Reps'],
+  [/\bNigeria\b/gi,'Naija'],
+  [/\bNigerians\b/gi,'Naija pipo'],
+  [/\bNigerian\b/gi,'Naija'],
+  [/\bgovernment\b/gi,'goment'],
+  [/\bMinister\b/gi,'Minister'],
+  [/\bpolice\b/gi,'police pipo'],
+  [/\bArmy\b/gi,'Army'],
+  [/\bCourt\b/gi,'Court'],
+  [/\bSupreme Court\b/gi,'Supreme Court'],
+  [/\bNational Assembly\b/gi,'Naija Assembly'],
+
+  // VERBS — past tense
+  [/\bhas announced\b/gi,'don announce'],
+  [/\bhave announced\b/gi,'don announce'],
+  [/\bannounced\b/gi,'don announce'],
+  [/\bhas been arrested\b/gi,'don carry go'],
+  [/\bwas arrested\b/gi,'don carry go'],
+  [/\barrested\b/gi,'don carry go'],
+  [/\bhas been killed\b/gi,'don die'],
+  [/\bwas killed\b/gi,'don die'],
+  [/\bkilled\b/gi,'don die'],
+  [/\bdied\b/gi,'don die'],
+  [/\bhas died\b/gi,'don die'],
+  [/\bwas injured\b/gi,'don wound'],
+  [/\binjured\b/gi,'don wound'],
+  [/\bhas resigned\b/gi,'don resign'],
+  [/\bresigned\b/gi,'don resign'],
+  [/\bhas been suspended\b/gi,'don suspend'],
+  [/\bsuspended\b/gi,'don suspend'],
+  [/\bhas been sacked\b/gi,'don sack'],
+  [/\bsacked\b/gi,'don sack'],
+  [/\bhas been jailed\b/gi,'don go jail'],
+  [/\bjailed\b/gi,'don go jail'],
+  [/\bhas been sentenced\b/gi,'don get sentence'],
+  [/\bsentenced\b/gi,'don get sentence'],
+  [/\bhas been convicted\b/gi,'don guilty'],
+  [/\bconvicted\b/gi,'don guilty'],
+  [/\bhas confirmed\b/gi,'don confirm'],
+  [/\bconfirmed\b/gi,'don confirm'],
+  [/\bhas signed\b/gi,'don sign'],
+  [/\bsigned\b/gi,'don sign'],
+  [/\bhas approved\b/gi,'don approve'],
+  [/\bapproved\b/gi,'don approve'],
+  [/\bhas rejected\b/gi,'don reject'],
+  [/\brejected\b/gi,'don reject'],
+  [/\bhas dismissed\b/gi,'don dismiss'],
+  [/\bdismissed\b/gi,'don dismiss'],
+  [/\bhas accused\b/gi,'don accuse'],
+  [/\baccused\b/gi,'don accuse'],
+  [/\bhas warned\b/gi,'don warn'],
+  [/\bwarned\b/gi,'don warn'],
+  [/\bhas ordered\b/gi,'don order'],
+  [/\bordered\b/gi,'don order'],
+  [/\bhas launched\b/gi,'don launch'],
+  [/\blaunched\b/gi,'don launch'],
+  [/\bhas revealed\b/gi,'don reveal'],
+  [/\brevealed\b/gi,'don reveal'],
+  [/\bhas denied\b/gi,'don deny'],
+  [/\bdenied\b/gi,'don deny'],
+  [/\bhas vowed\b/gi,'don swear'],
+  [/\bvowed\b/gi,'don swear'],
+  [/\bhas promised\b/gi,'don promise'],
+  [/\bpromised\b/gi,'don promise'],
+  [/\bhas moved\b/gi,'don move'],
+  [/\bmoves to\b/gi,'wan'],
+  [/\bhas called\b/gi,'don call'],
+  [/\bdefeated\b/gi,'don beat'],
+  [/\bwon\b/gi,'don win'],
+  [/\blost\b/gi,'don lose'],
+  [/\bfell\b/gi,'don fall'],
+  [/\bfalls\b/gi,'dey fall'],
+  [/\brises\b/gi,'dey rise'],
+  [/\brose\b/gi,'don rise'],
+  [/\bcrashed\b/gi,'don crash'],
+  [/\bexploded\b/gi,'don explode'],
+  [/\battacked\b/gi,'don attack'],
+  [/\bkidnapped\b/gi,'don kidnap'],
+  [/\bescaped\b/gi,'don run'],
+  [/\bfled\b/gi,'don comot'],
+  [/\bprotested\b/gi,'don protest'],
+
+  // VERBS — present
+  [/\bsays\b/gi,'talk say'],
+  [/\bsaid\b/gi,'talk say'],
+  [/\bstated\b/gi,'tok say'],
+  [/\bclaims\b/gi,'talk say'],
+  [/\bclaimed\b/gi,'talk say'],
+  [/\baccuses\b/gi,'dey accuse'],
+  [/\bwarns\b/gi,'dey warn'],
+  [/\bdenies\b/gi,'dey deny'],
+  [/\bsigns\b/gi,'dey sign'],
+  [/\bapproves\b/gi,'dey approve'],
+  [/\brejects\b/gi,'dey reject'],
+  [/\bwill be\b/gi,'go be'],
+  [/\bwill\b/gi,'go'],
+  [/\bhas been\b/gi,'don'],
+  [/\bhave been\b/gi,'don'],
+
+  // NOUNS
+  [/\bfuel price\b/gi,'fuel price wahala'],
+  [/\bfuel scarcity\b/gi,'fuel scarcity'],
+  [/\bsubsidy\b/gi,'subsidy'],
+  [/\beconomy\b/gi,'economy'],
+  [/\belection\b/gi,'election'],
+  [/\belections\b/gi,'elections'],
+  [/\bcorruption\b/gi,'corruption wahala'],
+  [/\bbribery\b/gi,'bribe wahala'],
+  [/\bfraud\b/gi,'fraud wahala'],
+  [/\bscandal\b/gi,'big wahala'],
+  [/\bcontroversy\b/gi,'wahala'],
+  [/\bconcerns\b/gi,'worry'],
+  [/\bcrisis\b/gi,'big wahala'],
+  [/\bemergency\b/gi,'emergency'],
+  [/\bprotest\b/gi,'protest'],
+  [/\bstrike\b/gi,'strike'],
+  [/\bshutdown\b/gi,'shutdown'],
+  [/\bprison\b/gi,'prison'],
+  [/\bjail\b/gi,'jail'],
+  [/\bbill\b/gi,'bill'],
+  [/\blaw\b/gi,'law'],
+  [/\bbudget\b/gi,'budget'],
+  [/\btax\b/gi,'tax'],
+  [/\bnaira\b/gi,'Naira'],
+  [/\bdollar\b/gi,'Dollar'],
+  [/\bmillion\b/gi,'million'],
+  [/\bbillion\b/gi,'billion'],
+  [/\btrillion\b/gi,'trillion'],
+  [/\bpetrol\b/gi,'fuel'],
+  [/\boil\b/gi,'oil'],
+  [/\bgas\b/gi,'gas'],
+  [/\bpower\b/gi,'light'],
+  [/\belectricity\b/gi,'light'],
+  [/\bsecurity\b/gi,'security'],
+  [/\bterrorism\b/gi,'terrorism wahala'],
+  [/\bbandits\b/gi,'bandits'],
+  [/\bkidnappers\b/gi,'kidnappers'],
+  [/\bhospital\b/gi,'hospital'],
+  [/\bschool\b/gi,'school'],
+  [/\buniversity\b/gi,'university'],
+  [/\bstudents\b/gi,'students'],
+  [/\bworkers\b/gi,'workers'],
+  [/\bfarmers\b/gi,'farmers'],
+
+  // ADJECTIVES/ADVERBS
+  [/\bimmediately\b/gi,'sharp sharp'],
+  [/\burgently\b/gi,'sharp sharp'],
+  [/\bsuddenly\b/gi,'suddenly'],
+  [/\bfinally\b/gi,'finally'],
+  [/\bcontroversial\b/gi,'wahala'],
+  [/\bsuspicious\b/gi,'suspicious'],
+  [/\bserious\b/gi,'serious'],
+  [/\bdangerous\b/gi,'dangerous'],
+  [/\bdeadly\b/gi,'deadly'],
+  [/\billegal\b/gi,'illegal'],
+  [/\bcorrupt\b/gi,'corrupt'],
+  [/\bsham\b/gi,'fake fake'],
+  [/\bfalse\b/gi,'fake'],
+  [/\bfake\b/gi,'fake fake'],
+  [/\bdirty\b/gi,'dirty'],
+  [/\bagain\b/gi,'again again'],
+
+  // PREPOSITIONS/CONNECTORS
+  [/\baccording to\b/gi,'as'],
+  [/\bamid\b/gi,'as'],
+  [/\bfollowing\b/gi,'after'],
+  [/\bregarding\b/gi,'about'],
+  [/\bconcerning\b/gi,'about'],
+  [/\bover\b/gi,'because of'],
+  [/\bdespite\b/gi,'even though'],
+  [/\balthough\b/gi,'even though'],
+  [/\bhowever\b/gi,'but'],
+];
+
+function toPidgin(text){
+  if(!text) return text;
+  let t=text;
+  for(const[r,s] of PIDGIN_MAP) t=t.replace(r,s);
+  return t;
+}
+function applyPidgin(){
+  pidginOn=localStorage.getItem(PIDGIN_K)==='1';
+  const btn=document.getElementById('pidgin-btn');
+  btn.classList.toggle('on',pidginOn);
+}
+function getTitle(a){return pidginOn?toPidgin(a.title):a.title;}
+
+// ── NAV ──
+function bindNav(){document.querySelectorAll('.ni').forEach(b=>b.addEventListener('click',()=>switchView(b.dataset.v)));}
+function switchView(v){
+  view=v;
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('.ni').forEach(x=>x.classList.remove('on'));
+  document.getElementById(v+'-view').classList.add('on');
+  document.querySelector(`.ni[data-v="${v}"]`).classList.add('on');
+  document.getElementById('main').scrollTop=0;
+  const isAbout=v==='about';
+  document.getElementById('ticker').style.display=isAbout?'none':'';
+  document.getElementById('cats').style.display=isAbout?'none':'';
+  document.getElementById('rate-bar').style.display=isAbout?'none':'';
+  document.getElementById('new-banner').classList.remove('show');
+}
+
+// ── CATS ──
+function bindCats(){
+  document.querySelectorAll('.pill').forEach(p=>{
+    p.addEventListener('click',()=>{
+      document.querySelectorAll('.pill').forEach(x=>x.classList.remove('on'));
+      p.classList.add('on'); cat=p.dataset.cat; arts=[]; nextPg=null; loadNews();
+    });
+  });
+}
+
+// ── TRENDING ──
+const TRENDING_KW=['breaking','just in','urgent','dead','killed','crash','fire','bomb','attack','arrest','resign','impeach','naira','fuel','election','super eagles','world cup','tinubu','senate','court'];
+function trendScore(a){const t=(a.title||'').toLowerCase(); return TRENDING_KW.filter(w=>t.includes(w)).length;}
+function isTrending(a){return trendScore(a)>=2;}
+function readTime(desc){if(!desc)return''; const w=desc.split(' ').length; return Math.max(1,Math.ceil(w/200))+'min';}
+
+// ── LOAD NEWS ──
+async function loadNews(paginate=false){
+  if(busy)return; busy=true;
+  if(!navigator.onLine){serveOfflineCache(); busy=false; return;}
+  if(!paginate){renderSkeletons(); document.getElementById('hero-box').innerHTML='';}
+  if(!paginate&&!cat){const c=getCache(); if(c){arts=c; renderFeed(); updateCatCounts(); renderMostRead(); busy=false; return;}}
+  spinning(true);
+  try{
+    const p=new URLSearchParams();
+    if(cat) p.set('category',cat);
+    if(paginate&&nextPg) p.set('page',nextPg);
+    const r=await fetch(`${API}?${p}`);
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const d=await r.json();
+    if(d.status==='ok'){
+      const fresh=d.articles||[];
+      arts=paginate?[...arts,...fresh]:fresh;
+      nextPg=d.nextPage||null;
+      if(!paginate&&!cat){setCache(fresh); saveOfflineCache(fresh);}
+      updateTicker(fresh); renderFeed(); updateCatCounts(); renderMostRead();
+    } else throw new Error(d.message||'API error');
+  }catch(e){
+    if(!paginate) renderErr(e.message);
+    else toast('⚠️ Could not load more');
+  }
+  spinning(false); busy=false;
+}
+
+function setCache(d){localStorage.setItem(CACHE_K,JSON.stringify({ts:Date.now(),d}));}
+function getCache(){
+  try{const c=JSON.parse(localStorage.getItem(CACHE_K)); if(c&&Date.now()-c.ts<CACHE_TTL)return c.d;}catch{}
+  return null;
+}
+
+// ── NEW STORIES CHECK ──
+function startNewCheck(){
+  setInterval(async()=>{
+    if(view!=='feed'||busy||!navigator.onLine) return;
+    try{
+      const r=await fetch(API); const d=await r.json();
+      if(d.status==='ok'&&d.articles?.length){
+        const newIds=d.articles.filter(a=>!arts.find(x=>x.id===a.id));
+        if(newIds.length>0){
+          pendingArts=d.articles;
+          document.getElementById('new-banner-txt').textContent=`⚡ ${newIds.length} new stor${newIds.length===1?'y':'ies'} available`;
+          document.getElementById('new-banner').classList.add('show');
+        }
+      }
+    }catch(e){}
+  },10*60*1000);
+  document.getElementById('new-banner').addEventListener('click',()=>{
+    document.getElementById('new-banner').classList.remove('show');
+    if(pendingArts.length){arts=pendingArts; pendingArts=[]; renderFeed(); renderMostRead();}
+    else{localStorage.removeItem(CACHE_K); arts=[]; nextPg=null; loadNews();}
+    document.getElementById('main').scrollTop=0;
+  });
+}
+
+// ── CAT COUNTS ──
+function updateCatCounts(){
+  document.querySelectorAll('.pill[data-cat]').forEach(p=>{
+    const c=p.dataset.cat;
+    if(!c){p.innerHTML='All'; return;}
+    const n=arts.filter(a=>a.cat===c).length;
+    p.innerHTML=c.charAt(0).toUpperCase()+c.slice(1)+(n?`<span class="pill-count">${n}</span>`:'');
+  });
+}
+
+// ── MOST READ ──
+function trackClick(id){
+  if(typeof gtag!=='undefined') gtag('event','article_click',{article_id:id});
+  clickCounts[id]=(clickCounts[id]||0)+1;
+  localStorage.setItem(CLICKS_K,JSON.stringify(clickCounts));
+}
+function renderMostRead(){
+  if(!arts.length) return;
+  const sorted=[...arts].sort((a,b)=>(clickCounts[b.id]||0)-(clickCounts[a.id]||0));
+  const top=sorted.slice(0,5);
+  const wrap=document.getElementById('most-read');
+  const strip=document.getElementById('mr-strip');
+  wrap.style.display='block';
+  strip.innerHTML=top.map((a,i)=>`
+    <div class="mr-card" data-id="${a.id}">
+      ${a.img?`<img class="mr-img" src="${a.img}" alt="" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">`:''}
+      <div class="mr-img-ph" style="${a.img?'display:none':''}">
+        ${catEmoji(a.cat)}
+      </div>
+      <div class="mr-body">
+        <div class="mr-num">${i+1}</div>
+        <div class="mr-hl">${getTitle(a)}</div>
+      </div>
+    </div>`).join('');
+  strip.querySelectorAll('.mr-card').forEach((el,i)=>{
+    el.addEventListener('click',()=>{trackClick(top[i].id); openArt(top[i]);});
+  });
+}
+
+// ── NAIRA RATES ──
+async function loadRates(){
+  // Check cache first
+  try{
+    const c=JSON.parse(localStorage.getItem(RATE_K));
+    if(c&&Date.now()-c.ts<RATE_TTL){displayRates(c.d); return;}
+  }catch(e){}
+  try{
+    // Free exchange rate API
+    const r=await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+    const d=await r.json();
+    const ngn=d.rates.NGN||1600;
+    const rates={
+      usd:Math.round(ngn),
+      eur:Math.round(ngn/d.rates.EUR),
+      gbp:Math.round(ngn/d.rates.GBP),
+    };
+    // BTC via free API
+    try{
+      const br=await fetch('https://api.coindesk.com/v1/bpi/currentprice/USD.json');
+      const bd=await br.json();
+      rates.btc=Math.round(bd.bpi.USD.rate_float).toLocaleString();
+    }catch(e){rates.btc='—';}
+    localStorage.setItem(RATE_K,JSON.stringify({ts:Date.now(),d:rates}));
+    displayRates(rates);
+  }catch(e){
+    // Fallback static rates
+    displayRates({usd:1612,eur:1750,gbp:2060,btc:'103,420'});
+  }
+}
+function displayRates(r){
+  document.getElementById('rate-usd').textContent='₦'+r.usd.toLocaleString();
+  document.getElementById('rate-eur').textContent='₦'+r.eur.toLocaleString();
+  document.getElementById('rate-gbp').textContent='₦'+r.gbp.toLocaleString();
+  document.getElementById('rate-btc').textContent='$'+r.btc.toLocaleString();
+}
+
+// ── POLL OF THE DAY ──
+const POLLS=[
+  {q:"Do you support the current fuel price in Nigeria?",opts:["Yes, it's fair","No, reduce am"]},
+  {q:"Which party will win the 2027 presidential election?",opts:["APC","PDP","Labour Party","Not sure"]},
+  {q:"Is Nigeria's economy improving under Tinubu?",opts:["Yes, I see improvement","No, things worse","Too early to say"]},
+  {q:"Should Nigeria switch to cryptocurrency for transactions?",opts:["Yes, e go help","No, too risky","Maybe in future"]},
+  {q:"Which is more important for Nigeria right now?",opts:["Security","Economy","Education","Healthcare"]},
+  {q:"Do you trust Nigerian news media?",opts:["Yes, mostly","No, dem dey lie","Sometimes only"]},
+];
+
+function initPoll(){
+  const today=new Date().toISOString().slice(0,10);
+  let state={};
+  try{state=JSON.parse(localStorage.getItem(POLL_K)||'{}');}catch(e){}
+  if(state.date!==today){state={date:today,idx:Math.floor(Math.random()*POLLS.length),votes:{}};}
+  const poll=POLLS[state.idx];
+  if(!poll) return;
+  const wrap=document.getElementById('poll-wrap');
+  wrap.style.display='block';
+  const totalVotes=Object.values(state.votes||{}).reduce((a,b)=>a+b,0);
+  const voted=state.myVote!=null;
+  wrap.innerHTML=`<div class="poll-card">
+    <div class="poll-hd"><span class="poll-badge">📊 Poll</span><span style="font-size:11px;color:var(--ink4)">Today's question</span></div>
+    <div class="poll-q">${poll.q}</div>
+    <div class="poll-opts">${poll.opts.map((o,i)=>{
+      const v=state.votes?.[i]||0;
+      const pct=totalVotes?Math.round(v/totalVotes*100):0;
+      const isMyVote=state.myVote===i;
+      return`<button class="poll-opt ${voted?(isMyVote?'voted':'losing'):''}" data-i="${i}">
+        ${voted?`<div class="poll-bar" style="width:${pct}%"></div>`:''}
+        <div class="poll-opt-inner">
+          <span>${o}</span>
+          ${voted?`<span class="poll-pct">${pct}%</span>`:''}
+        </div>
+      </button>`;
+    }).join('')}</div>
+    ${totalVotes?`<div class="poll-total">${totalVotes} vote${totalVotes!==1?'s':''} so far</div>`:''}
+  </div>`;
+  if(!voted){
+    wrap.querySelectorAll('.poll-opt').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const i=parseInt(btn.dataset.i);
+        state.votes=state.votes||{};
+        state.votes[i]=(state.votes[i]||0)+1;
+        state.myVote=i;
+        localStorage.setItem(POLL_K,JSON.stringify(state));
+        initPoll();
+        toast('✅ Vote recorded — thanks!');
+        if(navigator.vibrate) navigator.vibrate(15);
+      });
+    });
+  }
+}
+
+// ── RENDER FEED ──
+function renderFeed(){
+  const list=document.getElementById('card-list'), heroBox=document.getElementById('hero-box');
+  if(!arts.length){
+    heroBox.innerHTML='';
+    list.innerHTML=`<div class="mty" style="grid-column:1/-1"><div class="ico">📭</div><p>No stories found.<br>Try a different category.</p></div>`;
+    document.getElementById('load-more').style.display='none'; return;
+  }
+  heroBox.innerHTML=heroHTML(arts[0]);
+  document.getElementById('hero-card').addEventListener('click',e=>{
+    if(e.target.closest('.hero-share'))return;
+    trackClick(arts[0].id); openArt(arts[0]);
+  });
+  document.getElementById('hero-wa').addEventListener('click',e=>{e.stopPropagation(); shareWA(arts[0]);});
+  document.getElementById('hero-ai').addEventListener('click',e=>{e.stopPropagation(); openArt(arts[0]); setTimeout(()=>triggerAISummary(arts[0]),300);});
+  document.getElementById('hero-xi').addEventListener('click',e=>{e.stopPropagation(); shareX(arts[0]);});
+  document.getElementById('hero-img-share').addEventListener('click',e=>{e.stopPropagation(); shareAsImage(arts[0]);});
+  const rest=arts.slice(1);
+  list.innerHTML=rest.map((a,i)=>cardHTML(a,i)).join('');
+  list.querySelectorAll('.nc').forEach((el,i)=>bindCard(el,rest[i]));
+  const lm=document.getElementById('load-more');
+  lm.style.display=nextPg?'block':'none'; lm.onclick=()=>loadNews(true);
+}
+
+function heroHTML(a){
+  const{cc}=catColors(a.cat); const trending=isTrending(a); const rt=readTime(a.desc);
+  const title=getTitle(a);
+  return`<div class="hero-wrap"><div class="hero" id="hero-card">
+    <div class="hero-img">
+      ${a.img?`<img src="${a.img}" alt="" loading="eager" onerror="this.style.display='none';this.nextSibling.style.display='flex'">`:``}
+      <div class="hero-img-ph" style="${a.img?'display:none':''}">${catEmoji(a.cat)}</div>
+      ${a.cat?`<div class="cat-badge ${cc}">${a.cat.toUpperCase()}</div>`:''}
+      ${trending?`<div class="trending-badge">🔥 Trending</div>`:''}
+    </div>
+    <div class="hero-body">
+      <div class="hero-meta">
+        <div class="src-dot ${cc}"></div>
+        <span class="hero-src">${a.source}</span>
+        <span class="hero-time">${ago(a.pub)}</span>
+        ${rt?`<span class="read-time">· ⏱ ${rt}</span>`:''}
+      </div>
+      <div class="hero-hl${pidginOn?' pidgin':''}">${title}</div>
+      ${a.desc?`<div class="hero-desc">${a.desc}</div>`:''}
+      <div class="hero-foot">
+        <span class="more-lnk">Read more →</span>
+        <div class="share-group hero-share">
+          <button class="ai-summary-btn" id="hero-ai">✨ AI Summary</button>
+          <button class="wa-btn" id="hero-wa">${waIco()} WA</button>
+          <button class="x-btn" id="hero-xi">${xIco()} X</button>
+          <button class="img-btn" id="hero-img-share">🖼️</button>
+        </div>
+      </div>
+    </div>
+  </div></div>`;
+}
+
+function cardHTML(a,i){
+  const{cc}=catColors(a.cat); const isSv=saved.some(s=>s.id===a.id);
+  const trending=isTrending(a); const rt=readTime(a.desc); const title=getTitle(a);
+  return`<div class="nc">
+    <div class="nc-img">
+      ${a.img?`<img src="${a.img}" alt="" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">`:``}
+      <div class="nc-img-ph" style="${a.img?'display:none':''}">${catEmoji(a.cat)}</div>
+      ${trending?`<div class="nc-fire">🔥</div>`:''}
+    </div>
+    <div class="nc-body">
+      <div class="nc-meta">
+        <span class="nc-src">${a.source}</span>
+        <div class="nc-dot"></div>
+        <span class="nc-time">${ago(a.pub)}</span>
+        ${rt?`<span class="nc-rt">⏱${rt}</span>`:''}
+      </div>
+      <div class="nc-hl${pidginOn?' pidgin':''}">${title}</div>
+      ${a.cat?`<span class="nc-tag ${cc}">${a.cat}</span>`:''}
+      <div class="nc-acts">
+        <button class="nc-act sv-act ${isSv?'sv':''}">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="${isSv?'currentColor':'none'}" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>${isSv?'Saved':'Save'}
+        </button>
+        <button class="nc-act ai-summary-btn nc-ai">✨ Summary</button>
+        <button class="nc-act wa nc-wa">${waIco()} WA</button>
+        <button class="nc-act xi nc-xi">${xIco()} X</button>
+        <button class="nc-act cp nc-cp">🖼️ Card</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function bindCard(el,a){
+  el.addEventListener('click',e=>{if(e.target.closest('.nc-act'))return; trackClick(a.id); openArt(a);});
+  el.querySelector('.sv-act').addEventListener('click',e=>{e.stopPropagation(); toggleSave(a,el.querySelector('.sv-act'));});
+  el.querySelector('.nc-wa').addEventListener('click',e=>{e.stopPropagation(); shareWA(a);});
+  if(el.querySelector('.nc-ai')) el.querySelector('.nc-ai').addEventListener('click',e=>{e.stopPropagation(); openArt(a); setTimeout(()=>triggerAISummary(a),300);});
+  el.querySelector('.nc-xi').addEventListener('click',e=>{e.stopPropagation(); shareX(a);});
+  el.querySelector('.nc-cp').addEventListener('click',e=>{e.stopPropagation(); shareAsImage(a);});
+  el.addEventListener('touchstart',()=>{if(navigator.vibrate) navigator.vibrate(8);},{passive:true});
+}
+
+function renderSkeletons(){
+  document.getElementById('hero-box').innerHTML=`<div class="hero-wrap"><div style="background:var(--card);border-radius:12px;box-shadow:var(--shadow-s);overflow:hidden"><div class="sk" style="height:215px;border-radius:0"></div><div style="padding:14px;display:flex;flex-direction:column;gap:10px"><div class="sk sk-ln s"></div><div class="sk sk-ln f t"></div><div class="sk sk-ln m t"></div><div class="sk sk-ln s"></div></div></div></div>`;
+  document.getElementById('card-list').innerHTML=Array(5).fill('').map(()=>`<div class="sk-card"><div class="sk sk-img"></div><div class="sk-bd"><div class="sk sk-ln s"></div><div class="sk sk-ln f t"></div><div class="sk sk-ln m"></div></div></div>`).join('');
+}
+function renderErr(msg){
+  document.getElementById('hero-box').innerHTML='';
+  document.getElementById('card-list').innerHTML=`<div class="err-s" style="grid-column:1/-1"><div class="ico">📡</div><p>Couldn't load stories.<br>${msg?msg+'<br>':''}Check your connection.</p><button class="retry" onclick="loadNews()">Try Again</button></div>`;
+}
+function updateTicker(items){
+  if(!items.length) return;
+  const hl=items.slice(0,8).map(a=>getTitle(a));
+  document.getElementById('ticker-track').innerHTML=[...hl,...hl].map(h=>`<span class="ticker-item">${h} <span style="opacity:.3">◆</span> </span>`).join('');
+}
+document.getElementById('feed-rfsh').addEventListener('click',hardRefresh);
+document.getElementById('rfsh-btn').addEventListener('click',hardRefresh);
+function hardRefresh(){localStorage.removeItem(CACHE_K); arts=[]; nextPg=null; loadNews();}
+function spinning(on){document.getElementById('rfsh-ico').style.animation=on?'spin .8s linear infinite':'';}
+function toggleSave(a,btn){
+  const idx=saved.findIndex(s=>s.id===a.id);
+  if(idx===-1){saved.unshift(a); toast('📌 Article saved'); if(btn){btn.classList.add('sv'); btn.querySelector('svg').setAttribute('fill','currentColor'); btn.lastChild.textContent=' Saved';}}
+  else{saved.splice(idx,1); toast('Removed from saved'); if(btn){btn.classList.remove('sv'); btn.querySelector('svg').setAttribute('fill','none'); btn.lastChild.textContent=' Save';}}
+  localStorage.setItem(SAVED_K,JSON.stringify(saved)); renderSaved(); updateBadge();
+}
+function renderSaved(){
+  updateBadge();
+  const list=document.getElementById('sv-list');
+  if(!saved.length){list.innerHTML=`<div class="mty"><div class="ico">📭</div><p>No saved articles yet.</p></div>`; return;}
+  list.innerHTML=saved.map((a,i)=>cardHTML(a,i)).join('');
+  list.querySelectorAll('.nc').forEach((el,i)=>bindCard(el,saved[i]));
+}
+function updateBadge(){const b=document.getElementById('sv-badge'); b.textContent=saved.length; b.style.display=saved.length?'flex':'none';}
+document.getElementById('sv-clr').addEventListener('click',()=>{saved=[]; localStorage.removeItem(SAVED_K); renderSaved(); toast('Saved articles cleared');});
+function shareWA(a){
+  if(typeof gtag!=='undefined') gtag('event','share',{method:'whatsapp',content_id:a.id});const title=getTitle(a); const txt=`⚡ *${title}*\n\n${a.desc?a.desc.slice(0,130)+'…\n\n':''}${a.link}\n\n_via Flash Nigeria_`; window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank');}
+function shareX(a){
+  if(typeof gtag!=='undefined') gtag('event','share',{method:'twitter',content_id:a.id});const title=getTitle(a); window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(`⚡ ${title}\n\n${a.link}\n\n#Nigeria #FlashNigeria`),'_blank');}
+function copyLink(a){navigator.clipboard.writeText(a.link).then(()=>toast('🔗 Link copied!')).catch(()=>toast('Could not copy'));}
+const HIST_MAX=5; let srchHist=JSON.parse(localStorage.getItem(SRCH_HIST_K)||'[]'); let sT;
+function bindSearch(){
+  const inp=document.getElementById('srch-inp'), clr=document.getElementById('srch-x');
+  renderSearchHistory();
+  inp.addEventListener('input',()=>{clearTimeout(sT); const q=inp.value.trim(); clr.style.display=q?'block':'none'; if(!q){resetSearch(); return;} sT=setTimeout(()=>doSearch(q),420);});
+  clr.addEventListener('click',()=>{inp.value=''; clr.style.display='none'; resetSearch(); inp.focus();});
+}
+function addToHistory(q){srchHist=srchHist.filter(x=>x!==q); srchHist.unshift(q); srchHist=srchHist.slice(0,HIST_MAX); localStorage.setItem(SRCH_HIST_K,JSON.stringify(srchHist)); renderSearchHistory();}
+function renderSearchHistory(){
+  const box=document.getElementById('srch-history');
+  if(!srchHist.length){box.innerHTML=''; return;}
+  box.innerHTML='<div style="font-size:11px;color:var(--ink4);font-weight:600;margin-bottom:6px;text-transform:uppercase;">Recent</div>'+srchHist.map((q,i)=>`<div class="sh-chip" data-q="${q}"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4"/></svg>${q}<span class="sh-chip-x" data-i="${i}">✕</span></div>`).join('');
+  box.querySelectorAll('.sh-chip').forEach(el=>{el.addEventListener('click',e=>{if(e.target.classList.contains('sh-chip-x')){srchHist.splice(parseInt(e.target.dataset.i),1); localStorage.setItem(SRCH_HIST_K,JSON.stringify(srchHist)); renderSearchHistory(); return;} const q=el.dataset.q; document.getElementById('srch-inp').value=q; document.getElementById('srch-x').style.display='block'; doSearch(q);});});
+}
+function resetSearch(){document.getElementById('srch-res').innerHTML=`<div class="mty"><div class="ico">🔍</div><p>Search headlines, topics<br>or sources from Nigeria</p></div>`; renderSearchHistory();}
+async function doSearch(q){
+  addToHistory(q); const box=document.getElementById('srch-res');
+  box.innerHTML=`<div class="mty"><div class="ico" style="animation:spin .8s linear infinite;display:inline-block">⚡</div><p>Searching…</p></div>`;
+  const local=arts.filter(a=>(a.title+' '+(a.desc||'')+' '+a.source).toLowerCase().includes(q.toLowerCase()));
+  if(local.length){renderSearchRes(local,box); return;}
+  try{const r=await fetch(`${API}?q=${encodeURIComponent(q)}`); const d=await r.json(); if(d.status==='ok'&&d.articles?.length) renderSearchRes(d.articles,box); else box.innerHTML=`<div class="mty"><div class="ico">🔍</div><p>No results for "<strong>${q}</strong>"</p></div>`;}catch{box.innerHTML=`<div class="mty"><div class="ico">📡</div><p>Search failed.</p></div>`;}
+}
+function renderSearchRes(items,box){box.innerHTML=items.map((a,i)=>cardHTML(a,i)).join(''); box.querySelectorAll('.nc').forEach((el,i)=>bindCard(el,items[i]));}
+function bindModal(){
+  document.getElementById('mo-back').addEventListener('click',closeArt);
+  document.getElementById('mo-wa').addEventListener('click',()=>{if(curArt)shareWA(curArt);});
+  document.getElementById('mo-xi').addEventListener('click',()=>{if(curArt)shareX(curArt);});
+  document.getElementById('mo-img-share').addEventListener('click',()=>{if(curArt)shareAsImage(curArt);});
+}
+function openArt(a){
+  curArt=a; document.getElementById('mo-src').textContent=a.source;
+  const isSv=saved.some(s=>s.id===a.id); const{cc}=catColors(a.cat); const title=getTitle(a); const rt=readTime(a.desc);
+  document.getElementById('mo-body').innerHTML=`<div class="mo-tag-row">${a.cat?`<span class="nc-tag ${cc}">${a.cat.toUpperCase()}</span>`:''}<span style="font-size:11px;color:var(--ink4)">${ago(a.pub)}${rt?' · ⏱ '+rt:''}</span></div><div class="mo-hl${pidginOn?' pidgin':''}">${title}</div>${a.img?`<div class="mo-img"><img src="${a.img}" alt="" loading="lazy"></div>`:''}<div class="mo-desc">${a.desc||'No description available.'}</div><div class="mo-cta"><button class="mo-sv ${isSv?'on':''}" id="mo-sv-btn">${isSv?'📌 Saved':'📌 Save'}</button><button class="mo-cp" id="mo-cp-btn">📋 Copy Link</button></div><a href="${a.link}" target="_blank" rel="noopener" class="mo-read">Read Full Story →</a>
+    ${renderRelated(a)}`;
+  document.getElementById('mo-sv-btn').addEventListener('click',function(){toggleSave(a,null); const ns=saved.some(s=>s.id===a.id); this.textContent=ns?'📌 Saved':'📌 Save'; this.classList.toggle('on',ns);});
+  document.getElementById('mo-cp-btn').addEventListener('click',()=>copyLink(a));
+  document.getElementById('mo-ai-btn').addEventListener('click',()=>triggerAISummary(a));
+  // Reset reading progress
+  document.getElementById('modal-progress').style.width='0%';
+  document.getElementById('modal').classList.add('on'); document.body.style.overflow='hidden';
+  // Bind related story clicks
+  setTimeout(()=>{
+    document.querySelectorAll('.related-card[data-rid]').forEach(el=>{
+      el.addEventListener('click',()=>{
+        const art=window._relMap&&window._relMap[el.dataset.rid];
+        if(art){closeArt(); setTimeout(()=>openArt(art),150);}
+      });
+    });
+  },100);
+}
+function closeArt(){document.getElementById('modal').classList.remove('on'); document.body.style.overflow=''; curArt=null;}
+function bindInstall(){
+  document.getElementById('ib-go').addEventListener('click',async()=>{if(!deferredInstall)return; deferredInstall.prompt(); await deferredInstall.userChoice; document.getElementById('install-bar').style.display='none'; deferredInstall=null;});
+  document.getElementById('ib-x').addEventListener('click',()=>document.getElementById('install-bar').style.display='none');
+}
+function bindPTR(){
+  let sy=0,pulling=false; const main=document.getElementById('main'), ptr=document.getElementById('ptr');
+  main.addEventListener('touchstart',e=>{if(main.scrollTop===0&&view==='feed'){sy=e.touches[0].clientY; pulling=true;}},{passive:true});
+  main.addEventListener('touchmove',e=>{if(pulling&&e.touches[0].clientY-sy>65)ptr.classList.add('on');},{passive:true});
+  main.addEventListener('touchend',()=>{if(pulling&&ptr.classList.contains('on')){ptr.classList.remove('on'); hardRefresh();} pulling=false;});
+}
+function bindNotifications(){
+  if(localStorage.getItem(NOTIF_K)) return;
+  if(!('Notification' in window)) return;
+  if(Notification.permission==='granted'){scheduleNewsCheck(); return;}
+  if(Notification.permission==='denied') return;
+  setTimeout(()=>{document.getElementById('notif-bar').style.display='flex';},30000);
+  document.getElementById('nb-allow').addEventListener('click',async()=>{document.getElementById('notif-bar').style.display='none'; const perm=await Notification.requestPermission(); if(perm==='granted'){toast('🔔 Breaking alerts enabled — max 2/day'); scheduleNewsCheck();}});
+  document.getElementById('nb-x').addEventListener('click',()=>{document.getElementById('notif-bar').style.display='none'; localStorage.setItem(NOTIF_K,'dismissed');});
+}
+function scheduleNewsCheck(){checkForTrending(); setInterval(checkForTrending,30*60*1000);}
+async function checkForTrending(){if(Notification.permission!=='granted') return; if('serviceWorker' in navigator&&navigator.serviceWorker.controller){navigator.serviceWorker.controller.postMessage({type:'CHECK_NEWS'});}}
+if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('/sw.js').catch(e=>console.log('SW:',e));});}
+let tT;
+function toast(msg){const el=document.getElementById('toast'); el.textContent=msg; el.classList.add('on'); clearTimeout(tT); tT=setTimeout(()=>el.classList.remove('on'),2500);}
+function ago(ds){if(!ds)return''; const s=Math.floor((Date.now()-new Date(ds))/1000); if(s<60)return'Just now'; if(s<3600)return Math.floor(s/60)+'m ago'; if(s<86400)return Math.floor(s/3600)+'h ago'; return Math.floor(s/86400)+'d ago';}
+function catEmoji(c){return{politics:'🏛️',business:'💼',sports:'⚽',entertainment:'🎬',technology:'💻',health:'🏥',science:'🔬'}[c]||'📰';}
+function catColors(c){return{politics:{cc:'red'},business:{cc:''},sports:{cc:'teal'},entertainment:{cc:'purple'},technology:{cc:'blue'},health:{cc:''}}[c]||{cc:''};}
+const SRC_MAP={'vanguard':'vanguard','sahara':'saharareporters','sahara reporters':'saharareporters','punch':'punch','channels':'channels','channels tv':'channels','guardian':'guardian','premium times':'premiumtimes','daily trust':'dailytrust','leadership':'leadership','nation':'thenation','tribune':'tribune','businessday':'businessday','arise':'arise'};
+const CAT_WORDS={'politics':'politics','political':'politics','government':'politics','business':'business','economy':'business','naira':'business','sports':'sports','football':'sports','eagles':'sports','entertainment':'entertainment','nollywood':'entertainment','technology':'technology','tech':'technology','health':'health'};
+let recog=null, synth=window.speechSynthesis, vpArts=[], vpListening=false;
+function bindVoice(){
+  document.getElementById('voice-fab').addEventListener('click',openVP);
+  document.getElementById('vp-close').addEventListener('click',closeVP);
+  document.getElementById('vp').addEventListener('click',e=>{if(e.target===document.getElementById('vp'))closeVP();});
+  document.getElementById('vp-inp-go').addEventListener('click',submitVPQuery);
+  document.getElementById('vp-inp').addEventListener('keydown',e=>{if(e.key==='Enter')submitVPQuery();});
+  document.getElementById('vp-inp-mic').addEventListener('click',toggleMic);
+  document.getElementById('vp-stop').addEventListener('click',()=>{stopSpeak(); document.getElementById('vp-stop').style.display='none';});
+  document.getElementById('vp-hints').querySelectorAll('.vp-hint').forEach(b=>{b.addEventListener('click',()=>{document.getElementById('vp-inp').value=b.textContent; submitVPQuery();});});
+  if(synth&&synth.onvoiceschanged!==undefined) synth.onvoiceschanged=()=>synth.getVoices();
+}
+function openVP(){document.getElementById('vp').classList.add('on'); document.body.style.overflow='hidden'; setTimeout(()=>document.getElementById('vp-inp').focus(),300);}
+function closeVP(){stopSpeak(); stopListen(); document.getElementById('vp').classList.remove('on'); document.body.style.overflow='';}
+function submitVPQuery(){const q=document.getElementById('vp-inp').value.trim(); if(!q){setStatus('Type or speak a query first','err'); return;} processVPQuery(q);}
+function toggleMic(){
+  if(vpListening){stopListen(); return;}
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){setStatus('Voice not supported — please type','err'); return;}
+  stopSpeak(); recog=new SR(); recog.lang='en-US'; recog.continuous=false; recog.interimResults=true;
+  vpListening=true; document.getElementById('vp-inp-mic').classList.add('on'); document.getElementById('vp-input-bar').classList.add('listening'); document.getElementById('voice-fab').classList.add('listening');
+  if(navigator.vibrate) navigator.vibrate(20); setStatus('🎤 Listening…','');
+  recog.onresult=e=>{const tx=Array.from(e.results).map(r=>r[0].transcript).join(''); document.getElementById('vp-inp').value=tx; if(e.results[e.results.length-1].isFinal){stopListen(); processVPQuery(tx);}};
+  recog.onerror=e=>{stopListen(); if(e.error==='not-allowed') setStatus('🔒 Mic blocked','err'); else{setStatus('💡 Type your query and tap ➤',''); document.getElementById('vp-inp').focus();}};
+  recog.onend=()=>stopListen();
+  try{recog.start();}catch(e){stopListen(); setStatus('💡 Type your query and tap ➤',''); document.getElementById('vp-inp').focus();}
+}
+function stopListen(){vpListening=false; document.getElementById('vp-inp-mic').classList.remove('on'); document.getElementById('vp-input-bar').classList.remove('listening'); document.getElementById('voice-fab').classList.remove('listening'); if(recog){try{recog.stop();}catch(e){} recog=null;}}
+async function processVPQuery(query){
+  stopSpeak(); setStatus('⚡ Searching…',''); setGoLoading(true); document.getElementById('vp-results').style.display='none'; document.getElementById('vp-stop').style.display='none';
+  const q=query.toLowerCase().trim();
+  let srcQ=null; for(const[k,v]of Object.entries(SRC_MAP)){if(q.includes(k)){srcQ=v;break;}}
+  let catQ=null; for(const[k,v]of Object.entries(CAT_WORDS)){if(q.includes(k)){catQ=v;break;}}
+  let searchTerm=srcQ||''; if(!searchTerm&&!catQ) searchTerm=query.replace(/give me|show me|what('s| is)|the|news|headlines|breaking|latest|today|please/gi,'').trim();
+  try{
+    const p=new URLSearchParams(); if(searchTerm) p.set('q',searchTerm); if(catQ&&!srcQ) p.set('category',catQ);
+    const r=await fetch(`${API}?${p}`); if(!r.ok) throw new Error('HTTP '+r.status); const d=await r.json();
+    if(d.status==='ok'&&d.articles?.length){let res=d.articles; if(srcQ){const f=res.filter(a=>a.source.toLowerCase().replace(/\s/g,'').includes(srcQ.replace(/\s/g,''))); if(f.length)res=f;} vpArts=res.slice(0,5); renderVPCards(vpArts); setStatus('✅ Found '+vpArts.length+' stories','ok'); speakHeadlines(vpArts,srcQ,catQ,q.includes('break'));}
+    else setStatus('No results. Try different keywords.','err');
+  }catch(e){setStatus('Error: '+e.message,'err');}
+  setGoLoading(false);
+}
+function renderVPCards(results){const box=document.getElementById('vp-results'); box.style.display='flex'; box.innerHTML=results.map((a,i)=>`<div class="vpc"><div class="vpc-num">${i+1}</div><div class="vpc-body"><div class="vpc-src">${a.source} · ${ago(a.pub)}</div><div class="vpc-hl">${getTitle(a)}</div></div><div class="vpc-play"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div>`).join(''); box.querySelectorAll('.vpc').forEach((el,i)=>{el.addEventListener('click',()=>{stopSpeak(); setTimeout(()=>{closeVP(); openArt(vpArts[i]);},200);});});}
+function speakHeadlines(results,srcQ,catQ,isBreaking){const src=srcQ?srcQ.replace('saharareporters','Sahara Reporters').replace('premiumtimes','Premium Times').replace('dailytrust','Daily Trust'):''; speak(`Here are ${isBreaking?'the breaking ':''}${catQ||''} headlines${src?' from '+src:''}. ${results.length} stories. `+results.map((a,i)=>`Story ${i+1}: ${getTitle(a)}.`).join(' ')+' Tap any story to read more.');}
+function speak(text){stopSpeak(); if(!synth)return; const u=new SpeechSynthesisUtterance(text); u.lang='en-GB'; u.rate=0.92; u.pitch=1; u.volume=1; const voices=synth.getVoices(); const best=voices.find(v=>v.name.includes('Google UK English Female')||v.name.includes('Samantha')||(v.lang==='en-GB'&&v.localService)); if(best)u.voice=best; u.onstart=()=>{document.getElementById('voice-fab').classList.add('speaking'); document.getElementById('vp-stop').style.display='block';}; u.onend=()=>{document.getElementById('voice-fab').classList.remove('speaking');}; u.onerror=()=>{document.getElementById('voice-fab').classList.remove('speaking');}; synth.speak(u);}
+function stopSpeak(){if(synth)synth.cancel(); document.getElementById('voice-fab').classList.remove('speaking');}
+function setStatus(msg,type){const el=document.getElementById('vp-status'); el.textContent=msg; el.className='vp-status'+(type?' '+type:'');}
+function setGoLoading(on){document.getElementById('vp-inp-go').classList.toggle('loading',on);}
+
+async function shareAsImage(a){
+  toast('🖼️ Generating image card…');
+  const canvas=document.getElementById('share-canvas');
+  const ctx=canvas.getContext('2d');
+  const W=1080,H=1080;
+  canvas.width=W; canvas.height=H;
+  ctx.fillStyle='#0f0f0f'; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='#00C853'; ctx.fillRect(0,0,W,8);
+  if(a.img){
+    await new Promise(resolve=>{
+      const img=new Image(); img.crossOrigin='anonymous';
+      img.onload=()=>{ctx.globalAlpha=0.25; ctx.drawImage(img,0,0,W,H); ctx.globalAlpha=1; resolve();};
+      img.onerror=resolve; img.src=a.img; setTimeout(resolve,3000);
+    });
+  }
+  ctx.fillStyle='rgba(0,0,0,0.72)'; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='#00C853'; ctx.fillRect(0,0,W,8);
+  // bolt
+  ctx.fillStyle='#00C853'; ctx.beginPath();
+  const bx=80,by=80,bs=70;
+  ctx.moveTo(bx+bs*.6,by); ctx.lineTo(bx+bs*.28,by+bs*.46); ctx.lineTo(bx+bs*.54,by+bs*.46);
+  ctx.lineTo(bx+bs*.38,by+bs); ctx.lineTo(bx+bs*.72,by+bs*.54); ctx.lineTo(bx+bs*.46,by+bs*.54);
+  ctx.closePath(); ctx.fill();
+  ctx.fillStyle='#fff'; ctx.font='bold 52px sans-serif'; ctx.fillText('FLASH',165,130);
+  ctx.fillStyle='#00C853'; ctx.fillText(' NIGERIA',318,130);
+  if(a.cat){ctx.fillStyle='#00C853'; ctx.beginPath(); ctx.roundRect(80,180,130,36,8); ctx.fill(); ctx.fillStyle='#000'; ctx.font='bold 20px sans-serif'; ctx.textAlign='center'; ctx.fillText(a.cat.toUpperCase(),145,204); ctx.textAlign='left';}
+  ctx.fillStyle='#fff'; ctx.font='bold 66px sans-serif';
+  const title=pidginOn?toPidgin(a.title):a.title;
+  const words=title.split(' '); let line=''; let ly=310;
+  for(const w of words){const test=line+w+' '; if(ctx.measureText(test).width>W-160&&line!==''){ctx.fillText(line,80,ly); line=w+' '; ly+=80; if(ly>700){ctx.fillText('…',80,ly); break;}}else line=test;}
+  ctx.fillText(line,80,ly);
+  ctx.fillStyle='#888'; ctx.font='36px sans-serif'; ctx.fillText(`${a.source}  ·  ${ago(a.pub)}`,80,H-120);
+  ctx.fillStyle='#00C853'; ctx.font='30px sans-serif'; ctx.fillText('flash-nigeria.vercel.app',80,H-70);
+  ctx.fillStyle='#00C853'; ctx.fillRect(0,H-8,W,8);
+  try{
+    canvas.toBlob(async blob=>{
+      if(!blob) return;
+      const file=new File([blob],'flash-nigeria-news.png',{type:'image/png'});
+      if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+        await navigator.share({title:'Flash Nigeria',text:title,files:[file]});
+      } else {
+        const url=URL.createObjectURL(blob);
+        const a2=document.createElement('a'); a2.href=url; a2.download='flash-nigeria-news.png'; a2.click();
+        URL.revokeObjectURL(url); toast('🖼️ Image saved — share to Instagram/WhatsApp!');
+      }
+    },'image/png');
+  }catch(e){toast('Image ready — long press to save');}
+}
+
+
+// ── BACK TO TOP + SCROLL PROGRESS ──
+(function(){
+  const main=document.getElementById('main');
+  const btt=document.getElementById('btt');
+  const bar=document.getElementById('scroll-bar');
+  main.addEventListener('scroll',()=>{
+    const st=main.scrollTop;
+    const sh=main.scrollHeight-main.clientHeight;
+    // Progress bar
+    bar.style.width=(sh>0?Math.min(100,st/sh*100):0)+'%';
+    // BTT button
+    btt.classList.toggle('show',st>400);
+  },{passive:true});
+  btt.addEventListener('click',()=>{
+    main.scrollTo({top:0,behavior:'smooth'});
+    if(navigator.vibrate) navigator.vibrate(10);
+  });
+})();
+
+
+// ── FONT SIZE TOGGLE ──
+(function(){
+  const FONT_K='fn_font';
+  const sizes=['','text-lg'];
+  let idx=parseInt(localStorage.getItem(FONT_K)||'0');
+  document.body.classList.toggle('text-lg', idx===1);
+  document.getElementById('font-btn').addEventListener('click',()=>{
+    document.body.classList.remove(...sizes.filter(Boolean));
+    idx=(idx+1)%sizes.length;
+    if(sizes[idx]) document.body.classList.add(sizes[idx]);
+    localStorage.setItem(FONT_K,idx);
+    toast(idx===1?'🔤 Larger text':'🔤 Normal text');
+  });
+})();
+
+// ── MODAL READING PROGRESS ──
+(function(){
+  document.getElementById('mo-body').addEventListener('scroll',function(){
+    const el=this;
+    const pct=el.scrollHeight-el.clientHeight>0
+      ? Math.min(100, el.scrollTop/(el.scrollHeight-el.clientHeight)*100) : 100;
+    document.getElementById('modal-progress').style.width=pct+'%';
+  },{passive:true});
+})();
+
+// ── RELATED STORIES ──
+function renderRelated(currentArt){
+  const related = arts
+    .filter(a => a.id !== currentArt.id && (
+      a.cat === currentArt.cat || a.source === currentArt.source
+    ))
+    .slice(0, 3);
+  if(!related.length) return '';
+  related.forEach(a => { window._rel = window._rel||{}; window._rel[a.id]=a; });
+  let out = '<div class="related-wrap"><div class="related-hd"><em>📰</em>Related Stories</div>';
+  related.forEach(function(a){
+    out += '<div class="related-card" data-rid="' + a.id + '">';
+    if(a.img){
+      out += '<img class="related-thumb" src="' + a.img + '" alt="" loading="lazy">';
+    } else {
+      out += '<div class="related-thumb-ph">' + catEmoji(a.cat) + '</div>';
+    }
+    out += '<div class="related-body">';
+    out += '<div class="related-src">' + a.source + ' · ' + ago(a.pub) + '</div>';
+    out += '<div class="related-hl">' + getTitle(a) + '</div>';
+    out += '</div></div>';
+  });
+  out += '</div>';
+  return out;
+}
+
+
+// ── AI NEWS SUMMARY (Claude API) ──
+async function triggerAISummary(article){
+  const wrap = document.getElementById('mo-ai-wrap');
+  if(!wrap) return;
+
+  // Show loading state
+  wrap.innerHTML = `
+    <div class="ai-summary-box">
+      <button class="ai-summary-close" onclick="document.getElementById('mo-ai-wrap').innerHTML=''">✕</button>
+      <div class="ai-summary-hd">
+        <span class="ai-summary-badge">✨ AI Summary</span>
+        <span class="ai-summary-src">Powered by Claude</span>
+      </div>
+      <div class="ai-summary-loading">
+        <div class="ai-spin"></div>
+        Summarising this story…
+      </div>
+    </div>`;
+
+  const title = article.title || '';
+  const desc = article.desc || '';
+  const source = article.source || 'Nigeria News';
+
+  if(!desc && !title){
+    wrap.querySelector('.ai-summary-loading').outerHTML = '<div class="ai-summary-err">Not enough content to summarise this article.</div>';
+    return;
+  }
+
+  const prompt = `You are a Nigerian news summariser. Summarise the following news story in exactly 3 clear, concise sentences for a Nigerian audience. Be direct, factual and use simple English. Do not add any intro like "Here is a summary" — just give the 3 sentences directly.
+
+Headline: ${title}
+Source: ${source}
+Content: ${desc}`;
+
+  try{
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 200,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    const data = await response.json();
+    const summary = data.content?.[0]?.text || 'Could not generate summary.';
+
+    wrap.innerHTML = `
+      <div class="ai-summary-box">
+        <button class="ai-summary-close" onclick="document.getElementById('mo-ai-wrap').innerHTML=''">✕</button>
+        <div class="ai-summary-hd">
+          <span class="ai-summary-badge">✨ AI Summary</span>
+          <span class="ai-summary-src">Powered by Claude · ${source}</span>
+        </div>
+        <div class="ai-summary-text">${summary}</div>
+      </div>`;
+
+    // Track with analytics
+    if(typeof gtag !== 'undefined') gtag('event', 'ai_summary', {article_id: article.id});
+
+  } catch(err){
+    wrap.innerHTML = `
+      <div class="ai-summary-box">
+        <button class="ai-summary-close" onclick="document.getElementById('mo-ai-wrap').innerHTML=''">✕</button>
+        <div class="ai-summary-hd">
+          <span class="ai-summary-badge">✨ AI Summary</span>
+        </div>
+        <div class="ai-summary-err">⚠️ Could not generate summary. Check your connection.</div>
+      </div>`;
+  }
+}
+
+</script>
+</body>
+</html>
