@@ -172,16 +172,27 @@
     .mr-hl{font-family:var(--font-hd);font-size:13px;font-weight:800;line-height:1.2;color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-top:3px;}
 
     /* POLL */
-    #poll-wrap{margin:10px 16px 0;}
-    .poll-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow-s);padding:10px 12px;}
-    .poll-hd{display:flex;align-items:center;gap:7px;margin-bottom:6px;}
+    #poll-wrap{margin:8px 16px 0;}
+    .poll-card{
+      background:var(--card);border-radius:var(--radius);
+      box-shadow:var(--shadow-s);overflow:hidden;
+    }
+    .poll-hd{
+      display:flex;align-items:center;justify-content:space-between;
+      gap:7px;padding:8px 12px;cursor:pointer;
+      border-bottom:1px solid var(--border);
+    }
+    .poll-hd-left{display:flex;align-items:center;gap:7px;}
     .poll-badge{font-family:var(--font-hd);font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:var(--gold);color:#fff;padding:2px 8px;border-radius:4px;}
-    .poll-q{font-family:var(--font-hd);font-size:15px;font-weight:800;line-height:1.2;color:var(--ink);margin-bottom:8px;}
-    .poll-opts{display:flex;flex-direction:column;gap:5px;}
+    .poll-toggle{font-size:11px;color:var(--ink4);transition:transform .2s;}
+    .poll-toggle.collapsed{transform:rotate(-90deg);}
+    .poll-body{padding:10px 12px;}
+    .poll-q{font-family:var(--font-hd);font-size:14px;font-weight:800;line-height:1.2;color:var(--ink);margin-bottom:8px;}
+    .poll-opts{display:flex;flex-direction:column;gap:4px;}
     .poll-opt{
-      width:100%;padding:7px 12px;border-radius:var(--radius-s);
-      border:1.5px solid var(--border2);background:var(--bg);
-      font-family:var(--font-hd);font-size:14px;font-weight:700;
+      width:100%;padding:6px 10px;border-radius:6px;
+      border:1px solid var(--border2);background:var(--bg);
+      font-family:var(--font-hd);font-size:13px;font-weight:700;
       letter-spacing:.02em;color:var(--ink);text-align:left;
       transition:all .15s;position:relative;overflow:hidden;cursor:pointer;
     }
@@ -208,7 +219,7 @@
     }
     .hero-img img{
       position:absolute;inset:0;width:100%;height:100%;
-      object-fit:cover;object-position:center center;
+      object-fit:cover;object-position:center 25%;
       transition:transform .4s ease;
     }
     .hero-img-ph{
@@ -1280,7 +1291,14 @@ function trackClick(id){
 }
 function renderMostRead(){
   if(!arts.length) return;
-  const sorted=[...arts].sort((a,b)=>(clickCounts[b.id]||0)-(clickCounts[a.id]||0));
+  const sorted=[...arts].sort((a,b)=>{
+    // Combine click count + trending score so it's never empty
+    const clickA=(clickCounts[a.id]||0)*3;
+    const clickB=(clickCounts[b.id]||0)*3;
+    const trendA=trendScore(a);
+    const trendB=trendScore(b);
+    return (clickB+trendB)-(clickA+trendA);
+  });
   const top=sorted.slice(0,5);
   const wrap=document.getElementById('most-read');
   const strip=document.getElementById('mr-strip');
@@ -1303,31 +1321,32 @@ function renderMostRead(){
 
 // ── NAIRA RATES ──
 async function loadRates(){
-  // Check cache first
   try{
     const c=JSON.parse(localStorage.getItem(RATE_K));
     if(c&&Date.now()-c.ts<RATE_TTL){displayRates(c.d); return;}
   }catch(e){}
   try{
-    // Free exchange rate API
-    const r=await fetch('https://api.exchangerate-api.com/v4/latest/USD');
-    const d=await r.json();
-    const ngn=d.rates.NGN||1600;
-    const rates={
-      usd:Math.round(ngn),
-      eur:Math.round(ngn/d.rates.EUR),
-      gbp:Math.round(ngn/d.rates.GBP),
-    };
-    // BTC via free API
-    try{
-      const br=await fetch('https://api.coindesk.com/v1/bpi/currentprice/USD.json');
-      const bd=await br.json();
-      rates.btc=Math.round(bd.bpi.USD.rate_float).toLocaleString();
-    }catch(e){rates.btc='—';}
+    // Fetch exchange rates + BTC in parallel
+    const [fxRes, btcRes] = await Promise.allSettled([
+      fetch('https://api.exchangerate-api.com/v4/latest/USD'),
+      fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd')
+    ]);
+    const rates = {usd:1612, eur:1750, gbp:2060, btc:'103,420'};
+    if(fxRes.status==='fulfilled' && fxRes.value.ok){
+      const d=await fxRes.value.json();
+      const ngn=d.rates.NGN||1612;
+      rates.usd=Math.round(ngn);
+      rates.eur=Math.round(ngn/(d.rates.EUR||0.92));
+      rates.gbp=Math.round(ngn/(d.rates.GBP||0.79));
+    }
+    if(btcRes.status==='fulfilled' && btcRes.value.ok){
+      const b=await btcRes.value.json();
+      const btcPrice=b?.bitcoin?.usd;
+      if(btcPrice) rates.btc=Math.round(btcPrice).toLocaleString();
+    }
     localStorage.setItem(RATE_K,JSON.stringify({ts:Date.now(),d:rates}));
     displayRates(rates);
   }catch(e){
-    // Fallback static rates
     displayRates({usd:1612,eur:1750,gbp:2060,btc:'103,420'});
   }
 }
@@ -1375,7 +1394,7 @@ function initPoll(){
       </button>`;
     }).join('')}</div>
     ${totalVotes?`<div class="poll-total">${totalVotes} vote${totalVotes!==1?'s':''} so far</div>`:''}
-  </div>`;
+  </div></div>`;
   if(!voted){
     wrap.querySelectorAll('.poll-opt').forEach(btn=>{
       btn.addEventListener('click',()=>{
@@ -1704,6 +1723,17 @@ async function shareAsImage(a){
   }catch(e){toast('Image ready — long press to save');}
 }
 
+
+
+// ── POLL TOGGLE ──
+function togglePoll(){
+  const body=document.getElementById('poll-body');
+  const toggle=document.getElementById('poll-toggle');
+  if(!body||!toggle) return;
+  const collapsed=body.style.display==='none';
+  body.style.display=collapsed?'block':'none';
+  toggle.classList.toggle('collapsed',!collapsed);
+}
 
 // ── BACK TO TOP + SCROLL PROGRESS ──
 (function(){
