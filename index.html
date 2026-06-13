@@ -501,12 +501,12 @@
     #voice-fab.listening{background:var(--red);animation:pulse 1.2s infinite;}
     #voice-fab.speaking{background:var(--gold);}
     @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(220,38,38,.5);}70%{box-shadow:0 0 0 16px rgba(220,38,38,0);}100%{box-shadow:0 0 0 0 rgba(220,38,38,0);}}
-    #vp{position:fixed;inset:0;z-index:250;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.5);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);}
+    #vp{position:fixed;inset:0;z-index:250;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.65);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);}
     #vp.on{display:flex;}
-    .vp-sheet{width:100%;max-width:480px;background:var(--card);border-radius:24px 24px 0 0;padding:18px 20px 36px;box-shadow:0 -4px 24px rgba(0,0,0,.2);animation:slideup .25s ease;position:relative;}
+    .vp-sheet{width:100%;max-width:480px;background:var(--card);border-radius:24px 24px 0 0;padding:18px 16px 40px;box-shadow:0 -4px 24px rgba(0,0,0,.3);animation:slideup .25s ease;position:relative;max-height:90vh;overflow-y:auto;}
     @keyframes slideup{from{transform:translateY(60px);opacity:0;}to{transform:translateY(0);opacity:1;}}
     .vp-handle{width:40px;height:4px;border-radius:2px;background:var(--border2);margin:0 auto 16px;}
-    .vp-close{position:absolute;top:16px;right:16px;width:30px;height:30px;border-radius:50%;background:var(--bg);color:var(--ink3);display:flex;align-items:center;justify-content:center;font-size:14px;border:none;cursor:pointer;}
+    .vp-close{position:absolute;top:12px;right:12px;width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.08);color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;border:2px solid rgba(0,0,0,.1);cursor:pointer;z-index:10;-webkit-tap-highlight-color:transparent;}
     .vp-title{font-family:var(--font-hd);font-size:20px;font-weight:900;letter-spacing:.02em;text-align:center;margin-bottom:3px;color:var(--ink);}
     .vp-sub{font-size:12px;color:var(--ink3);text-align:center;margin-bottom:14px;}
     .vp-input-wrap{margin-bottom:12px;}
@@ -521,7 +521,7 @@
     .vp-inp-go.loading{background:var(--gold);}
     .vp-status{font-size:12px;color:var(--ink3);padding:4px 2px;min-height:20px;}
     .vp-status.err{color:var(--red);}.vp-status.ok{color:var(--green);}
-    .vp-hints{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+    .vp-hints{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;padding-bottom:4px;}
     .vp-hint{font-size:11px;font-weight:600;color:var(--ink3);padding:4px 11px;border-radius:20px;background:var(--bg);border:1px solid var(--border2);cursor:pointer;transition:all .15s;white-space:nowrap;}
     .vp-hint:hover{background:var(--gold-bg);border-color:var(--gold-border);color:var(--gold);}
     .vp-results{max-height:230px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;margin-bottom:12px;scrollbar-width:thin;}
@@ -985,8 +985,9 @@
 
 <div id="vp">
   <div class="vp-sheet">
-    <button class="vp-close" id="vp-close">✕</button>
-    <div class="vp-handle"></div>
+    <button class="vp-close" id="vp-close" style="width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.08);border:none;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#111;position:absolute;top:14px;right:14px;">✕</button>
+    <div class="vp-handle" style="width:50px;height:5px;border-radius:3px;background:rgba(0,0,0,.15);margin:0 auto 16px;"></div>
+    <button class="vp-close" id="vp-close2" onclick="document.getElementById('vp-close').click()" style="position:absolute;top:12px;right:12px;width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.08);border:2px solid rgba(0,0,0,.1);font-size:18px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
     <div class="vp-title">⚡ Flash Voice</div>
     <div class="vp-sub">Speak or type any topic — tap 💡 below for examples</div>
     <!-- HOW TO USE -->
@@ -1864,6 +1865,10 @@ function bindVoice(){
   document.getElementById('voice-fab').addEventListener('click',openVP);
   document.getElementById('vp-close').addEventListener('click',closeVP);
   document.getElementById('vp').addEventListener('click',e=>{if(e.target===document.getElementById('vp'))closeVP();});
+  // Also close on swipe down
+  let vpStartY=0;
+  document.querySelector('.vp-sheet').addEventListener('touchstart',e=>{vpStartY=e.touches[0].clientY;},{passive:true});
+  document.querySelector('.vp-sheet').addEventListener('touchend',e=>{if(e.changedTouches[0].clientY-vpStartY>80)closeVP();},{passive:true});
   document.getElementById('vp-inp-go').addEventListener('click',submitVPQuery);
   document.getElementById('vp-inp').addEventListener('keydown',e=>{if(e.key==='Enter')submitVPQuery();});
   document.getElementById('vp-inp-mic').addEventListener('click',toggleMic);
