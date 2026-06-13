@@ -342,7 +342,7 @@
     .nc-act.wa:hover{background:var(--green-bg);border-color:var(--green-border);}
 
     /* LOAD MORE */
-    #load-more{display:none !important;}
+    #load-more{display:block;width:calc(100% - 32px);margin:16px auto 0;padding:10px;border-radius:var(--radius);border:1px solid var(--border2);background:var(--card);font-family:var(--font-hd);font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink3);transition:all .15s;}
     #load-more:hover{border-color:var(--ink);color:var(--ink);}
 
     /* SKELETON */
@@ -2114,17 +2114,23 @@ function renderRelated(currentArt){
 
 
 
-// ── INFINITE SCROLL ──
+// ── INFINITE SCROLL — conservative to save API calls ──
 (function(){
   const main = document.getElementById('main');
   let scrollBusy = false;
+  let lastLoad = 0;
+  const MIN_INTERVAL = 5000; // min 5 seconds between loads
   main.addEventListener('scroll', function() {
     if(scrollBusy || !nextPg) return;
+    const now = Date.now();
+    if(now - lastLoad < MIN_INTERVAL) return;
+    // Only trigger when very close to bottom (100px)
     const distFromBottom = main.scrollHeight - main.scrollTop - main.clientHeight;
-    if(distFromBottom < 300) {
+    if(distFromBottom < 100) {
       scrollBusy = true;
+      lastLoad = now;
       loadNews(true).then(() => {
-        setTimeout(() => { scrollBusy = false; }, 1000);
+        setTimeout(() => { scrollBusy = false; }, 2000);
       }).catch(() => { scrollBusy = false; });
     }
   }, { passive: true });
