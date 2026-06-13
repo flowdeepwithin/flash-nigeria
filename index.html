@@ -846,33 +846,19 @@
       <div id="poll-wrap" style="display:none"></div>
 
       <div id="hero-box"></div>
-      <!-- SPONSORED: PAMAFORCE -->
-      <div class="sponsored-card" onclick="window.open('https://pama-ai.vercel.app','_blank')" style="margin:14px 16px 0;">
-        <span class="sponsored-label">Sponsored</span>
-        <div class="sponsored-img">
-          <div class="sponsored-img-inner">
-            <div class="sponsored-logo">Pama<span>Force</span></div>
-            <div class="sponsored-tagline-sm">The Force That Keeps You Moving</div>
-            <!-- Decorative circles -->
-            <div style="position:absolute;width:120px;height:120px;border-radius:50%;background:rgba(249,115,22,0.08);top:-30px;right:-20px;"></div>
-            <div style="position:absolute;width:80px;height:80px;border-radius:50%;background:rgba(249,115,22,0.06);bottom:-20px;left:-10px;"></div>
-          </div>
+      <!-- SPONSORED: PAMAFORCE — compact banner -->
+      <div onclick="window.open('https://pama-ai.vercel.app','_blank')" style="margin:10px 16px 0;background:linear-gradient(135deg,#1a0800,#0f0500);border:1.5px solid rgba(249,115,22,0.25);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;">
+        <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#f97316,#ea580c);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <span style="font-size:18px;">💪</span>
         </div>
-        <div class="sponsored-body" style="background:#0f0800;">
-          <div class="sponsored-title">Build Unbreakable Discipline. Every Day.</div>
-          <div class="sponsored-features">
-            <span class="sponsored-feat">🔥 Streak tracking</span>
-            <span class="sponsored-feat">⚡ AI Coach</span>
-            <span class="sponsored-feat">🏆 Leaderboard</span>
-            <span class="sponsored-feat">🎯 Daily goals</span>
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">
+            <span style="font-family:var(--font-hd);font-size:14px;font-weight:900;color:#fff;letter-spacing:.02em;">PamaForce</span>
+            <span style="font-size:10px;font-weight:700;color:#f97316;background:rgba(249,115,22,0.15);padding:1px 6px;border-radius:4px;border:1px solid rgba(249,115,22,0.3);">Sponsored</span>
           </div>
-          <div class="sponsored-desc">
-            PamaForce keeps you accountable with an AI coach that speaks your language — Gentle, Strict, Spiritual or Military. Build habits that stick.
-          </div>
-          <button class="sponsored-cta">
-            Try PamaForce Free →
-          </button>
+          <p style="font-size:12px;color:rgba(255,255,255,0.6);margin:0;">Build discipline daily — AI coach, streaks & leaderboard</p>
         </div>
+        <span style="font-size:18px;color:#f97316;flex-shrink:0;">›</span>
       </div>
 
       <div class="sec-hd">
@@ -989,7 +975,12 @@
     <div class="vp-handle" style="width:50px;height:5px;border-radius:3px;background:rgba(0,0,0,.15);margin:0 auto 16px;"></div>
     <button class="vp-close" id="vp-close2" onclick="document.getElementById('vp-close').click()" style="position:absolute;top:12px;right:12px;width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.08);border:2px solid rgba(0,0,0,.1);font-size:18px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
     <div class="vp-title">⚡ Flash Voice</div>
-    <div class="vp-sub">Speak or type any topic — tap 💡 below for examples</div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:4px;">
+      <div class="vp-sub" style="margin:0;">Speak or type any topic — tap 💡 below</div>
+      <button id="vp-pidgin-btn" onclick="toggleVPPidgin()" style="font-family:var(--font-hd);font-size:11px;font-weight:800;letter-spacing:.04em;padding:4px 10px;border-radius:6px;border:1.5px solid var(--border2);color:var(--ink3);background:var(--bg);cursor:pointer;white-space:nowrap;transition:all .15s;">
+        🗣️ PIDGIN
+      </button>
+    </div>
     <!-- HOW TO USE -->
     <div class="vp-howto">
       <div class="vp-howto-hd" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.vp-arr').textContent=this.nextElementSibling.classList.contains('open')?'▲':'▼'">
@@ -1132,6 +1123,33 @@ function initWelcomeBar(){
     localStorage.setItem('fn_wb','1');
   });
   localStorage.setItem('fn_wb','1');
+}
+
+
+// ── VOICE PANEL PIDGIN TOGGLE ──
+function toggleVPPidgin(){
+  pidginOn = !pidginOn;
+  localStorage.setItem(PIDGIN_K, pidginOn ? '1' : '0');
+  const btn = document.getElementById('vp-pidgin-btn');
+  if(btn){
+    btn.style.background = pidginOn ? 'var(--gold)' : 'var(--bg)';
+    btn.style.color = pidginOn ? '#fff' : 'var(--ink3)';
+    btn.style.borderColor = pidginOn ? 'var(--gold)' : 'var(--border2)';
+    btn.textContent = pidginOn ? '🗣️ PIDGIN ON' : '🗣️ PIDGIN';
+  }
+  // Update rendered results if any
+  if(vpArts.length) renderVPCards(vpArts);
+  toast(pidginOn ? '🗣️ Pidgin mode on — headlines in Naija!' : 'Pidgin off');
+}
+
+// Sync VP pidgin button state on open
+function syncVPPidginBtn(){
+  const btn = document.getElementById('vp-pidgin-btn');
+  if(!btn) return;
+  btn.style.background = pidginOn ? 'var(--gold)' : 'var(--bg)';
+  btn.style.color = pidginOn ? '#fff' : 'var(--ink3)';
+  btn.style.borderColor = pidginOn ? 'var(--gold)' : 'var(--border2)';
+  btn.textContent = pidginOn ? '🗣️ PIDGIN ON' : '🗣️ PIDGIN';
 }
 
 // ── OFFLINE ──
@@ -1876,7 +1894,7 @@ function bindVoice(){
   document.getElementById('vp-hints').querySelectorAll('.vp-hint').forEach(b=>{b.addEventListener('click',()=>{document.getElementById('vp-inp').value=b.textContent; submitVPQuery();});});
   if(synth&&synth.onvoiceschanged!==undefined) synth.onvoiceschanged=()=>synth.getVoices();
 }
-function openVP(){document.getElementById('vp').classList.add('on'); document.body.style.overflow='hidden'; setTimeout(()=>document.getElementById('vp-inp').focus(),300);}
+function openVP(){document.getElementById('vp').classList.add('on'); document.body.style.overflow='hidden'; setTimeout(()=>{document.getElementById('vp-inp').focus(); syncVPPidginBtn();},300);}
 function closeVP(){stopSpeak(); stopListen(); document.getElementById('vp').classList.remove('on'); document.body.style.overflow='';}
 function submitVPQuery(){const q=document.getElementById('vp-inp').value.trim(); if(!q){setStatus('Type or speak a query first','err'); return;} processVPQuery(q);}
 function toggleMic(){
@@ -1924,7 +1942,16 @@ async function processVPQuery(query){
   setGoLoading(false);
 }
 function renderVPCards(results){const box=document.getElementById('vp-results'); box.style.display='flex'; box.innerHTML=results.map((a,i)=>`<div class="vpc"><div class="vpc-num">${i+1}</div><div class="vpc-body"><div class="vpc-src">${a.source} · ${ago(a.pub)}</div><div class="vpc-hl">${getTitle(a)}</div></div><div class="vpc-play"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div>`).join(''); box.querySelectorAll('.vpc').forEach((el,i)=>{el.addEventListener('click',()=>{stopSpeak(); setTimeout(()=>{closeVP(); openArt(vpArts[i]);},200);});});}
-function speakHeadlines(results,srcQ,catQ,isBreaking){const src=srcQ?srcQ.replace('saharareporters','Sahara Reporters').replace('premiumtimes','Premium Times').replace('dailytrust','Daily Trust'):''; speak(`Here are ${isBreaking?'the breaking ':''}${catQ||''} headlines${src?' from '+src:''}. ${results.length} stories. `+results.map((a,i)=>`Story ${i+1}: ${getTitle(a)}.`).join(' ')+' Tap any story to read more.');}
+function speakHeadlines(results,srcQ,catQ,isBreaking){
+  const src=srcQ?srcQ.replace('saharareporters','Sahara Reporters').replace('premiumtimes','Premium Times').replace('dailytrust','Daily Trust'):'';
+  const lang = pidginOn ? 'Pidgin' : (catQ||'');
+  const intro = pidginOn
+    ? `Here na ${results.length} ${isBreaking?'breaking ':''}${src?src+' ':''}headlines for you. `
+    : `Here are ${isBreaking?'the breaking ':''}${catQ||''} headlines${src?' from '+src:''}. ${results.length} stories. `;
+  const stories = results.map((a,i)=>`Story ${i+1}: ${getTitle(a)}.`).join(' ');
+  const outro = pidginOn ? ' Tap any story to read am.' : ' Tap any story to read more.';
+  speak(intro + stories + outro);
+}
 function speak(text){stopSpeak(); if(!synth)return; const u=new SpeechSynthesisUtterance(text); u.lang='en-GB'; u.rate=0.92; u.pitch=1; u.volume=1; const voices=synth.getVoices(); const best=voices.find(v=>v.name.includes('Google UK English Female')||v.name.includes('Samantha')||(v.lang==='en-GB'&&v.localService)); if(best)u.voice=best; u.onstart=()=>{document.getElementById('voice-fab').classList.add('speaking'); document.getElementById('vp-stop').style.display='block';}; u.onend=()=>{document.getElementById('voice-fab').classList.remove('speaking');}; u.onerror=()=>{document.getElementById('voice-fab').classList.remove('speaking');}; synth.speak(u);}
 function stopSpeak(){if(synth)synth.cancel(); document.getElementById('voice-fab').classList.remove('speaking');}
 function setStatus(msg,type){const el=document.getElementById('vp-status'); el.textContent=msg; el.className='vp-status'+(type?' '+type:'');}
