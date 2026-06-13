@@ -1223,7 +1223,6 @@ async function loadNews(paginate=false){
   spinning(true);
   try{
     const p=new URLSearchParams();
-    p.set('size','20');
     if(cat) p.set('category',cat);
     if(paginate&&nextPg) p.set('page',nextPg);
     const r=await fetch(`${API}?${p}`);
