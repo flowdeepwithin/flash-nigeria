@@ -460,6 +460,41 @@
     /* IMAGE SHARE CANVAS (hidden) */
     #share-canvas{display:none;}
 
+
+    /* VOICE HOW-TO */
+    .vp-howto{
+      margin-bottom:12px;
+      background:var(--bg);
+      border:1px solid var(--border2);
+      border-radius:12px;
+      overflow:hidden;
+    }
+    .vp-howto-hd{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:10px 14px;cursor:pointer;
+    }
+    .vp-howto-title{
+      font-size:12px;font-weight:700;color:var(--ink3);
+      text-transform:uppercase;letter-spacing:.06em;
+      display:flex;align-items:center;gap:6px;
+    }
+    .vp-howto-body{
+      padding:0 14px 12px;
+      display:none;
+    }
+    .vp-howto-body.open{display:block;}
+    .vp-howto-row{
+      display:flex;align-items:flex-start;gap:8px;
+      padding:6px 0;border-bottom:1px solid var(--border);
+    }
+    .vp-howto-row:last-child{border-bottom:none;}
+    .vp-howto-cmd{
+      font-size:12px;font-weight:700;color:var(--gold);
+      min-width:140px;flex-shrink:0;
+    }
+    .vp-howto-desc{
+      font-size:12px;color:var(--ink3);line-height:1.4;
+    }
     /* VOICE */
     #voice-fab{position:fixed;bottom:calc(var(--nav-h) + 16px);right:16px;width:54px;height:54px;border-radius:50%;background:var(--ink);color:var(--card);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(0,0,0,.28);z-index:150;border:none;cursor:pointer;transition:transform .2s,background .2s;}
     #voice-fab:hover{transform:scale(1.08);}
@@ -856,22 +891,76 @@
     <button class="vp-close" id="vp-close">✕</button>
     <div class="vp-handle"></div>
     <div class="vp-title">⚡ Flash Voice</div>
-    <div class="vp-sub">Speak or type — get headlines read aloud</div>
+    <div class="vp-sub">Speak or type any topic — tap 💡 below for examples</div>
+    <!-- HOW TO USE -->
+    <div class="vp-howto">
+      <div class="vp-howto-hd" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.vp-arr').textContent=this.nextElementSibling.classList.contains('open')?'▲':'▼'">
+        <span class="vp-howto-title">💡 How to use Flash Voice</span>
+        <span class="vp-arr" style="font-size:10px;color:var(--ink4)">▼</span>
+      </div>
+      <div class="vp-howto-body">
+        <div class="vp-howto-row">
+          <span class="vp-howto-cmd">"News on judiciary"</span>
+          <span class="vp-howto-desc">Court, EFCC & legal stories</span>
+        </div>
+        <div class="vp-howto-row">
+          <span class="vp-howto-cmd">"Nigeria security"</span>
+          <span class="vp-howto-desc">Army, police, crime & terrorism</span>
+        </div>
+        <div class="vp-howto-row">
+          <span class="vp-howto-cmd">"Celebrity news"</span>
+          <span class="vp-howto-desc">Nollywood, music & entertainment</span>
+        </div>
+        <div class="vp-howto-row">
+          <span class="vp-howto-cmd">"Economy today"</span>
+          <span class="vp-howto-desc">Naira, inflation & business</span>
+        </div>
+        <div class="vp-howto-row">
+          <span class="vp-howto-cmd">"Super Eagles"</span>
+          <span class="vp-howto-desc">Football & sports headlines</span>
+        </div>
+        <div class="vp-howto-row">
+          <span class="vp-howto-cmd">"Vanguard breaking"</span>
+          <span class="vp-howto-desc">Stories from Vanguard newspaper</span>
+        </div>
+        <div class="vp-howto-row">
+          <span class="vp-howto-cmd">"Crime news"</span>
+          <span class="vp-howto-desc">Robbery, kidnap & arrests</span>
+        </div>
+        <div class="vp-howto-row">
+          <span class="vp-howto-cmd">"Politics today"</span>
+          <span class="vp-howto-desc">Government & political news</span>
+        </div>
+        <div class="vp-howto-row">
+          <span class="vp-howto-cmd">"Health news"</span>
+          <span class="vp-howto-desc">Medical & wellness stories</span>
+        </div>
+        <div class="vp-howto-row">
+          <span class="vp-howto-cmd">🎤 Or just speak!</span>
+          <span class="vp-howto-desc">Tap the mic and say anything naturally</span>
+        </div>
+      </div>
+    </div>
+
     <div class="vp-input-wrap">
       <div class="vp-input-bar" id="vp-input-bar">
-        <input type="text" id="vp-inp" placeholder="Type: Vanguard breaking, Channels TV…" autocomplete="off"/>
+        <input type="text" id="vp-inp" placeholder="Try: news on judiciary, celebrity news, economy…" autocomplete="off"/>
         <button class="vp-inp-mic" id="vp-inp-mic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button>
         <button class="vp-inp-go" id="vp-inp-go"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
       </div>
       <div class="vp-status" id="vp-status"></div>
     </div>
     <div class="vp-hints" id="vp-hints">
+      <button class="vp-hint">News on judiciary</button>
+      <button class="vp-hint">Nigeria security</button>
+      <button class="vp-hint">Celebrity news</button>
+      <button class="vp-hint">Economy today</button>
+      <button class="vp-hint">Super Eagles</button>
+      <button class="vp-hint">Crime news</button>
+      <button class="vp-hint">Politics today</button>
       <button class="vp-hint">Vanguard breaking</button>
-      <button class="vp-hint">Punch politics</button>
-      <button class="vp-hint">Channels TV</button>
-      <button class="vp-hint">Sports headlines</button>
-      <button class="vp-hint">Business news</button>
-      <button class="vp-hint">Daily Trust</button>
+      <button class="vp-hint">Health news</button>
+      <button class="vp-hint">Business Nigeria</button>
     </div>
     <div class="vp-results" id="vp-results" style="display:none"></div>
     <button class="vp-stop" id="vp-stop" style="display:none">⏹ Stop Reading</button>
@@ -1631,7 +1720,48 @@ function ago(ds){if(!ds)return''; const s=Math.floor((Date.now()-new Date(ds))/1
 function catEmoji(c){return{politics:'🏛️',business:'💼',sports:'⚽',entertainment:'🎬',technology:'💻',health:'🏥',science:'🔬'}[c]||'📰';}
 function catColors(c){return{politics:{cc:'red'},business:{cc:''},sports:{cc:'teal'},entertainment:{cc:'purple'},technology:{cc:'blue'},health:{cc:''}}[c]||{cc:''};}
 const SRC_MAP={'vanguard':'vanguard','punch':'punch','channels':'channels','channels tv':'channels','guardian':'guardian','premium times':'premiumtimes','daily trust':'dailytrust','leadership':'leadership','nation':'thenation','tribune':'tribune','businessday':'businessday','arise':'arise'};
-const CAT_WORDS={'politics':'politics','political':'politics','government':'politics','business':'business','economy':'business','naira':'business','sports':'sports','football':'sports','eagles':'sports','entertainment':'entertainment','nollywood':'entertainment','technology':'technology','tech':'technology','health':'health'};
+const CAT_WORDS={
+  // Politics
+  'politics':'politics','political':'politics','government':'politics',
+  'tinubu':'politics','senate':'politics','presidency':'politics',
+  'election':'politics','governor':'politics','minister':'politics',
+  'judiciary':'politics','court':'politics','supreme court':'politics',
+  'efcc':'politics','corruption':'politics','impeach':'politics',
+  'national assembly':'politics','house of reps':'politics',
+  // Business & Economy
+  'business':'business','economy':'business','naira':'business',
+  'dollar':'business','inflation':'business','cbn':'business',
+  'fuel price':'business','subsidy':'business','oil':'business',
+  'stock':'business','market':'business','trade':'business',
+  'bank':'business','fintech':'business','startup':'business',
+  // Sports
+  'sports':'sports','football':'sports','soccer':'sports',
+  'super eagles':'sports','eagles':'sports','afcon':'sports',
+  'world cup':'sports','premier league':'sports','champions league':'sports',
+  'osimhen':'sports','basketball':'sports','athletics':'sports',
+  'npfl':'sports','wrestling':'sports',
+  // Entertainment & Celebs
+  'entertainment':'entertainment','celebrity':'entertainment',
+  'celebs':'entertainment','nollywood':'entertainment',
+  'music':'entertainment','afrobeats':'entertainment',
+  'burna boy':'entertainment','wizkid':'entertainment',
+  'davido':'entertainment','movie':'entertainment',
+  'award':'entertainment','fashion':'entertainment',
+  'bbnaija':'entertainment','big brother':'entertainment',
+  // Technology
+  'technology':'technology','tech':'technology','crypto':'technology',
+  'bitcoin':'technology','ai':'technology','startup':'technology',
+  'fintech':'technology','digital':'technology','internet':'technology',
+  // Health
+  'health':'health','medical':'health','hospital':'health',
+  'disease':'health','covid':'health','vaccine':'health',
+  'cancer':'health','mental health':'health','wellness':'health',
+  // Security
+  'security':'politics','crime':'politics','kidnap':'politics',
+  'bandits':'politics','terrorism':'politics','attack':'politics',
+  'robbery':'politics','police':'politics','army':'politics',
+  'military':'politics','boko haram':'politics','iswap':'politics',
+};
 let recog=null, synth=window.speechSynthesis, vpArts=[], vpListening=false;
 function bindVoice(){
   document.getElementById('voice-fab').addEventListener('click',openVP);
@@ -1663,9 +1793,26 @@ function stopListen(){vpListening=false; document.getElementById('vp-inp-mic').c
 async function processVPQuery(query){
   stopSpeak(); setStatus('⚡ Searching…',''); setGoLoading(true); document.getElementById('vp-results').style.display='none'; document.getElementById('vp-stop').style.display='none';
   const q=query.toLowerCase().trim();
+
+  // Clean filler words from query
+  const cleaned = q
+    .replace(/(news|about|on|for|give me|show me|what's|what is|the|latest|breaking|today|please|in|of|regarding|concerning)/gi,'')
+    .replace(/\s+/g,' ').trim();
+
+  // Check source map first
   let srcQ=null; for(const[k,v]of Object.entries(SRC_MAP)){if(q.includes(k)){srcQ=v;break;}}
-  let catQ=null; for(const[k,v]of Object.entries(CAT_WORDS)){if(q.includes(k)){catQ=v;break;}}
-  let searchTerm=srcQ||''; if(!searchTerm&&!catQ) searchTerm=query.replace(/give me|show me|what('s| is)|the|news|headlines|breaking|latest|today|please/gi,'').trim();
+
+  // Check category/topic map (longest match first)
+  let catQ=null;
+  const sortedTopics = Object.entries(CAT_WORDS).sort((a,b)=>b[0].length-a[0].length);
+  for(const[k,v]of sortedTopics){if(q.includes(k)){catQ=v;break;}}
+
+  // Build search term
+  let searchTerm=srcQ||'';
+  if(!searchTerm){
+    // Use cleaned query as search term for specific topics
+    searchTerm = cleaned || query.replace(/give me|show me|what('s| is)|the|news|headlines|breaking|latest|today|please/gi,'').trim();
+  }
   try{
     const p=new URLSearchParams(); if(searchTerm) p.set('q',searchTerm); if(catQ&&!srcQ) p.set('category',catQ);
     const r=await fetch(`${API}?${p}`); if(!r.ok) throw new Error('HTTP '+r.status); const d=await r.json();
