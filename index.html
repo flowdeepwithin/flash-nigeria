@@ -19,7 +19,7 @@
   <meta name="twitter:title" content="Flash Nigeria ⚡"/>
   <meta name="twitter:description" content="Flash. News. Nigeria."/>
   <meta name="twitter:image" content="https://flash-nigeria.vercel.app/icons/icon-512x512.png"/>
-  <meta name="keywords" content="Nigeria news, breaking news Nigeria, Naija news, Vanguard, Punch, Sahara Reporters, Channels TV, Nigerian politics, Nigerian sports"/>
+  <meta name="keywords" content="Nigeria news, breaking news Nigeria, Naija news, Vanguard, Punch, Channels TV, Guardian, Nigerian politics, Nigerian sports"/>
   <meta name="author" content="Flash Nigeria"/>
   <link rel="canonical" href="https://flash-nigeria.vercel.app"/>
   <!-- Google Analytics -->
@@ -859,7 +859,7 @@
     <div class="vp-sub">Speak or type — get headlines read aloud</div>
     <div class="vp-input-wrap">
       <div class="vp-input-bar" id="vp-input-bar">
-        <input type="text" id="vp-inp" placeholder="Type: Vanguard breaking, Sahara Reporters…" autocomplete="off"/>
+        <input type="text" id="vp-inp" placeholder="Type: Vanguard breaking, Channels TV…" autocomplete="off"/>
         <button class="vp-inp-mic" id="vp-inp-mic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button>
         <button class="vp-inp-go" id="vp-inp-go"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
       </div>
@@ -872,7 +872,6 @@
       <button class="vp-hint">Sports headlines</button>
       <button class="vp-hint">Business news</button>
       <button class="vp-hint">Daily Trust</button>
-      <button class="vp-hint">Sahara Reporters</button>
     </div>
     <div class="vp-results" id="vp-results" style="display:none"></div>
     <button class="vp-stop" id="vp-stop" style="display:none">⏹ Stop Reading</button>
@@ -953,7 +952,7 @@ function bindOffline(){
   });
 }
 function saveOfflineCache(articles){
-  const top20=articles.slice(0,20);
+  const top20=articles.slice(0,30);
   localStorage.setItem(OFFLINE_K,JSON.stringify({ts:Date.now(),d:top20}));
 }
 function serveOfflineCache(){
@@ -1224,6 +1223,7 @@ async function loadNews(paginate=false){
   spinning(true);
   try{
     const p=new URLSearchParams();
+    p.set('size','20');
     if(cat) p.set('category',cat);
     if(paginate&&nextPg) p.set('page',nextPg);
     const r=await fetch(`${API}?${p}`);
@@ -1511,7 +1511,7 @@ function bindCard(el,a){
 
 function renderSkeletons(){
   document.getElementById('hero-box').innerHTML=`<div class="hero-wrap"><div style="background:var(--card);border-radius:12px;box-shadow:var(--shadow-s);overflow:hidden"><div class="sk" style="height:215px;border-radius:0"></div><div style="padding:14px;display:flex;flex-direction:column;gap:10px"><div class="sk sk-ln s"></div><div class="sk sk-ln f t"></div><div class="sk sk-ln m t"></div><div class="sk sk-ln s"></div></div></div></div>`;
-  document.getElementById('card-list').innerHTML=Array(5).fill('').map(()=>`<div class="sk-card"><div class="sk sk-img"></div><div class="sk-bd"><div class="sk sk-ln s"></div><div class="sk sk-ln f t"></div><div class="sk sk-ln m"></div></div></div>`).join('');
+  document.getElementById('card-list').innerHTML=Array(8).fill('').map(()=>`<div class="sk-card"><div class="sk sk-img"></div><div class="sk-bd"><div class="sk sk-ln s"></div><div class="sk sk-ln f t"></div><div class="sk sk-ln m"></div></div></div>`).join('');
 }
 function renderErr(msg){
   document.getElementById('hero-box').innerHTML='';
@@ -1623,7 +1623,7 @@ function toast(msg){const el=document.getElementById('toast'); el.textContent=ms
 function ago(ds){if(!ds)return''; const s=Math.floor((Date.now()-new Date(ds))/1000); if(s<60)return'Just now'; if(s<3600)return Math.floor(s/60)+'m ago'; if(s<86400)return Math.floor(s/3600)+'h ago'; return Math.floor(s/86400)+'d ago';}
 function catEmoji(c){return{politics:'🏛️',business:'💼',sports:'⚽',entertainment:'🎬',technology:'💻',health:'🏥',science:'🔬'}[c]||'📰';}
 function catColors(c){return{politics:{cc:'red'},business:{cc:''},sports:{cc:'teal'},entertainment:{cc:'purple'},technology:{cc:'blue'},health:{cc:''}}[c]||{cc:''};}
-const SRC_MAP={'vanguard':'vanguard','sahara':'saharareporters','sahara reporters':'saharareporters','punch':'punch','channels':'channels','channels tv':'channels','guardian':'guardian','premium times':'premiumtimes','daily trust':'dailytrust','leadership':'leadership','nation':'thenation','tribune':'tribune','businessday':'businessday','arise':'arise'};
+const SRC_MAP={'vanguard':'vanguard','punch':'punch','channels':'channels','channels tv':'channels','guardian':'guardian','premium times':'premiumtimes','daily trust':'dailytrust','leadership':'leadership','nation':'thenation','tribune':'tribune','businessday':'businessday','arise':'arise'};
 const CAT_WORDS={'politics':'politics','political':'politics','government':'politics','business':'business','economy':'business','naira':'business','sports':'sports','football':'sports','eagles':'sports','entertainment':'entertainment','nollywood':'entertainment','technology':'technology','tech':'technology','health':'health'};
 let recog=null, synth=window.speechSynthesis, vpArts=[], vpListening=false;
 function bindVoice(){
