@@ -637,6 +637,74 @@
     
     
 
+
+    /* SPONSORED CARD */
+    .sponsored-card{
+      margin:0 16px;
+      background:linear-gradient(135deg,#1a0a00,#0f0800);
+      border:1.5px solid rgba(249,115,22,0.3);
+      border-radius:var(--radius);
+      overflow:hidden;
+      cursor:pointer;
+      transition:box-shadow .15s;
+      position:relative;
+    }
+    .sponsored-card:hover{box-shadow:0 4px 20px rgba(249,115,22,0.2);}
+    .sponsored-label{
+      position:absolute;top:10px;right:10px;
+      font-family:var(--font-hd);font-size:10px;font-weight:800;
+      letter-spacing:.08em;text-transform:uppercase;
+      background:rgba(249,115,22,0.2);color:#f97316;
+      padding:2px 8px;border-radius:4px;
+      border:1px solid rgba(249,115,22,0.3);
+    }
+    .sponsored-img{
+      width:100%;height:140px;object-fit:cover;
+      background:linear-gradient(135deg,#1a0800,#2d1200);
+      display:flex;align-items:center;justify-content:center;
+      position:relative;overflow:hidden;
+    }
+    .sponsored-img-inner{
+      width:100%;height:140px;
+      background:linear-gradient(135deg,#0f0800 0%,#1f0f00 50%,#0a0500 100%);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+    }
+    .sponsored-logo{
+      font-family:var(--font-hd);font-size:36px;font-weight:900;
+      letter-spacing:-.5px;color:#fff;
+    }
+    .sponsored-logo span{color:#f97316;}
+    .sponsored-tagline-sm{
+      font-size:11px;color:rgba(255,255,255,0.5);
+      letter-spacing:.08em;text-transform:uppercase;
+    }
+    .sponsored-body{padding:14px 14px 12px;}
+    .sponsored-title{
+      font-family:var(--font-hd);font-size:20px;font-weight:900;
+      color:#fff;margin-bottom:6px;line-height:1.2;
+      letter-spacing:.01em;
+    }
+    .sponsored-desc{
+      font-size:12px;color:rgba(255,255,255,0.6);
+      line-height:1.55;margin-bottom:12px;
+    }
+    .sponsored-cta{
+      display:inline-flex;align-items:center;gap:6px;
+      background:linear-gradient(135deg,#f97316,#ea580c);
+      color:#fff;font-family:var(--font-hd);
+      font-size:13px;font-weight:800;letter-spacing:.04em;
+      text-transform:uppercase;padding:8px 16px;
+      border-radius:8px;border:none;cursor:pointer;
+      transition:opacity .15s;
+    }
+    .sponsored-cta:hover{opacity:.88;}
+    .sponsored-features{
+      display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;
+    }
+    .sponsored-feat{
+      font-size:11px;color:rgba(255,255,255,0.5);
+      display:flex;align-items:center;gap:4px;
+    }
     /* TABLET */
     @media(min-width:540px){
       .card-list{display:grid;grid-template-columns:1fr 1fr;}
@@ -778,6 +846,35 @@
       <div id="poll-wrap" style="display:none"></div>
 
       <div id="hero-box"></div>
+      <!-- SPONSORED: PAMAFORCE -->
+      <div class="sponsored-card" onclick="window.open('https://pama-ai.vercel.app','_blank')" style="margin:14px 16px 0;">
+        <span class="sponsored-label">Sponsored</span>
+        <div class="sponsored-img">
+          <div class="sponsored-img-inner">
+            <div class="sponsored-logo">Pama<span>Force</span></div>
+            <div class="sponsored-tagline-sm">The Force That Keeps You Moving</div>
+            <!-- Decorative circles -->
+            <div style="position:absolute;width:120px;height:120px;border-radius:50%;background:rgba(249,115,22,0.08);top:-30px;right:-20px;"></div>
+            <div style="position:absolute;width:80px;height:80px;border-radius:50%;background:rgba(249,115,22,0.06);bottom:-20px;left:-10px;"></div>
+          </div>
+        </div>
+        <div class="sponsored-body">
+          <div class="sponsored-title">Build Unbreakable Discipline. Every Day.</div>
+          <div class="sponsored-features">
+            <span class="sponsored-feat">🔥 Streak tracking</span>
+            <span class="sponsored-feat">⚡ AI Coach</span>
+            <span class="sponsored-feat">🏆 Leaderboard</span>
+            <span class="sponsored-feat">🎯 Daily goals</span>
+          </div>
+          <div class="sponsored-desc">
+            PamaForce keeps you accountable with an AI coach that speaks your language — Gentle, Strict, Spiritual or Military. Build habits that stick.
+          </div>
+          <button class="sponsored-cta">
+            Try PamaForce Free →
+          </button>
+        </div>
+      </div>
+
       <div class="sec-hd">
         <h2><em>⚡</em>Latest Stories</h2>
         <button class="rfsh-btn" id="feed-rfsh">
