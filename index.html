@@ -342,7 +342,7 @@
     .nc-act.wa:hover{background:var(--green-bg);border-color:var(--green-border);}
 
     /* LOAD MORE */
-    #load-more{display:block;width:calc(100% - 32px);margin:16px auto 0;padding:12px;border-radius:var(--radius);border:1.5px solid var(--border2);background:var(--card);font-family:var(--font-hd);font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink3);box-shadow:var(--shadow-s);transition:all .15s;}
+    #load-more{display:none !important;}
     #load-more:hover{border-color:var(--ink);color:var(--ink);}
 
     /* SKELETON */
@@ -915,6 +915,14 @@ document.addEventListener('DOMContentLoaded',()=>{
   bindNav(); bindCats(); bindSearch(); bindInstall(); bindPTR();
   bindModal(); bindVoice(); bindDarkMode();
   bindNotifications(); bindOffline();
+  // Check if already allowed and fire test notif
+  if(Notification.permission==='granted' && 'serviceWorker' in navigator){
+    navigator.serviceWorker.ready.then(reg => {
+      if(reg.active){
+        reg.active.postMessage({type:'CHECK_NEWS'});
+      }
+    });
+  }
   renderSaved(); loadNews();
   loadRates(); initPoll(); startNewCheck();
   document.getElementById('mo-wa').innerHTML=waIco()+' WA';
@@ -1807,6 +1815,23 @@ function renderRelated(currentArt){
 
 
 
+
+
+// ── INFINITE SCROLL ──
+(function(){
+  const main = document.getElementById('main');
+  let scrollBusy = false;
+  main.addEventListener('scroll', function() {
+    if(scrollBusy || !nextPg) return;
+    const distFromBottom = main.scrollHeight - main.scrollTop - main.clientHeight;
+    if(distFromBottom < 300) {
+      scrollBusy = true;
+      loadNews(true).then(() => {
+        setTimeout(() => { scrollBusy = false; }, 1000);
+      }).catch(() => { scrollBusy = false; });
+    }
+  }, { passive: true });
+})();
 
 </script>
 </body>
