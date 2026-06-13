@@ -9,6 +9,10 @@ const CAT_MAP = {
   health: 'health',
 };
 
+// Simple in-memory cache to reduce API calls
+const cache = new Map();
+const CACHE_TTL = 8 * 60 * 1000; // 8 minutes
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
@@ -16,12 +20,20 @@ export default async function handler(req, res) {
 
   const { category, page, q } = req.query;
 
-  // Only cache the first page with no filters
+  // Cache headers
   if (!page && !q && !category) {
-    res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600');
+    res.setHeader('Cache-Control', 'public, s-maxage=480, stale-while-revalidate=960');
   } else {
-    // Paginated / search / category requests — never cache
     res.setHeader('Cache-Control', 'no-store');
+  }
+
+  // Check in-memory cache for first page requests
+  const cacheKey = `${category||'all'}-${q||''}-${page||'1'}`;
+  if (!page && !q) {
+    const cached = cache.get(cacheKey);
+    if (cached && Date.now() - cached.ts < CACHE_TTL) {
+      return res.json(cached.data);
+    }
   }
 
   try {
@@ -33,14 +45,8 @@ export default async function handler(req, res) {
       size: '10',
     });
 
-    if (q) {
-      params.set('q', q.slice(0, 100));
-    }
-
-    if (category && CAT_MAP[category]) {
-      params.set('category', CAT_MAP[category]);
-    }
-
+    if (q) params.set('q', q.slice(0, 100));
+    if (category && CAT_MAP[category]) params.set('category', CAT_MAP[category]);
     if (page) params.set('page', page);
 
     const apiUrl = `https://newsdata.io/api/1/latest?${params}`;
@@ -50,6 +56,16 @@ export default async function handler(req, res) {
       signal: AbortSignal.timeout(12000),
     });
 
+    // Handle rate limit gracefully
+    if (response.status === 429) {
+      return res.status(200).json({
+        status: 'error',
+        message: 'Daily news limit reached. Please try again later.',
+        articles: [],
+        nextPage: null,
+      });
+    }
+
     if (!response.ok) {
       throw new Error('NewsData API error: ' + response.status);
     }
@@ -57,6 +73,15 @@ export default async function handler(req, res) {
     const data = await response.json();
 
     if (data.status !== 'success') {
+      // NewsData returns error in status field sometimes
+      if (data.results?.status === 'limitReached') {
+        return res.status(200).json({
+          status: 'error',
+          message: 'Daily news limit reached. Please try again later.',
+          articles: [],
+          nextPage: null,
+        });
+      }
       throw new Error('API returned: ' + data.status);
     }
 
@@ -76,16 +101,23 @@ export default async function handler(req, res) {
         cat: item.category?.[0] || '',
       }));
 
-    return res.json({
+    const result = {
       status: 'ok',
       articles,
       nextPage: data.nextPage || null,
       total: data.totalResults || 0,
-    });
+    };
+
+    // Cache first page
+    if (!page && !q) {
+      cache.set(cacheKey, { ts: Date.now(), data: result });
+    }
+
+    return res.json(result);
 
   } catch (err) {
     console.error('Flash Nigeria API error:', err.message);
-    return res.status(500).json({
+    return res.status(200).json({
       status: 'error',
       message: err.message,
       articles: [],
