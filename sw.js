@@ -3,7 +3,7 @@
 
 const CACHE = 'flashng-v5';
 const ASSETS = ['/', '/index.html'];
-const MAX_DAILY = 2;
+const MAX_DAILY = 3;
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
@@ -14,7 +14,10 @@ self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys =>
       Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-    )
+    ).then(() => {
+      // Check for breaking news immediately on activation
+      return checkTrending();
+    })
   );
   self.clients.claim();
 });
@@ -41,7 +44,19 @@ self.addEventListener('notificationclick', e => {
 
 self.addEventListener('message', e => {
   if (e.data?.type === 'CHECK_NEWS') checkTrending();
+  if (e.data?.type === 'TEST_NOTIF') {
+    self.registration.showNotification('⚡ Flash Nigeria', {
+      body: '🇳🇬 Breaking alerts are ON! You will get notified of major Nigerian news — max 3 per day.',
+      icon: '/icons/icon-192x192.png',
+      badge: '/icons/icon-72x72.png',
+      tag: 'test-notification',
+      data: { url: 'https://flash-nigeria.vercel.app' }
+    });
+  }
 });
+
+// Use setInterval to periodically check (every 30 min)
+setInterval(() => { checkTrending(); }, 30 * 60 * 1000);
 
 async function checkTrending() {
   try {
@@ -87,21 +102,28 @@ async function checkTrending() {
 function isTrending(article, sentIds) {
   if (sentIds.includes(article.id)) return false;
   const title = (article.title || '').toLowerCase();
+
   const breakingWords = [
-    'breaking','just in','urgent','alert','bomb','attack','explosion',
-    'dead','killed','death','crash','fire','flood','kidnap','abduct',
-    'resign','arrested','impeach','coup','overthrow','emergency',
-    'crisis','war','protest','strike','shutdown','collapse',
-    'election result','wins election','declared winner',
-    'tinubu','president','governor','senate','supreme court',
-    'naira crash','naira falls','fuel price','fuel scarcity',
-    'super eagles','champions league final','world cup',
+    'breaking','just in','urgent','alert','flash',
+    'bomb','attack','explosion','dead','killed','death','crash',
+    'fire','flood','kidnap','abduct','robbery','shooting','gunmen',
+    'bandits','terrorism','hostage','resign','arrested','impeach',
+    'coup','overthrow','emergency','sacked','suspended','convicted',
+    'sentenced','jailed','wins election','declared winner','election result',
+    'tinubu','atiku','senate','supreme court','efcc','dss',
+    'naira','fuel price','fuel scarcity','subsidy','inflation',
+    'super eagles','afcon','world cup','champions league','osimhen',
+    'crisis','war','protest','strike','shutdown','collapse','disaster',
   ];
+
   if (!breakingWords.some(w => title.includes(w))) return false;
+
+  // Recent — within last 6 hours
   if (article.pub) {
     const age = (Date.now() - new Date(article.pub)) / 1000 / 60;
-    if (age > 120) return false;
+    if (age > 360) return false;
   }
+
   return true;
 }
 
