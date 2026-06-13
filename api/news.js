@@ -30,7 +30,7 @@ export default async function handler(req, res) {
       country: 'ng',
       language: 'en',
       image: '1',
-      size: '10',
+      size: '20',
     });
 
     if (q) {
@@ -42,6 +42,8 @@ export default async function handler(req, res) {
     }
 
     if (page) params.set('page', page);
+    // Allow frontend to request more articles
+    if (req.query.size) params.set('size', Math.min(parseInt(req.query.size)||20, 50).toString());
 
     const apiUrl = `https://newsdata.io/api/1/latest?${params}`;
 
