@@ -8,7 +8,6 @@ const SOURCES = [
   { name: 'Premium Times',   url: 'https://www.premiumtimesng.com/feed/' },
   { name: 'Guardian Nigeria',url: 'https://guardian.ng/feed/' },
   { name: 'Channels TV',     url: 'https://www.channelstv.com/feed/' },
-  { name: 'ThisDay',         url: 'https://www.thisdaylive.com/index.php/feed/' },
   { name: 'BusinessDay',     url: 'https://businessday.ng/feed/' },
 ];
 
@@ -155,6 +154,9 @@ export default async function handler(req, res) {
     let all = [];
     results.forEach(r => { if (r.status === 'fulfilled') all = all.concat(r.value); });
     all.sort((a,b) => new Date(b.pub) - new Date(a.pub));
+
+    // Remove articles with no image — empty boxes look bad
+    all = all.filter(a => a.img && a.img.startsWith('http'));
 
     // Deduplicate
     const seen = new Set();
