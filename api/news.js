@@ -13,6 +13,12 @@ const SOURCES = [
   { name: 'The Nation',      url: 'https://thenationonlineng.net/feed/' },
   { name: 'Pulse Nigeria',   url: 'https://www.pulse.ng/news/rss' },
   { name: 'Legit.ng',        url: 'https://www.legit.ng/rss/all.rss' },
+  // Entertainment heavy sources
+  { name: 'Pulse Entertainment', url: 'https://www.pulse.ng/entertainment/rss' },
+  { name: 'Legit Entertainment', url: 'https://www.legit.ng/rss/entertainment.rss' },
+  { name: 'Vanguard Entertainment', url: 'https://www.vanguardngr.com/entertainment/feed/' },
+  { name: 'Punch Entertainment', url: 'https://punchng.com/category/entertainment/feed/' },
+  { name: 'The Nation Entertainment', url: 'https://thenationonlineng.net/category/entertainment/feed/' },
 ];
 
 const CAT_KEYWORDS = {
