@@ -1,52 +1,64 @@
-// Flash Nigeria Service Worker — Smart Notifications
-// Max 2 alerts per day, only truly trending stories
+// Flash Nigeria Service Worker — v3
+// Smart notifications + offline caching
 
-const CACHE = 'flashng-v5';
-const ASSETS = ['/', '/index.html'];
+const CACHE = 'fn-v3';
+const OFFLINE_URLS = ['/', '/index.html', '/manifest.json'];
 const MAX_DAILY = 3;
+const NOTIF_K = 'fn_notif_daily';
 
+// ── INSTALL ──
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
+  e.waitUntil(
+    caches.open(CACHE).then(c => c.addAll(OFFLINE_URLS))
+  );
   self.skipWaiting();
 });
 
+// ── ACTIVATE ──
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys =>
       Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-    ).then(() => {
-      // Check for breaking news immediately on activation
-      return checkTrending();
-    })
+    ).then(() => checkTrending())
   );
   self.clients.claim();
 });
 
+// ── FETCH ──
 self.addEventListener('fetch', e => {
-  if (e.request.url.includes('/api/')) return;
-  e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
-});
-
-self.addEventListener('notificationclick', e => {
-  e.notification.close();
-  const url = e.notification.data?.url || 'https://flash-nigeria.vercel.app';
-  e.waitUntil(
-    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
-      for (const client of list) {
-        if (client.url.includes('flash-nigeria') && 'focus' in client) {
-          return client.focus();
-        }
-      }
-      if (clients.openWindow) return clients.openWindow(url);
+  if (e.request.method !== 'GET') return;
+  const url = new URL(e.request.url);
+  if (url.pathname.startsWith('/api/')) return;
+  e.respondWith(
+    caches.match(e.request).then(cached => {
+      const net = fetch(e.request).then(res => {
+        if (res.ok) caches.open(CACHE).then(c => c.put(e.request, res.clone()));
+        return res;
+      }).catch(() => cached);
+      return cached || net;
     })
   );
 });
 
+// ── NOTIFICATION CLICK ──
+self.addEventListener('notificationclick', e => {
+  e.notification.close();
+  e.waitUntil(
+    clients.matchAll({ type: 'window' }).then(cls => {
+      const url = e.notification.data?.url || 'https://flash-nigeria.vercel.app';
+      const c = cls.find(c => c.url.includes('flash-nigeria') && 'focus' in c);
+      if (c) return c.focus();
+      return clients.openWindow(url);
+    })
+  );
+});
+
+// ── MESSAGES ──
 self.addEventListener('message', e => {
   if (e.data?.type === 'CHECK_NEWS') checkTrending();
   if (e.data?.type === 'TEST_NOTIF') {
     self.registration.showNotification('⚡ Flash Nigeria', {
-      body: '🇳🇬 Breaking alerts are ON! You will get notified of major Nigerian news — max 3 per day.',
+      body: '🇳🇬 Breaking alerts are ON! You\'ll be notified of major Nigerian news — max 3 per day.',
       icon: '/icons/icon-192x192.png',
       badge: '/icons/icon-72x72.png',
       tag: 'test-notification',
@@ -55,90 +67,132 @@ self.addEventListener('message', e => {
   }
 });
 
-// Use setInterval to periodically check (every 30 min)
-setInterval(() => { checkTrending(); }, 30 * 60 * 1000);
-
-async function checkTrending() {
+// ── CHECK DAILY LIMIT ──
+function getDailyCount() {
   try {
-    const state = await getState();
-    const todayKey = new Date().toISOString().slice(0, 10);
-    if (state.day !== todayKey) {
-      state.day = todayKey; state.count = 0; state.sentIds = [];
-    }
-    if (state.count >= MAX_DAILY) return;
-
-    const r = await fetch('https://flash-nigeria.vercel.app/api/news');
-    if (!r.ok) return;
-    const d = await r.json();
-    if (d.status !== 'ok' || !d.articles?.length) return;
-
-    const trending = d.articles.find(a => isTrending(a, state.sentIds));
-    if (!trending) return;
-
-    await self.registration.showNotification('⚡ Flash Nigeria', {
-      body: trending.title,
-      icon: '/icons/icon-192x192.png',   // ✅ fixed path
-      badge: '/icons/icon-72x72.png',    // ✅ fixed path
-      tag: trending.id,
-      renotify: false,
-      requireInteraction: false,
-      silent: false,
-      data: { url: trending.link || 'https://flash-nigeria.vercel.app', id: trending.id },
-      actions: [
-        { action: 'read', title: '📰 Read now' },
-        { action: 'dismiss', title: 'Dismiss' }
-      ]
-    });
-
-    state.count++;
-    state.sentIds.push(trending.id);
-    await setState(state);
-
-  } catch (err) {
-    console.error('Flash Nigeria SW error:', err);
-  }
+    const d = JSON.parse(self.__notifData || '{}');
+    const today = new Date().toDateString();
+    if (d.date !== today) return 0;
+    return d.count || 0;
+  } catch(e) { return 0; }
 }
 
+function incrementDailyCount() {
+  try {
+    const today = new Date().toDateString();
+    const count = getDailyCount() + 1;
+    self.__notifData = JSON.stringify({ date: today, count });
+  } catch(e) {}
+}
+
+// ── BREAKING NEWS DETECTION ──
 function isTrending(article, sentIds) {
   if (sentIds.includes(article.id)) return false;
   const title = (article.title || '').toLowerCase();
 
-  const breakingWords = [
-    'breaking','just in','urgent','alert','flash',
-    'bomb','attack','explosion','dead','killed','death','crash',
-    'fire','flood','kidnap','abduct','robbery','shooting','gunmen',
-    'bandits','terrorism','hostage','resign','arrested','impeach',
-    'coup','overthrow','emergency','sacked','suspended','convicted',
-    'sentenced','jailed','wins election','declared winner','election result',
-    'tinubu','atiku','senate','supreme court','efcc','dss',
-    'naira','fuel price','fuel scarcity','subsidy','inflation',
-    'super eagles','afcon','world cup','champions league','osimhen',
-    'crisis','war','protest','strike','shutdown','collapse','disaster',
+  // HIGH PRIORITY — Always notify immediately
+  const highPriority = [
+    // Death & violence
+    'dead','killed','death','bomb','attack','explosion','shooting','gunmen',
+    'massacre','hostage','kidnap','abduct','assassination',
+    // Major political events
+    'impeach','coup','overthrow','resign','sacked','suspended',
+    'arrested','convicted','sentenced','jailed',
+    'wins election','declared winner','election result',
+    // Economic emergencies
+    'naira crash','naira falls','fuel scarcity','fuel price hike',
+    'fuel subsidy','economic emergency','recession',
+    // Natural disasters
+    'flood','earthquake','disaster','collapse','fire outbreak',
+    // Key Nigerian figures
+    'tinubu','president tinubu','vice president','chief justice',
+    // Legal
+    'supreme court rules','court orders','efcc arrests',
   ];
 
-  if (!breakingWords.some(w => title.includes(w))) return false;
+  // MEDIUM PRIORITY — Notify if truly breaking
+  const mediumPriority = [
+    'breaking','just in','urgent','alert','flash',
+    'crash','fire','flood','protest','strike','shutdown',
+    'atiku','obi','senate','house of reps','efcc','dss','nnpc',
+    'naira','fuel price','subsidy','inflation','cbn',
+    'super eagles','afcon','world cup','champions league',
+    'crisis','war','emergency','overthrow',
+  ];
 
-  // Recent — within last 6 hours
+  const isHighPriority = highPriority.some(w => title.includes(w));
+  const isMediumPriority = mediumPriority.some(w => title.includes(w));
+
+  if (!isHighPriority && !isMediumPriority) return false;
+
+  // Must be recent — within last 3 hours for high, 2 hours for medium
   if (article.pub) {
-    const age = (Date.now() - new Date(article.pub)) / 1000 / 60;
-    if (age > 360) return false;
+    const age = (Date.now() - new Date(article.pub)) / 1000 / 60; // minutes
+    if (isHighPriority && age > 180) return false;
+    if (isMediumPriority && age > 120) return false;
   }
 
-  return true;
+  return isHighPriority ? 'high' : 'medium';
 }
 
-async function getState() {
+// ── FETCH & CHECK TRENDING ──
+async function checkTrending() {
+  if (getDailyCount() >= MAX_DAILY) return;
+  if (self.Notification?.permission !== 'granted') return;
+
   try {
-    const cache = await caches.open('flashng-state');
-    const r = await cache.match('/state');
-    if (r) return await r.json();
-  } catch {}
-  return { day: '', count: 0, sentIds: [] };
+    const res = await fetch('https://flash-nigeria.vercel.app/api/news', {
+      cache: 'no-store'
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (!data.articles?.length) return;
+
+    // Get already-sent IDs
+    let sentIds = [];
+    try {
+      const stored = await self.registration.getNotifications({ tag: 'flash-sent' });
+      sentIds = stored.map(n => n.data?.id).filter(Boolean);
+    } catch(e) {}
+
+    // Find best breaking story
+    let bestArticle = null;
+    let bestPriority = null;
+
+    for (const article of data.articles) {
+      const priority = isTrending(article, sentIds);
+      if (priority === 'high') {
+        bestArticle = article;
+        bestPriority = 'high';
+        break; // High priority — send immediately
+      }
+      if (priority === 'medium' && !bestArticle) {
+        bestArticle = article;
+        bestPriority = 'medium';
+      }
+    }
+
+    if (!bestArticle) return;
+
+    const emoji = bestPriority === 'high' ? '🚨' : '⚡';
+    const prefix = bestPriority === 'high' ? 'BREAKING' : 'Flash Nigeria';
+
+    await self.registration.showNotification(`${emoji} ${prefix}`, {
+      body: bestArticle.title,
+      icon: '/icons/icon-192x192.png',
+      badge: '/icons/icon-72x72.png',
+      tag: `flash-${bestArticle.id}`,
+      data: { url: bestArticle.link, id: bestArticle.id },
+      requireInteraction: bestPriority === 'high', // High priority stays on screen
+      vibrate: bestPriority === 'high' ? [200,100,200,100,200] : [200,100,200],
+    });
+
+    incrementDailyCount();
+
+  } catch(e) {
+    console.error('SW checkTrending error:', e);
+  }
 }
 
-async function setState(state) {
-  const cache = await caches.open('flashng-state');
-  await cache.put('/state', new Response(JSON.stringify(state), {
-    headers: { 'Content-Type': 'application/json' }
-  }));
-}
+// Check every 30 minutes
+setInterval(() => checkTrending(), 30 * 60 * 1000);
