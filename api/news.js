@@ -16,12 +16,70 @@ const SOURCES = [
 ];
 
 const CAT_KEYWORDS = {
-  politics:      ['politic','government','senate','president','governor','election','efcc','minister','tinubu','atiku','obi','police','army','military','security','court','judge','law','constitution','national assembly','reps','democracy','party','pdp','apc','labour party','impeach','resign','sack','arrest','detain','prison','jail'],
-  business:      ['business','economy','naira','dollar','inflation','fuel','subsidy','oil','bank','market','trade','cbn','fintech','gdp','revenue','tax','budget','import','export','stock','exchange','price','cost','million','billion','pension','asset','equity','securities','frc','investment','finance','financial','monetary','fiscal','debt','loan','credit','mou','procurement'],
-  sports:        ['sport','football','soccer','eagle','afcon','world cup','premier','league','osimhen','npfl','basketball','tennis','athletics','cricket','golf','boxing','wrestling','champion','match','game','goal','score','fifa','caf'],
-  entertainment: ['entertainment','nollywood','music','celebrity','film','movie','award','fashion','afrobeat','bbnaija','big brother','singer','actor','actress','rapper','concert','album','song','dance','comedy','joke'],
-  technology:    ['technolog','digital','crypto','bitcoin','ai ','artificial intelligence','startup','internet','software','app ','apps','cyber','hack','data','cloud','5g','robot','drone','satellite'],
-  health:        ['health','medical','hospital','disease','covid','vaccine','cancer','mental','wellness','doctor','nurse','patient','drug','medicine','surgery','outbreak','epidemic','virus','treatment'],
+  politics: [
+    'politic','government','senate','president','governor','election','efcc','minister',
+    'tinubu','atiku','obi','buhari','police','army','military','security','court','judge',
+    'law','constitution','national assembly','house of reps','democracy','party','pdp',
+    'apc','labour party','impeach','resign','sack','arrest','detain','prison','jail',
+    'lawmaker','legislation','bill','state','local government','lga','ward','council',
+    'commissioner','speaker','deputy','federal','abuja','aso rock','national','protest',
+    'strike','riot','coup','overthrow','presidency','vice president','chief of staff',
+    'dss','nsa','ipob','bandits','terrorism','insurgency','boko haram','iswap',
+    'kidnap','ransom','hostage','abduct','shooting','gunmen','troops','soldiers',
+    'supreme court','appeal court','tribunal','judge','justice','ruling','verdict',
+    'firs','customs','immigration','nnpc','fgn','dpr','nuprc',
+  ],
+  business: [
+    'business','economy','naira','dollar','inflation','fuel','subsidy','oil','bank',
+    'market','trade','cbn','fintech','gdp','revenue','tax','budget','import','export',
+    'stock','exchange','price','cost','million','billion','pension','asset','equity',
+    'securities','investment','finance','financial','monetary','fiscal','debt','loan',
+    'credit','procurement','dangote','zenith','gtb','access bank','uba','firstbank',
+    'fmcg','manufacturing','agriculture','farming','harvest','crude','barrel','brent',
+    'forex','interest rate','mpc','monetary','bonds','treasury','pension','insurance',
+    'startup','venture','capital','sme','entrepreneur','industry','company','firm',
+    'profit','loss','revenue','quarterly','annual','report','shares','dividend',
+    'power','electricity','nerc','aedc','eko','jos','ibadan distribution',
+  ],
+  sports: [
+    'sport','football','soccer','super eagle','afcon','world cup','premier league',
+    'osimhen','napoli','npfl','basketball','tennis','athletics','cricket','golf',
+    'boxing','wrestling','champion','match','game','goal','score','fifa','caf',
+    'galatasaray','arsenal','chelsea','manchester','liverpool','real madrid',
+    'barcelona','transfer','signing','coach','manager','stadium','league',
+    'ranger','ranger rover','cup','trophy','medal','olympics','commonwealth',
+    'track','field','relay','swim','nff','nba','wnba','ipl','formula one','f1',
+    'felix','blessing','tobi','brume','asaba','warri','lagos','abuja tournament',
+    'fan','supporter','jersey','boots','pitch','referee','var','penalty',
+  ],
+  entertainment: [
+    'entertainment','nollywood','music','celebrity','film','movie','award','fashion',
+    'afrobeat','bbnaija','big brother','singer','actor','actress','rapper','concert',
+    'album','song','dance','comedy','joke','wizkid','davido','burna boy','tiwa',
+    'olamide','rema','tems','ckay','asake','fireboy','omah lay','simi','yemi alade',
+    'genevieve','omotola','funke akindele','ramsey','ini edo','mercy johnson',
+    'rita dominic','kate henshaw','toyin','eniola badmus','odunlade',
+    'grammy','headies','amvca','afrima','vgma','kora','oscars','emmy',
+    'instagram','tiktok','viral','trending','skit','content creator','influencer',
+    'fashion week','model','designer','style','red carpet','premiere','box office',
+    'streaming','netflix','amazon prime','showmax','youtube','spotify',
+  ],
+  technology: [
+    'technolog','digital','crypto','bitcoin','blockchain','ai ','artificial intelligence',
+    'startup','internet','software','app ','apps','cyber','hack','data','cloud','5g',
+    'robot','drone','satellite','elon musk','spacex','tesla','openai','chatgpt',
+    'meta','google','microsoft','apple','samsung','iphone','android','laptop',
+    'fintech','paystack','flutterwave','opay','kuda','moniepoint','palmpay',
+    'e-commerce','jumia','konga','jiji','social media','facebook','twitter','x ',
+  ],
+  health: [
+    'health','medical','hospital','disease','covid','vaccine','cancer','mental',
+    'wellness','doctor','nurse','patient','drug','medicine','surgery','outbreak',
+    'epidemic','virus','treatment','who','ncdc','fmoh','ministry of health',
+    'malaria','cholera','monkeypox','ebola','hiv','aids','tuberculosis','tb',
+    'diabetes','hypertension','maternal','infant','mortality','nutrition',
+    'federal medical centre','teaching hospital','clinic','pharmacy','nma',
+  ],
 };
 
 function detectCategory(title, desc) {
@@ -104,7 +162,16 @@ function parseRSS(xml, sourceName) {
     const img = extractImage(item, rawDesc + contentEncoded);
 
     const id = Buffer.from(link).toString('base64').slice(0,22);
-    const cat = detectCategory(title, desc);
+    // Try RSS category tag first, then detect from text
+    const rssCategory = get('category').toLowerCase();
+    let cat = '';
+    if (rssCategory.includes('sport')) cat = 'sports';
+    else if (rssCategory.includes('entertain') || rssCategory.includes('nollywood') || rssCategory.includes('music')) cat = 'entertainment';
+    else if (rssCategory.includes('politic') || rssCategory.includes('government')) cat = 'politics';
+    else if (rssCategory.includes('business') || rssCategory.includes('economy') || rssCategory.includes('finance')) cat = 'business';
+    else if (rssCategory.includes('tech') || rssCategory.includes('digital')) cat = 'technology';
+    else if (rssCategory.includes('health') || rssCategory.includes('medical')) cat = 'health';
+    else cat = detectCategory(title, desc);
 
     let pubDate = '';
     try { pubDate = pub ? new Date(pub).toISOString() : new Date().toISOString(); }
