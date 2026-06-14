@@ -19,6 +19,9 @@ const SOURCES = [
   { name: 'Vanguard Entertainment', url: 'https://www.vanguardngr.com/entertainment/feed/' },
   { name: 'Punch Entertainment', url: 'https://punchng.com/category/entertainment/feed/' },
   { name: 'The Nation Entertainment', url: 'https://thenationonlineng.net/category/entertainment/feed/' },
+  { name: 'Vanguard Sports', url: 'https://www.vanguardngr.com/sports/feed/' },
+  { name: 'Punch Sports', url: 'https://punchng.com/category/sports/feed/' },
+  { name: 'Complete Sports', url: 'https://www.completesports.com/feed/' },
 ];
 
 const CAT_KEYWORDS = {
@@ -135,7 +138,7 @@ function parseRSS(xml, sourceName) {
   // Get all items
   const itemMatches = [...xml.matchAll(/<item[\s\S]*?<\/item>/gi)];
 
-  for (const itemMatch of itemMatches.slice(0, 15)) {
+  for (const itemMatch of itemMatches.slice(0, 20)) {
     const item = itemMatch[0];
 
     const get = (tag) => {
@@ -200,7 +203,7 @@ export default async function handler(req, res) {
 
   const { category, page } = req.query;
   const pageNum = parseInt(page) || 1;
-  const pageSize = 15;
+  const pageSize = 20;
   const cacheKey = `rss-${category||'all'}-${pageNum}`;
 
   // Return cached if fresh
@@ -249,26 +252,28 @@ export default async function handler(req, res) {
       seen.add(key); return true;
     });
 
-    // Interleave sources so feed is mixed — not all Vanguard first
-    // Group by source then round-robin pick one from each
-    const bySource = {};
-    all.forEach(a => {
-      if (!bySource[a.source]) bySource[a.source] = [];
-      bySource[a.source].push(a);
-    });
-    const sourceNames = Object.keys(bySource);
-    const interleaved = [];
-    let hasMore = true;
-    while (hasMore) {
-      hasMore = false;
-      for (const src of sourceNames) {
-        if (bySource[src].length > 0) {
-          interleaved.push(bySource[src].shift());
-          hasMore = true;
+    // Interleave sources for ALL tab — sort by date for category tabs
+    if (!category || category === 'all') {
+      const bySource = {};
+      all.forEach(a => {
+        if (!bySource[a.source]) bySource[a.source] = [];
+        bySource[a.source].push(a);
+      });
+      const sourceNames = Object.keys(bySource);
+      const interleaved = [];
+      let hasMore = true;
+      while (hasMore) {
+        hasMore = false;
+        for (const src of sourceNames) {
+          if (bySource[src].length > 0) {
+            interleaved.push(bySource[src].shift());
+            hasMore = true;
+          }
         }
       }
+      all = interleaved;
     }
-    all = interleaved;
+    // For category pages keep date sort (already sorted above)
 
     // Store ALL articles in full cache
     cache.set(fullCacheKey, { ts: Date.now(), data: all });
