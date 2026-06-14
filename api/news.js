@@ -9,6 +9,10 @@ const SOURCES = [
   { name: 'Guardian Nigeria',url: 'https://guardian.ng/feed/' },
   { name: 'Channels TV',     url: 'https://www.channelstv.com/feed/' },
   { name: 'BusinessDay',     url: 'https://businessday.ng/feed/' },
+  { name: 'Tribune',         url: 'https://tribuneonlineng.com/feed/' },
+  { name: 'The Nation',      url: 'https://thenationonlineng.net/feed/' },
+  { name: 'Pulse Nigeria',   url: 'https://www.pulse.ng/news/rss' },
+  { name: 'Legit.ng',        url: 'https://www.legit.ng/rss/all.rss' },
 ];
 
 const CAT_KEYWORDS = {
