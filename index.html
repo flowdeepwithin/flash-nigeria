@@ -881,6 +881,7 @@
           <a href="mailto:therealmrcommander@gmail.com" class="feed-footer-link">✉️ Contact</a>
           <a href="#" onclick="switchView('about');return false;" class="feed-footer-link">ℹ️ About</a>
           <a href="https://x.com/FlashNigeriaNG" target="_blank" rel="noopener" class="feed-footer-link">𝕏 Follow</a>
+          <a href="https://web.facebook.com/profile.php?id=61590895346252" target="_blank" rel="noopener" class="feed-footer-link" style="color:#1877f2;">📘 Facebook</a>
         </div>
       </div>
     </div>
@@ -1872,7 +1873,19 @@ function bindVoice(){
   });
   if(synth&&synth.onvoiceschanged!==undefined) synth.onvoiceschanged=()=>synth.getVoices();
 }
-function openVP(){document.getElementById('vp').classList.add('on'); document.body.style.overflow='hidden'; setTimeout(()=>{document.getElementById('vp-inp').focus(); syncVPPidginBtn();},300);}
+function openVP(){
+  // Reset voice panel to clean state every time
+  document.getElementById('vp-inp').value = '';
+  document.getElementById('vp-results').style.display = 'none';
+  document.getElementById('vp-stop').style.display = 'none';
+  document.getElementById('vp-status').textContent = '';
+  document.getElementById('vp-status').className = 'vp-status';
+  vpArts = [];
+  stopSpeak();
+  document.getElementById('vp').classList.add('on');
+  document.body.style.overflow = 'hidden';
+  setTimeout(()=>{ document.getElementById('vp-inp').focus(); }, 300);
+}
 function closeVP(){stopSpeak(); stopListen(); document.getElementById('vp').classList.remove('on'); document.body.style.overflow='';}
 function submitVPQuery(){const q=document.getElementById('vp-inp').value.trim(); if(!q){setStatus('Type or speak a query first','err'); return;} processVPQuery(q);}
 function toggleMic(){
