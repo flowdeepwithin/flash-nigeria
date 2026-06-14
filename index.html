@@ -1658,9 +1658,9 @@ function cardHTML(a,i){
   const trending=isTrending(a); const rt=readTime(a.desc); const title=getTitle(a);
   const tagClass=cc||'';
   return`<div class="nc">
-    <div class="nc-img">
-      ${a.img?`<img src="${a.img}" alt="" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">`:``}
-      <div class="nc-img-ph" style="${a.img?'display:none':''}">${catEmoji(a.cat)}</div>
+    <div class="nc-img" style="${['entertainment','sports','politics','business'].includes(a.img)?`background:${a.img==='entertainment'?'linear-gradient(135deg,#7c3aed,#a855f7)':a.img==='sports'?'linear-gradient(135deg,#059669,#10b981)':a.img==='politics'?'linear-gradient(135deg,#1d4ed8,#3b82f6)':'linear-gradient(135deg,#d97706,#f59e0b)'}`:''}">
+      ${!['entertainment','sports','politics','business'].includes(a.img)&&a.img?`<img src="${a.img}" alt="" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">`:``}
+      <div class="nc-img-ph" style="${!['entertainment','sports','politics','business'].includes(a.img)&&a.img?'display:none':''};font-size:32px;">${['entertainment','sports','politics','business'].includes(a.img)?catEmoji(a.img):catEmoji(a.cat)}</div>
       ${trending?`<div class="nc-fire">🔥</div>`:''}
     </div>
     <div class="nc-body">
