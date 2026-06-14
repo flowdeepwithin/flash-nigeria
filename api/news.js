@@ -166,6 +166,27 @@ export default async function handler(req, res) {
       seen.add(key); return true;
     });
 
+    // Interleave sources so feed is mixed — not all Vanguard first
+    // Group by source then round-robin pick one from each
+    const bySource = {};
+    all.forEach(a => {
+      if (!bySource[a.source]) bySource[a.source] = [];
+      bySource[a.source].push(a);
+    });
+    const sourceNames = Object.keys(bySource);
+    const interleaved = [];
+    let hasMore = true;
+    while (hasMore) {
+      hasMore = false;
+      for (const src of sourceNames) {
+        if (bySource[src].length > 0) {
+          interleaved.push(bySource[src].shift());
+          hasMore = true;
+        }
+      }
+    }
+    all = interleaved;
+
     // Filter by category
     if (category && category !== 'all') {
       all = all.filter(a => a.cat === category);
