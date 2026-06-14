@@ -1386,7 +1386,7 @@ async function loadNews(paginate=false){
       updateTicker(fresh); renderFeed(); updateCatCounts(); renderMostRead();
       // Show/hide Load More button
       var lmBtn = document.getElementById('load-more');
-      if(lmBtn) lmBtn.style.display = nextPg ? 'block' : 'none';
+      if(lmBtn){ lmBtn.style.display = nextPg ? 'block' : 'none'; lmBtn.textContent='Load More Stories'; }
     } else throw new Error(d.message||'API error');
   }catch(e){
     if(!paginate) renderErr(e.message);
@@ -2141,31 +2141,115 @@ function renderRelated(currentArt){
 
 // Infinite scroll + Load More button
 (function(){
-  // Load More button click
   var lmBtn = document.getElementById('load-more');
   if(lmBtn){
     lmBtn.addEventListener('click', function(){
-      if(nextPg) loadNews(true);
+      if(nextPg){ lmBtn.textContent='Loading...'; loadNews(true); }
     });
   }
-
-  // Auto scroll detection
   var scrollEl = document.getElementById('main');
   var scrollBusy = false, scrollLast = 0;
   scrollEl.addEventListener('scroll', function(){
-    if(scrollBusy || !nextPg) return;
+    if(scrollBusy) return;
+    if(!nextPg) return;
     var now = Date.now();
     if(now - scrollLast < 3000) return;
-    var dist = scrollEl.scrollHeight - scrollEl.scrollTop - scrollEl.clientHeight;
-    if(dist < 300){
+    var scrolled = scrollEl.scrollTop + scrollEl.clientHeight;
+    var total = scrollEl.scrollHeight;
+    if(scrolled >= total - 400){
       scrollBusy = true;
       scrollLast = now;
       loadNews(true).then(function(){
-        setTimeout(function(){ scrollBusy = false; }, 2000);
-      }).catch(function(){ scrollBusy = false; });
+        scrollBusy = false;
+      }).catch(function(){
+        scrollBusy = false;
+      });
     }
-  }, {passive: true});
+  }, {passive:true});
 })();
+
+// -- NOTIFICATION SYSTEM --
+function quickToggleNotif(){
+  if(Notification.permission==='denied'){
+    toast('Blocked! Go to phone Settings > Browser > Notifications > Enable Flash Nigeria');
+    return;
+  }
+  if(Notification.permission!=='granted'){
+    Notification.requestPermission().then(function(p){
+      if(p==='granted'){
+        localStorage.removeItem('fn_notif_off');
+        updateNotifHdrBtn();
+        toast('Breaking alerts ON!');
+        if(navigator.serviceWorker&&navigator.serviceWorker.controller){
+          navigator.serviceWorker.controller.postMessage({type:'TEST_NOTIF'});
+        }
+      } else {
+        toast('Notifications blocked');
+        updateNotifHdrBtn();
+      }
+    });
+    return;
+  }
+  var isOn = localStorage.getItem('fn_notif_off')!=='1';
+  if(isOn){
+    localStorage.setItem('fn_notif_off','1');
+    toast('Breaking alerts OFF');
+  } else {
+    localStorage.removeItem('fn_notif_off');
+    toast('Breaking alerts ON!');
+  }
+  updateNotifHdrBtn();
+  updateNotifUI();
+}
+
+function updateNotifHdrBtn(){
+  var btn=document.getElementById('notif-hdr-btn');
+  var txt=document.getElementById('notif-hdr-txt');
+  if(!btn) return;
+  var isOff=localStorage.getItem('fn_notif_off')==='1';
+  var isDenied=Notification.permission==='denied';
+  var isGranted=Notification.permission==='granted';
+  if(isGranted&&!isOff){
+    btn.style.background='var(--gold)';
+    btn.style.borderColor='var(--gold)';
+    btn.style.color='#fff';
+    if(txt) txt.textContent='ON';
+  } else {
+    btn.style.background='rgba(255,255,255,0.06)';
+    btn.style.borderColor='var(--border2)';
+    btn.style.color='var(--ink4)';
+    if(txt) txt.textContent='OFF';
+  }
+}
+
+function updateNotifUI(){
+  var btn=document.getElementById('notif-toggle-btn');
+  var dot=document.getElementById('notif-toggle-dot');
+  var txt=document.getElementById('notif-status-text');
+  if(!btn||!txt) return;
+  var isOff=localStorage.getItem('fn_notif_off')==='1';
+  if(Notification.permission==='granted'&&!isOff){
+    btn.style.background='var(--gold)';
+    if(dot) dot.style.left='22px';
+    txt.textContent='Breaking alerts are ON. Max 3 per day.';
+  } else if(Notification.permission==='granted'&&isOff){
+    btn.style.background='var(--border2)';
+    if(dot) dot.style.left='3px';
+    txt.textContent='Alerts paused. Tap bell to resume.';
+  } else if(Notification.permission==='denied'){
+    btn.style.background='var(--border2)';
+    if(dot) dot.style.left='3px';
+    txt.textContent='Blocked in browser. Go to Settings to enable.';
+  } else {
+    btn.style.background='var(--border2)';
+    if(dot) dot.style.left='3px';
+    txt.textContent='Tap bell icon to enable breaking news alerts';
+  }
+}
+
+function toggleNotifications(){
+  quickToggleNotif();
+}
 
 </script>
 </body>
