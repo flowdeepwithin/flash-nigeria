@@ -194,7 +194,7 @@ export default async function handler(req, res) {
 
   const { category, page } = req.query;
   const pageNum = parseInt(page) || 1;
-  const pageSize = 20;
+  const pageSize = 15;
   const cacheKey = `rss-${category||'all'}-${pageNum}`;
 
   // Return cached if fresh
@@ -204,6 +204,13 @@ export default async function handler(req, res) {
     return res.json(cached.data);
   }
 
+  // Check full article cache first (stores ALL articles)
+  const fullCacheKey = `rss-full-${category||'all'}`;
+  let all = [];
+  const fullCached = cache.get(fullCacheKey);
+  if (fullCached && Date.now() - fullCached.ts < CACHE_TTL) {
+    all = fullCached.data;
+  } else {
   try {
     // Fetch all RSS feeds in parallel
     const results = await Promise.allSettled(
@@ -222,7 +229,6 @@ export default async function handler(req, res) {
     );
 
     // Combine & sort
-    let all = [];
     results.forEach(r => { if (r.status === 'fulfilled') all = all.concat(r.value); });
     all.sort((a,b) => new Date(b.pub) - new Date(a.pub));
 
@@ -258,6 +264,14 @@ export default async function handler(req, res) {
     }
     all = interleaved;
 
+    // Store ALL articles in full cache
+    cache.set(fullCacheKey, { ts: Date.now(), data: all });
+  } catch(err) {
+    console.error('RSS fetch error:', err.message);
+    return res.status(200).json({ status:'error', message:err.message, articles:[], nextPage:null });
+  }
+  } // end else
+
     // Filter by category
     if (category && category !== 'all') {
       all = all.filter(a => a.cat === category);
@@ -274,8 +288,4 @@ export default async function handler(req, res) {
     res.setHeader('Cache-Control', 'public, s-maxage=600');
     return res.json(data);
 
-  } catch(err) {
-    console.error('RSS error:', err.message);
-    return res.status(200).json({ status:'error', message:err.message, articles:[], nextPage:null });
-  }
 }
