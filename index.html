@@ -1422,7 +1422,7 @@ function startNewCheck(){
         }
       }
     }catch(e){}
-  },10*60*1000);
+  },3*60*1000);
   document.getElementById('new-banner').addEventListener('click',()=>{
     document.getElementById('new-banner').classList.remove('show');
     if(pendingArts.length){arts=pendingArts; pendingArts=[]; renderFeed(); renderMostRead();}
@@ -2124,26 +2124,7 @@ function renderRelated(currentArt){
 
 
 // ── INFINITE SCROLL — conservative to save API calls ──
-(function(){
-  const main = document.getElementById('main');
-  let scrollBusy = false;
-  let lastLoad = 0;
-  const MIN_INTERVAL = 5000; // min 5 seconds between loads
-  main.addEventListener('scroll', function() {
-    if(scrollBusy || !nextPg) return;
-    const now = Date.now();
-    if(now - lastLoad < MIN_INTERVAL) return;
-    // Only trigger when very close to bottom (100px)
-    const distFromBottom = main.scrollHeight - main.scrollTop - main.clientHeight;
-    if(distFromBottom < 100) {
-      scrollBusy = true;
-      lastLoad = now;
-      loadNews(true).then(() => {
-        setTimeout(() => { scrollBusy = false; }, 2000);
-      }).catch(() => { scrollBusy = false; });
-    }
-  }, { passive: true });
-})();
+
 
 // Infinite scroll + Load More button
 (function(){
