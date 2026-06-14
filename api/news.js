@@ -101,33 +101,32 @@ function detectCategory(title, desc) {
 }
 
 function extractImage(item, description) {
-  // Try multiple image sources in order of reliability
   const patterns = [
-    // Media content
-    /(<media:content[^>]+url=["'])([^"']+)(["'])/i,
-    // Media thumbnail  
-    /(<media:thumbnail[^>]+url=["'])([^"']+)(["'])/i,
-    // Enclosure
-    /(<enclosure[^>]+url=["'])([^"']+)["'][^>]*type=["']image/i,
-    // Image in content:encoded
-    /<img[^>]+src=["']([^"']+)["']/i,
+    /media:content[^>]+url=["']([^"']+)["']/i,
+    /media:thumbnail[^>]+url=["']([^"']+)["']/i,
+    /<enclosure[^>]+url=["']([^"']+)["'][^>]*type=["']image/i,
+    /<enclosure[^>]+type=["']image[^"']*["'][^>]+url=["']([^"']+)["']/i,
   ];
 
   for (const p of patterns) {
     const m = item.match(p);
-    if (m) {
-      const url = m[2] || m[1];
-      if (url && url.startsWith('http') && !url.includes('pixel') && !url.includes('1x1')) {
-        return url.trim();
-      }
+    if (m?.[1] && m[1].startsWith('http') && !m[1].includes('1x1') && !m[1].includes('pixel')) {
+      return m[1].trim();
     }
   }
 
-  // Try in description HTML
-  if (description) {
-    const imgMatch = description.match(/<img[^>]+src=["']([^"']+)["']/i);
-    if (imgMatch && imgMatch[1].startsWith('http')) return imgMatch[1].trim();
+  // Try all img tags in description/content
+  const allText = description || '';
+  const imgMatches = [...allText.matchAll(/<img[^>]+src=["']([^"']+)["']/gi)];
+  for (const m of imgMatches) {
+    if (m[1].startsWith('http') && !m[1].includes('1x1') && !m[1].includes('pixel') && !m[1].includes('s.w.org/images/core')) {
+      return m[1].trim();
+    }
   }
+
+  // Try srcset
+  const srcset = allText.match(/srcset=["']([^"' ]+)/i);
+  if (srcset?.[1]?.startsWith('http')) return srcset[1].trim();
 
   return '';
 }
@@ -241,8 +240,19 @@ export default async function handler(req, res) {
     results.forEach(r => { if (r.status === 'fulfilled') all = all.concat(r.value); });
     all.sort((a,b) => new Date(b.pub) - new Date(a.pub));
 
-    // Remove articles with no image — empty boxes look bad
-    all = all.filter(a => a.img && a.img.startsWith('http'));
+    // For articles with no image — use category placeholder
+    all = all.map(a => {
+      if (!a.img || !a.img.startsWith('http')) {
+        // Give entertainment/sports a branded placeholder color
+        // so they still show but with style
+        if (a.cat === 'entertainment') a.img = 'entertainment';
+        else if (a.cat === 'sports') a.img = 'sports';
+        else if (a.cat === 'politics') a.img = 'politics';
+        else if (a.cat === 'business') a.img = 'business';
+        else return null; // Remove uncategorised articles with no image
+      }
+      return a;
+    }).filter(Boolean);
 
     // Deduplicate
     const seen = new Set();
