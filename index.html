@@ -1040,16 +1040,21 @@
       <div class="vp-status" id="vp-status"></div>
     </div>
     <div class="vp-hints" id="vp-hints">
-      <button class="vp-hint">News on judiciary</button>
-      <button class="vp-hint">Nigeria security</button>
-      <button class="vp-hint">Celebrity news</button>
-      <button class="vp-hint">Economy today</button>
-      <button class="vp-hint">Super Eagles</button>
-      <button class="vp-hint">Crime news</button>
       <button class="vp-hint">Politics today</button>
-      <button class="vp-hint">Vanguard breaking</button>
+      <button class="vp-hint">Business news</button>
+      <button class="vp-hint">Sports headlines</button>
+      <button class="vp-hint">Celebrity news</button>
       <button class="vp-hint">Health news</button>
-      <button class="vp-hint">Business Nigeria</button>
+      <button class="vp-hint">Nigeria security</button>
+      <button class="vp-hint">Vanguard</button>
+      <button class="vp-hint">Punch</button>
+      <button class="vp-hint">Daily Post</button>
+      <button class="vp-hint">Premium Times</button>
+      <button class="vp-hint">Guardian Nigeria</button>
+      <button class="vp-hint">Channels TV</button>
+      <button class="vp-hint">Pulse Nigeria</button>
+      <button class="vp-hint">Tribune</button>
+      <button class="vp-hint">Legit.ng</button>
     </div>
     <div class="vp-results" id="vp-results" style="display:none"></div>
     <button class="vp-stop" id="vp-stop" style="display:none">⏹ Stop Reading</button>
@@ -1813,7 +1818,58 @@ function bindVoice(){
   document.getElementById('vp-inp').addEventListener('keydown',e=>{if(e.key==='Enter')submitVPQuery();});
   document.getElementById('vp-inp-mic').addEventListener('click',toggleMic);
   document.getElementById('vp-stop').addEventListener('click',()=>{stopSpeak(); document.getElementById('vp-stop').style.display='none';});
-  document.getElementById('vp-hints').querySelectorAll('.vp-hint').forEach(b=>{b.addEventListener('click',()=>{document.getElementById('vp-inp').value=b.textContent; submitVPQuery();});});
+  document.getElementById('vp-hints').querySelectorAll('.vp-hint').forEach(b=>{
+    b.addEventListener('click',()=>{
+      var txt = b.textContent.trim();
+      document.getElementById('vp-inp').value = txt;
+      // Directly map hints to categories for better results
+      // Category hints
+      var catMap = {
+        'politics today':'politics','nigeria security':'politics',
+        'crime news':'politics','news on judiciary':'politics',
+        'business news':'business','economy today':'business',
+        'sports headlines':'sports','super eagles':'sports',
+        'celebrity news':'entertainment','health news':'health',
+        'technology news':'technology',
+      };
+      // Source hints - filter by source name
+      var srcMap = {
+        'vanguard':'vanguard','punch':'punch','daily post':'daily post',
+        'premium times':'premium times','guardian nigeria':'guardian nigeria',
+        'channels tv':'channels tv','pulse nigeria':'pulse nigeria',
+        'tribune':'tribune','legit.ng':'legit.ng','businessday':'businessday',
+        'the nation':'the nation',
+      };
+      var key = txt.toLowerCase();
+      if(catMap[key] !== undefined){
+        var cat = catMap[key];
+        var filtered = arts.filter(function(a){return a.cat===cat;});
+        if(filtered.length){
+          vpArts = filtered.slice(0,5);
+          renderVPCards(vpArts);
+          setStatus('✅ Found '+vpArts.length+' '+txt+' stories','ok');
+          speakHeadlines(vpArts, null, cat, false);
+        } else {
+          setStatus('No '+txt+' stories right now. Pull to refresh!','err');
+        }
+      } else if(srcMap[key] !== undefined){
+        var src = srcMap[key];
+        var filtered2 = arts.filter(function(a){
+          return a.source.toLowerCase().includes(src);
+        });
+        if(filtered2.length){
+          vpArts = filtered2.slice(0,5);
+          renderVPCards(vpArts);
+          setStatus('✅ Found '+vpArts.length+' stories from '+txt,'ok');
+          speakHeadlines(vpArts, src, null, false);
+        } else {
+          setStatus('No '+txt+' stories loaded yet. Try refreshing!','err');
+        }
+      } else {
+        submitVPQuery();
+      }
+    });
+  });
   if(synth&&synth.onvoiceschanged!==undefined) synth.onvoiceschanged=()=>synth.getVoices();
 }
 function openVP(){document.getElementById('vp').classList.add('on'); document.body.style.overflow='hidden'; setTimeout(()=>{document.getElementById('vp-inp').focus(); syncVPPidginBtn();},300);}
@@ -2039,15 +2095,19 @@ function renderRelated(currentArt){
 
 // Infinite scroll
 (function(){
-  var main2=document.getElementById('main');
-  var busy2=false, lastLoad2=0;
-  main2.addEventListener('scroll',function(){
-    if(busy2||!nextPg) return;
+  var scrollEl=document.getElementById('main');
+  var scrollBusy=false, scrollLast=0;
+  scrollEl.addEventListener('scroll',function(){
+    if(scrollBusy) return;
+    if(!nextPg && nextPg!==0) return;
     var now=Date.now();
-    if(now-lastLoad2<5000) return;
-    if(main2.scrollHeight-main2.scrollTop-main2.clientHeight<100){
-      busy2=true; lastLoad2=now;
-      loadNews(true).then(function(){setTimeout(function(){busy2=false;},2000);}).catch(function(){busy2=false;});
+    if(now-scrollLast<5000) return;
+    var dist=scrollEl.scrollHeight-scrollEl.scrollTop-scrollEl.clientHeight;
+    if(dist<200){
+      scrollBusy=true; scrollLast=now;
+      loadNews(true).then(function(){
+        setTimeout(function(){scrollBusy=false;},3000);
+      }).catch(function(){scrollBusy=false;});
     }
   },{passive:true});
 })();
