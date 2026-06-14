@@ -1,79 +1,121 @@
-// Flash Nigeria — RSS News Fetcher
-// Pulls from top Nigerian news sources — FREE, unlimited, no API key needed
+// Flash Nigeria — RSS News Fetcher v2
+// FREE, unlimited, 8 Nigerian sources
 
 const SOURCES = [
-  { name: 'Vanguard',        url: 'https://www.vanguardngr.com/feed/', cat: '' },
-  { name: 'Punch',           url: 'https://punchng.com/feed/', cat: '' },
-  { name: 'Daily Post',      url: 'https://dailypost.ng/feed/', cat: '' },
-  { name: 'Premium Times',   url: 'https://www.premiumtimesng.com/feed/', cat: '' },
-  { name: 'The Guardian NG', url: 'https://guardian.ng/feed/', cat: '' },
-  { name: 'Channels TV',     url: 'https://www.channelstv.com/feed/', cat: '' },
-  { name: 'ThisDay',         url: 'https://www.thisdaylive.com/index.php/feed/', cat: '' },
-  { name: 'BusinessDay',     url: 'https://businessday.ng/feed/', cat: '' },
+  { name: 'Vanguard',        url: 'https://www.vanguardngr.com/feed/' },
+  { name: 'Punch',           url: 'https://punchng.com/feed/' },
+  { name: 'Daily Post',      url: 'https://dailypost.ng/feed/' },
+  { name: 'Premium Times',   url: 'https://www.premiumtimesng.com/feed/' },
+  { name: 'Guardian Nigeria',url: 'https://guardian.ng/feed/' },
+  { name: 'Channels TV',     url: 'https://www.channelstv.com/feed/' },
+  { name: 'ThisDay',         url: 'https://www.thisdaylive.com/index.php/feed/' },
+  { name: 'BusinessDay',     url: 'https://businessday.ng/feed/' },
 ];
 
 const CAT_KEYWORDS = {
-  politics:      ['politic','government','senate','president','governor','election','efcc','minister','house of reps','tinubu','atiku','obi'],
-  business:      ['business','economy','naira','dollar','inflation','fuel','subsidy','oil','bank','market','trade','cbn','fintech'],
-  sports:        ['sport','football','soccer','eagle','afcon','world cup','premier','league','osimhen','npfl','basketball','tennis'],
-  entertainment: ['entertainment','nollywood','music','celebrity','film','movie','award','fashion','afrobeat','bbnaija'],
-  technology:    ['tech','technology','digital','crypto','bitcoin','ai','startup','internet','software','app'],
-  health:        ['health','medical','hospital','disease','covid','vaccine','cancer','mental','wellness','doctor'],
+  politics:      ['politic','government','senate','president','governor','election','efcc','minister','tinubu','atiku','obi','police','army','military','security','court','judge','law','constitution','national assembly','reps','democracy','party','pdp','apc','labour party','impeach','resign','sack','arrest','detain','prison','jail'],
+  business:      ['business','economy','naira','dollar','inflation','fuel','subsidy','oil','bank','market','trade','cbn','fintech','gdp','revenue','tax','budget','import','export','stock','exchange','price','cost','million','billion'],
+  sports:        ['sport','football','soccer','eagle','afcon','world cup','premier','league','osimhen','npfl','basketball','tennis','athletics','cricket','golf','boxing','wrestling','champion','match','game','goal','score','fifa','caf'],
+  entertainment: ['entertainment','nollywood','music','celebrity','film','movie','award','fashion','afrobeat','bbnaija','big brother','singer','actor','actress','rapper','concert','album','song','dance','comedy','joke'],
+  technology:    ['technolog','digital','crypto','bitcoin','ai ','artificial intelligence','startup','internet','software','app ','apps','cyber','hack','data','cloud','5g','robot','drone','satellite'],
+  health:        ['health','medical','hospital','disease','covid','vaccine','cancer','mental','wellness','doctor','nurse','patient','drug','medicine','surgery','outbreak','epidemic','virus','treatment'],
 };
-
-// Simple in-memory cache
-const cache = new Map();
-const CACHE_TTL = 10 * 60 * 1000; // 10 minutes
 
 function detectCategory(title, desc) {
   const text = (title + ' ' + (desc || '')).toLowerCase();
-  for (const [cat, keywords] of Object.entries(CAT_KEYWORDS)) {
-    if (keywords.some(k => text.includes(k))) return cat;
+  // Check in priority order
+  for (const cat of ['politics','sports','entertainment','business','technology','health']) {
+    if (CAT_KEYWORDS[cat].some(k => text.includes(k))) return cat;
   }
+  return '';
+}
+
+function extractImage(item, description) {
+  // Try multiple image sources in order of reliability
+  const patterns = [
+    // Media content
+    /(<media:content[^>]+url=["'])([^"']+)(["'])/i,
+    // Media thumbnail  
+    /(<media:thumbnail[^>]+url=["'])([^"']+)(["'])/i,
+    // Enclosure
+    /(<enclosure[^>]+url=["'])([^"']+)["'][^>]*type=["']image/i,
+    // Image in content:encoded
+    /<img[^>]+src=["']([^"']+)["']/i,
+  ];
+
+  for (const p of patterns) {
+    const m = item.match(p);
+    if (m) {
+      const url = m[2] || m[1];
+      if (url && url.startsWith('http') && !url.includes('pixel') && !url.includes('1x1')) {
+        return url.trim();
+      }
+    }
+  }
+
+  // Try in description HTML
+  if (description) {
+    const imgMatch = description.match(/<img[^>]+src=["']([^"']+)["']/i);
+    if (imgMatch && imgMatch[1].startsWith('http')) return imgMatch[1].trim();
+  }
+
   return '';
 }
 
 function parseRSS(xml, sourceName) {
   const articles = [];
-  const items = xml.match(/<item[\s\S]*?<\/item>/gi) || [];
 
-  for (const item of items.slice(0, 15)) {
+  // Get all items
+  const itemMatches = [...xml.matchAll(/<item[\s\S]*?<\/item>/gi)];
+
+  for (const itemMatch of itemMatches.slice(0, 15)) {
+    const item = itemMatch[0];
+
     const get = (tag) => {
-      const patterns = [
-        new RegExp(`<${tag}[^>]*><!\\[CDATA\\[([\\s\\S]*?)\\]\\]><\\/${tag}>`, 'i'),
-        new RegExp(`<${tag}[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i'),
-      ];
-      for (const p of patterns) {
-        const m = item.match(p);
-        if (m) return m[1].trim();
-      }
+      // Try CDATA first
+      const cdataMatch = item.match(new RegExp(`<${tag}[^>]*><!\\[CDATA\\[([\\s\\S]*?)\\]\\]><\\/${tag}>`, 'i'));
+      if (cdataMatch) return cdataMatch[1].trim();
+      // Try regular content
+      const plainMatch = item.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i'));
+      if (plainMatch) return plainMatch[1].replace(/<[^>]+>/g,'').trim();
       return '';
     };
 
-    const title = get('title').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&#\d+;/g,'').trim();
-    const link  = get('link') || item.match(/<link>([^<]+)<\/link>/i)?.[1] || '';
-    const desc  = get('description').replace(/<[^>]+>/g,'').replace(/&amp;/g,'&').replace(/&nbsp;/g,' ').replace(/&#\d+;/g,'').trim().slice(0, 300);
-    const pub   = get('pubDate') || get('dc:date') || '';
+    const rawTitle = get('title');
+    const title = rawTitle
+      .replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#\d+;/g,'').replace(/&nbsp;/g,' ').trim();
 
-    // Get image
-    let img = '';
-    const enclosure = item.match(/<enclosure[^>]+url="([^"]+)"[^>]*type="image/i);
-    const mediaCont = item.match(/<media:content[^>]+url="([^"]+)"/i);
-    const mediaThmb = item.match(/<media:thumbnail[^>]+url="([^"]+)"/i);
-    const imgTag    = (get('description')||'').match(/<img[^>]+src="([^"]+)"/i);
-    img = (enclosure?.[1] || mediaCont?.[1] || mediaThmb?.[1] || imgTag?.[1] || '').trim();
+    const rawLink = get('link') || item.match(/<link>([^<]+)<\/link>/i)?.[1] || '';
+    const link = rawLink.replace(/&amp;/g,'&').trim();
 
     if (!title || !link) continue;
 
-    const id = Buffer.from(link).toString('base64').slice(0, 22);
+    const rawDesc = get('description') || get('content:encoded') || '';
+    const desc = rawDesc
+      .replace(/<[^>]+>/g,' ').replace(/&amp;/g,'&').replace(/&nbsp;/g,' ').replace(/&#\d+;/g,'').replace(/\s+/g,' ').trim().slice(0,280);
+
+    const pub = get('pubDate') || get('dc:date') || get('published') || '';
+
+    // Extract image
+    const contentEncoded = get('content:encoded');
+    const img = extractImage(item, rawDesc + contentEncoded);
+
+    const id = Buffer.from(link).toString('base64').slice(0,22);
     const cat = detectCategory(title, desc);
-    const pubDate = pub ? new Date(pub).toISOString() : new Date().toISOString();
+
+    let pubDate = '';
+    try { pubDate = pub ? new Date(pub).toISOString() : new Date().toISOString(); }
+    catch(e) { pubDate = new Date().toISOString(); }
 
     articles.push({ id, title, link, desc, img, source: sourceName, cat, pub: pubDate });
   }
 
   return articles;
 }
+
+// In-memory cache
+const cache = new Map();
+const CACHE_TTL = 10 * 60 * 1000; // 10 min
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -83,9 +125,9 @@ export default async function handler(req, res) {
   const { category, page } = req.query;
   const pageNum = parseInt(page) || 1;
   const pageSize = 20;
-
-  // Cache key
   const cacheKey = `rss-${category||'all'}-${pageNum}`;
+
+  // Return cached if fresh
   const cached = cache.get(cacheKey);
   if (cached && Date.now() - cached.ts < CACHE_TTL) {
     res.setHeader('Cache-Control', 'public, s-maxage=600');
@@ -93,79 +135,53 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Pick sources to fetch (all or filtered)
-    const sources = SOURCES;
-
     // Fetch all RSS feeds in parallel
     const results = await Promise.allSettled(
-      sources.map(async (src) => {
+      SOURCES.map(async src => {
         const r = await fetch(src.url, {
           headers: {
-            'User-Agent': 'Mozilla/5.0 (compatible; FlashNigeriaBot/1.0)',
-            'Accept': 'application/rss+xml, application/xml, text/xml',
+            'User-Agent': 'Mozilla/5.0 (compatible; FlashNigeriaBot/1.0; +https://flash-nigeria.vercel.app)',
+            'Accept': 'application/rss+xml, application/xml, text/xml, */*',
           },
-          signal: AbortSignal.timeout(8000),
+          signal: AbortSignal.timeout(9000),
         });
-        if (!r.ok) throw new Error(`${src.name}: ${r.status}`);
+        if (!r.ok) throw new Error(`${src.name} ${r.status}`);
         const xml = await r.text();
         return parseRSS(xml, src.name);
       })
     );
 
-    // Combine all articles
-    let allArticles = [];
-    for (const result of results) {
-      if (result.status === 'fulfilled') {
-        allArticles = allArticles.concat(result.value);
-      }
-    }
+    // Combine & sort
+    let all = [];
+    results.forEach(r => { if (r.status === 'fulfilled') all = all.concat(r.value); });
+    all.sort((a,b) => new Date(b.pub) - new Date(a.pub));
 
-    // Sort by date — newest first
-    allArticles.sort((a, b) => new Date(b.pub) - new Date(a.pub));
-
-    // Remove duplicates by title similarity
+    // Deduplicate
     const seen = new Set();
-    allArticles = allArticles.filter(a => {
-      const key = a.title.slice(0, 40).toLowerCase();
+    all = all.filter(a => {
+      const key = a.title.slice(0,50).toLowerCase().replace(/[^a-z0-9]/g,'');
       if (seen.has(key)) return false;
-      seen.add(key);
-      return true;
+      seen.add(key); return true;
     });
 
-    // Filter by category if requested
+    // Filter by category
     if (category && category !== 'all') {
-      allArticles = allArticles.filter(a => a.cat === category);
+      all = all.filter(a => a.cat === category);
     }
 
     // Paginate
-    const total = allArticles.length;
-    const start = (pageNum - 1) * pageSize;
-    const articles = allArticles.slice(start, start + pageSize);
-    const nextPage = start + pageSize < total ? String(pageNum + 1) : null;
+    const total = all.length;
+    const start = (pageNum-1) * pageSize;
+    const articles = all.slice(start, start+pageSize);
+    const nextPage = start+pageSize < total ? String(pageNum+1) : null;
 
-    const result = {
-      status: 'ok',
-      articles,
-      nextPage,
-      total,
-      sources: results.map((r, i) => ({
-        name: sources[i].name,
-        ok: r.status === 'fulfilled',
-        count: r.status === 'fulfilled' ? r.value.length : 0,
-      })),
-    };
-
-    cache.set(cacheKey, { ts: Date.now(), data: result });
+    const data = { status:'ok', articles, nextPage, total };
+    cache.set(cacheKey, { ts: Date.now(), data });
     res.setHeader('Cache-Control', 'public, s-maxage=600');
-    return res.json(result);
+    return res.json(data);
 
-  } catch (err) {
-    console.error('RSS fetch error:', err.message);
-    return res.status(200).json({
-      status: 'error',
-      message: err.message,
-      articles: [],
-      nextPage: null,
-    });
+  } catch(err) {
+    console.error('RSS error:', err.message);
+    return res.status(200).json({ status:'error', message:err.message, articles:[], nextPage:null });
   }
 }
