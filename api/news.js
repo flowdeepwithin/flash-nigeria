@@ -14,7 +14,7 @@ const SOURCES = [
 
 const CAT_KEYWORDS = {
   politics:      ['politic','government','senate','president','governor','election','efcc','minister','tinubu','atiku','obi','police','army','military','security','court','judge','law','constitution','national assembly','reps','democracy','party','pdp','apc','labour party','impeach','resign','sack','arrest','detain','prison','jail'],
-  business:      ['business','economy','naira','dollar','inflation','fuel','subsidy','oil','bank','market','trade','cbn','fintech','gdp','revenue','tax','budget','import','export','stock','exchange','price','cost','million','billion'],
+  business:      ['business','economy','naira','dollar','inflation','fuel','subsidy','oil','bank','market','trade','cbn','fintech','gdp','revenue','tax','budget','import','export','stock','exchange','price','cost','million','billion','pension','asset','equity','securities','frc','investment','finance','financial','monetary','fiscal','debt','loan','credit','mou','procurement'],
   sports:        ['sport','football','soccer','eagle','afcon','world cup','premier','league','osimhen','npfl','basketball','tennis','athletics','cricket','golf','boxing','wrestling','champion','match','game','goal','score','fifa','caf'],
   entertainment: ['entertainment','nollywood','music','celebrity','film','movie','award','fashion','afrobeat','bbnaija','big brother','singer','actor','actress','rapper','concert','album','song','dance','comedy','joke'],
   technology:    ['technolog','digital','crypto','bitcoin','ai ','artificial intelligence','startup','internet','software','app ','apps','cyber','hack','data','cloud','5g','robot','drone','satellite'],
@@ -24,7 +24,7 @@ const CAT_KEYWORDS = {
 function detectCategory(title, desc) {
   const text = (title + ' ' + (desc || '')).toLowerCase();
   // Check in priority order
-  for (const cat of ['politics','sports','entertainment','business','technology','health']) {
+  for (const cat of ['politics','business','sports','entertainment','technology','health']) {
     if (CAT_KEYWORDS[cat].some(k => text.includes(k))) return cat;
   }
   return '';
