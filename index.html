@@ -12,16 +12,16 @@
   <!-- SEO -->
   <meta property="og:title" content="Flash Nigeria ⚡ — Flash. News. Nigeria."/>
   <meta property="og:description" content="Nigeria's fastest news app. Flash headlines from Vanguard, Punch, Channels TV, Guardian Nigeria, Premium Times, Daily Post and more."/>
-  <meta property="og:image" content="https://flash-nigeria.vercel.app/icons/icon-512x512.png"/>
-  <meta property="og:url" content="https://flash-nigeria.vercel.app"/>
+  <meta property="og:image" content="https://www.flashnigeria.com/icons/icon-512x512.png"/>
+  <meta property="og:url" content="https://www.flashnigeria.com"/>
   <meta property="og:type" content="website"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="Flash Nigeria ⚡"/>
   <meta name="twitter:description" content="Flash. News. Nigeria."/>
-  <meta name="twitter:image" content="https://flash-nigeria.vercel.app/icons/icon-512x512.png"/>
+  <meta name="twitter:image" content="https://www.flashnigeria.com/icons/icon-512x512.png"/>
   <meta name="keywords" content="Nigeria news, breaking news Nigeria, Naija news, Vanguard, Punch, Channels TV, Guardian, Nigerian politics, Nigerian sports"/>
   <meta name="author" content="Flash Nigeria"/>
-  <link rel="canonical" href="https://flash-nigeria.vercel.app"/>
+  <link rel="canonical" href="https://www.flashnigeria.com"/>
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-8F71YEBLS3"></script>
   <script>
@@ -718,13 +718,13 @@
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "Flash Nigeria",
-    "url": "https://flash-nigeria.vercel.app",
+    "url": "https://www.flashnigeria.com",
     "description": "Nigeria's fastest news app. Breaking headlines from Vanguard, Punch, Sahara Reporters, Channels TV and more.",
     "applicationCategory": "NewsApplication",
     "operatingSystem": "Any",
     "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
     "author": {"@type": "Person", "name": "Igbinosa"},
-    "publisher": {"@type": "Organization", "name": "Flash Nigeria", "url": "https://flash-nigeria.vercel.app"}
+    "publisher": {"@type": "Organization", "name": "Flash Nigeria", "url": "https://www.flashnigeria.com"}
   }
   </script>
 </head>
@@ -2019,7 +2019,7 @@ async function shareAsImage(a){
   for(const w of words){const test=line+w+' '; if(ctx.measureText(test).width>W-160&&line!==''){ctx.fillText(line,80,ly); line=w+' '; ly+=80; if(ly>700){ctx.fillText('…',80,ly); break;}}else line=test;}
   ctx.fillText(line,80,ly);
   ctx.fillStyle='#888'; ctx.font='36px sans-serif'; ctx.fillText(`${a.source}  ·  ${ago(a.pub)}`,80,H-120);
-  ctx.fillStyle='#00C853'; ctx.font='30px sans-serif'; ctx.fillText('flash-nigeria.vercel.app',80,H-70);
+  ctx.fillStyle='#00C853'; ctx.font='30px sans-serif'; ctx.fillText('www.flashnigeria.com',80,H-70);
   ctx.fillStyle='#00C853'; ctx.fillRect(0,H-8,W,8);
   try{
     canvas.toBlob(async blob=>{
