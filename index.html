@@ -1408,7 +1408,7 @@ function isTrending(a){return trendScore(a)>=2;}
 function readTime(desc){if(!desc)return''; const w=desc.split(' ').length; return Math.max(1,Math.ceil(w/200))+'min';}
 
 // ── LOAD NEWS ──
-async function loadNews(paginate=false){
+async function loadNews(paginate=false){ // always returns Promise
   if(busy)return; busy=true;
   if(!navigator.onLine){serveOfflineCache(); busy=false; return;}
   if(!paginate){renderSkeletons(); document.getElementById('hero-box').innerHTML='';}
@@ -1430,7 +1430,7 @@ async function loadNews(paginate=false){
       if(!paginate) renderMostRead(); // Breaking strip: load once only
       // Show/hide Load More button
       var lmBtn = document.getElementById('load-more');
-      if(lmBtn){ lmBtn.style.display = nextPg ? 'block' : 'none'; lmBtn.textContent='Load More Stories'; }
+      if(lmBtn){ lmBtn.style.display = nextPg ? 'block' : 'none'; lmBtn.textContent='Load More Stories'; lmBtn.disabled=false; }
     } else throw new Error(d.message||'API error');
   }catch(e){
     if(!paginate) renderErr(e.message);
@@ -1655,7 +1655,8 @@ function renderFeed(){
     if(realIdx < rest.length) bindCard(el, rest[realIdx]);
   });
   const lm=document.getElementById('load-more');
-  lm.style.display=nextPg?'block':'none'; lm.onclick=()=>loadNews(true);
+  lm.style.display=nextPg?'block':'none';
+  // onclick is bound once in init — do NOT rebind here
 }
 
 function heroHTML(a){
@@ -2177,30 +2178,35 @@ function renderRelated(currentArt){
 // ── INFINITE SCROLL — conservative to save API calls ──
 
 
-// Infinite scroll + Load More button
+// Infinite scroll + Load More button — single source of truth
 (function(){
+  // ── LOAD MORE BUTTON ── bound once, never rebound
   var lmBtn = document.getElementById('load-more');
   if(lmBtn){
     lmBtn.addEventListener('click', function(){
-      if(nextPg){ lmBtn.textContent='Loading...'; loadNews(true); }
+      if(busy || !nextPg) return;
+      lmBtn.textContent = 'Loading...';
+      lmBtn.disabled = true;
+      loadNews(true).finally(function(){
+        lmBtn.disabled = false;
+      });
     });
   }
+  // ── INFINITE SCROLL ──
   var scrollEl = document.getElementById('main');
-  var scrollBusy = false, scrollLast = 0;
+  var scrollLast = 0;
   scrollEl.addEventListener('scroll', function(){
-    if(scrollBusy) return;
-    if(!nextPg) return;
+    if(busy || !nextPg) return;
     var now = Date.now();
-    if(now - scrollLast < 3000) return;
+    if(now - scrollLast < 2000) return;
     var scrolled = scrollEl.scrollTop + scrollEl.clientHeight;
     var total = scrollEl.scrollHeight;
-    if(scrolled >= total - 400){
-      scrollBusy = true;
+    if(scrolled >= total - 500){
       scrollLast = now;
       loadNews(true).then(function(){
-        scrollBusy = false;
+
       }).catch(function(){
-        scrollBusy = false;
+
       });
     }
   }, {passive:true});
