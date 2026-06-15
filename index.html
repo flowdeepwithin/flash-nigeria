@@ -157,19 +157,23 @@
     #ptr.on{height:44px;}
     @keyframes spin{to{transform:rotate(360deg);}}
 
-    /* MOST READ STRIP */
+    /* BREAKING NEWS STRIP */
     #most-read{margin:14px 0 0;padding:0 16px;}
     .mr-hd{font-family:var(--font-hd);font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;}
-    .mr-hd em{color:var(--gold);font-style:normal;margin-right:4px;}
+    .mr-hd em{font-style:normal;margin-right:4px;}
+    .mr-hd .brk-badge{display:inline-block;background:#e11d48;color:#fff;font-size:9px;font-weight:900;letter-spacing:.1em;padding:2px 6px;border-radius:4px;margin-right:6px;vertical-align:middle;animation:brkpulse 1.8s infinite;}
+    @keyframes brkpulse{0%,100%{opacity:1;}50%{opacity:.6;}}
     .mr-strip{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;}
     .mr-strip::-webkit-scrollbar{display:none;}
-    .mr-card{background:var(--card);border-radius:var(--radius-s);box-shadow:var(--shadow-s);width:140px;flex-shrink:0;cursor:pointer;overflow:hidden;transition:box-shadow .15s;}
+    .mr-card{background:var(--card);border-radius:var(--radius-s);box-shadow:var(--shadow-s);width:140px;flex-shrink:0;cursor:pointer;overflow:hidden;transition:box-shadow .15s;position:relative;}
     .mr-card:hover{box-shadow:var(--shadow-m);}
+    .mr-card .brk-dot{position:absolute;top:6px;left:6px;width:7px;height:7px;background:#e11d48;border-radius:50%;animation:brkpulse 1.2s infinite;}
     .mr-img{width:100%;height:80px;object-fit:cover;object-position:center 20%;background:var(--border);}
     .mr-img-ph{width:100%;height:80px;display:flex;align-items:center;justify-content:center;font-size:24px;background:linear-gradient(135deg,var(--border),var(--border2));}
     .mr-body{padding:8px;}
-    .mr-num{font-family:var(--font-hd);font-size:18px;font-weight:900;color:var(--gold);line-height:1;}
-    .mr-hl{font-family:var(--font-hd);font-size:13px;font-weight:800;line-height:1.2;color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-top:3px;}
+    .mr-src{font-family:var(--font-hd);font-size:9px;font-weight:800;color:#e11d48;letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px;}
+    .mr-hl{font-family:var(--font-hd);font-size:13px;font-weight:800;line-height:1.2;color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-top:2px;}
+    .mr-ago{font-size:10px;color:var(--ink4);margin-top:4px;}
 
     /* POLL */
     #poll-wrap{margin:8px 16px 0;}
@@ -746,7 +750,7 @@
     </div>
     <div class="hdr-actions">
       <a href="#" id="wa-channel-btn" style="display:none" title="Join WhatsApp Channel" style="width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#16a34a;transition:background .15s;text-decoration:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg></a>
-      <button id="pidgin-btn" onclick="togglePidgin()" style="font-family:var(--font-hd);font-size:11px;font-weight:800;padding:4px 9px;border-radius:6px;border:1.5px solid var(--border2);color:var(--ink3);cursor:pointer;background:var(--bg);">PIDGIN</button><button id="notif-hdr-btn" onclick="quickToggleNotif()" title="Toggle alerts" style="height:30px;padding:0 10px;border-radius:15px;border:1.5px solid var(--gold);background:var(--gold);cursor:pointer;display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:700;font-family:var(--font-hd);color:#fff;transition:all .2s;margin-left:4px;letter-spacing:.02em;">🔔 <span id="notif-hdr-txt">ON</span></button>
+      <button id="pidgin-btn" onclick="togglePidgin()" title="Switch to Pidgin headlines" style="font-family:var(--font-hd);font-size:11px;font-weight:800;padding:4px 12px;border-radius:20px;border:1.5px solid var(--border2);color:var(--ink3);cursor:pointer;background:var(--bg);transition:all .2s;white-space:nowrap;">🗣️ PIDGIN</button><button id="notif-hdr-btn" onclick="quickToggleNotif()" title="Toggle breaking news alerts" style="height:30px;width:30px;border-radius:50%;border:1.5px solid var(--border2);background:var(--bg);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:15px;transition:all .2s;margin-left:4px;position:relative;"><span id="notif-hdr-ico">🔔</span><span id="notif-hdr-txt" style="position:absolute;top:-3px;right:-3px;font-size:8px;font-weight:900;font-family:var(--font-hd);background:#e11d48;color:#fff;border-radius:4px;padding:1px 3px;display:none;">ON</span></button>
       <button class="hdr-btn" id="font-btn" title="Toggle text size" style="font-size:13px;font-weight:700;">Aa</button>
       <button class="hdr-btn" id="dark-btn" title="Toggle dark mode">
         <svg id="dark-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -837,9 +841,9 @@
         <button class="nb-x" id="nb-x">✕</button>
       </div>
 
-      <!-- MOST READ -->
+      <!-- BREAKING NEWS STRIP -->
       <div id="most-read" style="display:none">
-        <div class="mr-hd"><em>🔥</em>Most Read Today</div>
+        <div class="mr-hd"><span class="brk-badge">BREAKING</span>Latest Headlines</div>
         <div class="mr-strip" id="mr-strip"></div>
       </div>
 
@@ -1454,27 +1458,23 @@ function trackClick(id){
 }
 function renderMostRead(){
   if(!arts.length) return;
-  const sorted=[...arts].sort((a,b)=>{
-    // Combine click count + trending score so it's never empty
-    const clickA=(clickCounts[a.id]||0)*3;
-    const clickB=(clickCounts[b.id]||0)*3;
-    const trendA=trendScore(a);
-    const trendB=trendScore(b);
-    return (clickB+trendB)-(clickA+trendA);
-  });
-  const top=sorted.slice(0,5);
+  // Sort by date — newest breaking stories first
+  const sorted=[...arts].sort((a,b)=>new Date(b.pub)-new Date(a.pub));
+  const top=sorted.slice(0,8);
   const wrap=document.getElementById('most-read');
   const strip=document.getElementById('mr-strip');
   wrap.style.display='block';
-  strip.innerHTML=top.map((a,i)=>`
+  strip.innerHTML=top.map((a)=>`
     <div class="mr-card" data-id="${a.id}">
+      <div class="brk-dot"></div>
       ${a.img?`<img class="mr-img" src="${a.img}" alt="" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">`:''}
       <div class="mr-img-ph" style="${a.img?'display:none':''}">
         ${catEmoji(a.cat)}
       </div>
       <div class="mr-body">
-        <div class="mr-num">${i+1}</div>
+        <div class="mr-src">${a.source}</div>
         <div class="mr-hl">${getTitle(a)}</div>
+        <div class="mr-ago">${ago(a.pub)}</div>
       </div>
     </div>`).join('');
   strip.querySelectorAll('.mr-card').forEach((el,i)=>{
@@ -1840,10 +1840,16 @@ const CAT_WORDS={
   'technology':'technology','tech':'technology','crypto':'technology',
   'bitcoin':'technology','ai':'technology','startup':'technology',
   'fintech':'technology','digital':'technology','internet':'technology',
+  'software':'technology','cyber':'technology','app':'technology',
+  'innovation':'technology','data':'technology','5g':'technology',
+  'paystack':'technology','flutterwave':'technology','opay':'technology',
   // Health
   'health':'health','medical':'health','hospital':'health',
   'disease':'health','covid':'health','vaccine':'health',
   'cancer':'health','mental health':'health','wellness':'health',
+  'doctor':'health','nurse':'health','ncdc':'health',
+  'malaria':'health','cholera':'health','outbreak':'health',
+  'ministry of health':'health','who ':'health','epidemic':'health',
   // Security
   'security':'politics','crime':'politics','kidnap':'politics',
   'bandits':'politics','terrorism':'politics','attack':'politics',
@@ -2197,20 +2203,20 @@ function quickToggleNotif(){
 function updateNotifHdrBtn(){
   var btn=document.getElementById('notif-hdr-btn');
   var txt=document.getElementById('notif-hdr-txt');
+  var ico=document.getElementById('notif-hdr-ico');
   if(!btn) return;
   var isOff=localStorage.getItem('fn_notif_off')==='1';
-  var isDenied=Notification.permission==='denied';
   var isGranted=Notification.permission==='granted';
   if(isGranted&&!isOff){
     btn.style.background='var(--gold)';
     btn.style.borderColor='var(--gold)';
-    btn.style.color='#fff';
-    if(txt) txt.textContent='ON';
+    if(ico) ico.textContent='🔔';
+    if(txt){ txt.textContent='ON'; txt.style.display='block'; }
   } else {
-    btn.style.background='rgba(255,255,255,0.06)';
+    btn.style.background='var(--bg)';
     btn.style.borderColor='var(--border2)';
-    btn.style.color='var(--ink4)';
-    if(txt) txt.textContent='OFF';
+    if(ico) ico.textContent='🔕';
+    if(txt){ txt.style.display='none'; }
   }
 }
 
