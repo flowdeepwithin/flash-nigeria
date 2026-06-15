@@ -1458,9 +1458,31 @@ function trackClick(id){
 }
 function renderMostRead(){
   if(!arts.length) return;
-  // Sort by date — newest breaking stories first
-  const sorted=[...arts].sort((a,b)=>new Date(b.pub)-new Date(a.pub));
-  const top=sorted.slice(0,8);
+  // Step 1: Sort ALL articles by date, newest first
+  const byDate=[...arts].sort((a,b)=>new Date(b.pub)-new Date(a.pub));
+  // Step 2: Take top 3 from each unique source (max last 2hrs)
+  const now=Date.now();
+  const TWO_HRS=2*60*60*1000;
+  const bySource={};
+  byDate.forEach(a=>{
+    if(!bySource[a.source]) bySource[a.source]=[];
+    if(bySource[a.source].length<3) bySource[a.source].push(a);
+  });
+  // Step 3: Round-robin interleave — one from each source at a time
+  const sources=Object.keys(bySource);
+  const interleaved=[];
+  let hasMore=true;
+  while(hasMore){
+    hasMore=false;
+    for(const src of sources){
+      if(bySource[src].length>0){
+        interleaved.push(bySource[src].shift());
+        hasMore=true;
+      }
+    }
+  }
+  // Step 4: Re-sort interleaved by time so newest still leads — max 10 cards
+  const top=interleaved.sort((a,b)=>new Date(b.pub)-new Date(a.pub)).slice(0,10);
   const wrap=document.getElementById('most-read');
   const strip=document.getElementById('mr-strip');
   wrap.style.display='block';
