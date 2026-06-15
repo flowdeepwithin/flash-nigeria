@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://flash-nigeria.vercel.app/</loc>
+    <loc>https://www.flashnigeria.com/</loc>
     <changefreq>hourly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://flash-nigeria.vercel.app/#politics</loc>
+    <loc>https://www.flashnigeria.com/#politics</loc>
     <changefreq>hourly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://flash-nigeria.vercel.app/#business</loc>
+    <loc>https://www.flashnigeria.com/#business</loc>
     <changefreq>hourly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://flash-nigeria.vercel.app/#sports</loc>
+    <loc>https://www.flashnigeria.com/#sports</loc>
     <changefreq>hourly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://flash-nigeria.vercel.app/#entertainment</loc>
+    <loc>https://www.flashnigeria.com/#entertainment</loc>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://flash-nigeria.vercel.app/#technology</loc>
+    <loc>https://www.flashnigeria.com/#technology</loc>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://flash-nigeria.vercel.app/#health</loc>
+    <loc>https://www.flashnigeria.com/#health</loc>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
