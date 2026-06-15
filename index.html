@@ -1384,7 +1384,7 @@ async function loadNews(paginate=false){
   if(busy)return; busy=true;
   if(!navigator.onLine){serveOfflineCache(); busy=false; return;}
   if(!paginate){renderSkeletons(); document.getElementById('hero-box').innerHTML='';}
-  if(!paginate&&!cat){const c=getCache(); if(c){arts=c; renderFeed(); updateCatCounts(); renderMostRead(); busy=false; return;}}
+  if(!paginate&&!cat){const c=getCache(); if(c){arts=c; renderFeed(); updateCatCounts(); renderMostRead(); busy=false; return;} }
   spinning(true);
   try{
     const p=new URLSearchParams();
@@ -1398,7 +1398,8 @@ async function loadNews(paginate=false){
       arts=paginate?[...arts,...fresh]:fresh;
       nextPg=d.nextPage||null;
       if(!paginate&&!cat){setCache(fresh); saveOfflineCache(fresh);}
-      updateTicker(fresh); renderFeed(); updateCatCounts(); renderMostRead();
+      updateTicker(fresh); renderFeed(); updateCatCounts();
+      if(!paginate) renderMostRead(); // Breaking strip: load once only
       // Show/hide Load More button
       var lmBtn = document.getElementById('load-more');
       if(lmBtn){ lmBtn.style.display = nextPg ? 'block' : 'none'; lmBtn.textContent='Load More Stories'; }
@@ -1456,60 +1457,41 @@ function trackClick(id){
   clickCounts[id]=(clickCounts[id]||0)+1;
   localStorage.setItem(CLICKS_K,JSON.stringify(clickCounts));
 }
-// ── BREAKING STRIP — fetch latest 1 article per source independently ──
-async function loadBreakingStrip(){
+function renderMostRead(){
+  // Use arts already loaded — pick latest 1 per source, no extra fetch
   const wrap=document.getElementById('most-read');
   const strip=document.getElementById('mr-strip');
-  wrap.style.display='block';
-  strip.innerHTML='<div style="padding:12px;color:var(--ink4);font-size:12px;">Loading...</div>';
-  try{
-    // Fetch pages 1-4 to get enough articles from all sources
-    const pages=await Promise.allSettled([
-      fetch('/api/news?page=1').then(r=>r.json()),
-      fetch('/api/news?page=2').then(r=>r.json()),
-      fetch('/api/news?page=3').then(r=>r.json()),
-      fetch('/api/news?page=4').then(r=>r.json()),
-    ]);
-    // Combine all articles
-    let all=[];
-    pages.forEach(p=>{ if(p.status==='fulfilled'&&p.value.articles) all=all.concat(p.value.articles); });
-    if(!all.length){ wrap.style.display='none'; return; }
-    // Sort by date — newest first
-    all.sort((a,b)=>new Date(b.pub)-new Date(a.pub));
-    // Pick LATEST 1 article per source
-    const seen={};
-    const top=[];
-    for(const a of all){
-      if(!seen[a.source]){
-        seen[a.source]=true;
-        top.push(a);
-      }
-      if(top.length>=19) break; // max 1 per source, 19 sources
+  if(!arts.length){ wrap.style.display='none'; return; }
+  // Sort all by date newest first
+  const sorted=[...arts].sort((a,b)=>new Date(b.pub)-new Date(a.pub));
+  // Pick latest 1 per source
+  const seen={};
+  const top=[];
+  for(const a of sorted){
+    if(!seen[a.source]){
+      seen[a.source]=true;
+      top.push(a);
     }
-    // Re-sort the picked ones by time — newest leads
-    top.sort((a,b)=>new Date(b.pub)-new Date(a.pub));
-    strip.innerHTML=top.map((a)=>`
-      <div class="mr-card" data-id="${a.id}">
-        <div class="brk-dot"></div>
-        ${a.img&&a.img.startsWith('http')?`<img class="mr-img" src="${a.img}" alt="" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">`:''}
-        <div class="mr-img-ph" style="${a.img&&a.img.startsWith('http')?'display:none':''}">
-          ${catEmoji(a.cat)}
-        </div>
-        <div class="mr-body">
-          <div class="mr-src">${a.source}</div>
-          <div class="mr-hl">${getTitle(a)}</div>
-          <div class="mr-ago">${ago(a.pub)}</div>
-        </div>
-      </div>`).join('');
-    strip.querySelectorAll('.mr-card').forEach((el,i)=>{
-      el.addEventListener('click',()=>{trackClick(top[i].id); openArt(top[i]);});
-    });
-  }catch(e){
-    wrap.style.display='none';
   }
-}
-function renderMostRead(){
-  loadBreakingStrip();
+  // Sort picked articles by time — newest leads
+  top.sort((a,b)=>new Date(b.pub)-new Date(a.pub));
+  wrap.style.display='block';
+  strip.innerHTML=top.map((a)=>`
+    <div class="mr-card" data-id="${a.id}">
+      <div class="brk-dot"></div>
+      ${a.img&&a.img.startsWith('http')?`<img class="mr-img" src="${a.img}" alt="" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">`:''}
+      <div class="mr-img-ph" style="${a.img&&a.img.startsWith('http')?'display:none':''}">
+        ${catEmoji(a.cat)}
+      </div>
+      <div class="mr-body">
+        <div class="mr-src">${a.source}</div>
+        <div class="mr-hl">${getTitle(a)}</div>
+        <div class="mr-ago">${ago(a.pub)}</div>
+      </div>
+    </div>`).join('');
+  strip.querySelectorAll('.mr-card').forEach((el,i)=>{
+    el.addEventListener('click',()=>{trackClick(top[i].id); openArt(top[i]);});
+  });
 }
 
 // ── NAIRA RATES ──
