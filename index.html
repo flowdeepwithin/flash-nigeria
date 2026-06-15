@@ -1333,7 +1333,16 @@ function toPidgin(text){
   for(var i=0; i<PIDGIN_MAP.length; i++){
     var find = PIDGIN_MAP[i][0];
     var replace = PIDGIN_MAP[i][1];
-    t = t.split(find).join(replace);
+    // Case-insensitive replacement using regex
+    try{
+      var re = new RegExp(find.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'), 'gi');
+      t = t.replace(re, function(match){
+        // Preserve original case style
+        if(match === match.toUpperCase()) return replace.toUpperCase();
+        if(match[0] === match[0].toUpperCase()) return replace[0].toUpperCase() + replace.slice(1);
+        return replace;
+      });
+    }catch(e){ t = t.split(find).join(replace); }
   }
   return t;
 }
