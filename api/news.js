@@ -80,6 +80,10 @@ const CAT_KEYWORDS = {
     'meta','google','microsoft','apple','samsung','iphone','android','laptop',
     'fintech','paystack','flutterwave','opay','kuda','moniepoint','palmpay',
     'e-commerce','jumia','konga','social media','facebook','twitter',
+    'app','gadget','innovation','programming','ai model','machine learning',
+    'cybersecurity','data breach','tech hub','silicon','coding','developer',
+    'smartphone','broadband','fibre','infrastructure','iot','web3','nft',
+    'remita','mtn','airtel','glo','9mobile','telecoms','nigerian tech',
   ],
   health: [
     'health','medical','hospital','disease','covid','vaccine','cancer','mental',
@@ -88,6 +92,11 @@ const CAT_KEYWORDS = {
     'malaria','cholera','monkeypox','ebola','hiv','aids','tuberculosis',
     'diabetes','hypertension','maternal','infant','mortality','nutrition',
     'teaching hospital','clinic','pharmacy','nma',
+    'lassa fever','yellow fever','meningitis','polio','immunization',
+    'nafdac','fake drug','blood pressure','stroke','heart attack',
+    'mental illness','depression','anxiety','rehabilitation','physiotherapy',
+    'nafdac','sanitation','food safety','healthcare','public health',
+    'medical doctor','specialist','ambulance','emergency','first aid',
   ],
 };
 
