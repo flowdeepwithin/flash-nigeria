@@ -983,8 +983,8 @@
             <div class="profile-card">
               <div class="profile-label">Plan</div>
               <div class="profile-value" id="profile-plan">Free</div>
-              <div class="mini-note">Upgrade anytime to unlock PRO tools.</div>
-              <button class="profile-btn gold" onclick="toast('Paystack upgrade is next')">♛ Upgrade to PRO</button>
+              <div class="mini-note">Paystack subscription is coming soon. Building continues while payment keys are prepared.</div>
+              <button class="profile-btn gold" onclick="showPaystackComingSoon()">♛ Upgrade to PRO <span style='font-size:10px;opacity:.9'>(Coming Soon)</span></button>
             </div>
             <div class="profile-card">
               <div class="profile-label">Saved Articles</div>
@@ -1012,7 +1012,7 @@
           <button class="profile-btn light" onclick="logoutFlash()">Logout ↪</button>
         </div>
 
-        <div class="profile-card"><div class="profile-label">Coming Next</div><div class="profile-value">Company alerts, Follow Topics, Paystack subscriptions, PRO Dashboard, and PDF reports.</div></div>
+        <div class="profile-card"><div class="profile-label">Coming Next</div><div class="profile-value">Saved news sync, Follow Companies, notification center, Paystack subscriptions coming soon, PRO Dashboard, and PDF reports.</div></div>
       </div>
     </div>
 
@@ -2458,6 +2458,61 @@ async function followTrackedCompany(){
   if(!flashUser){toast('Login to follow companies');openAuthModal('login');return;}
   try{await flashSB.from('followed_companies').upsert({user_id:flashUser.id,company_name:q},{onConflict:'user_id,company_name'});toast('⭐ Following '+q);}catch(e){toast('Could not follow yet');console.warn(e);}
 }
+
+
+// ── FLASH NIGERIA PRO V3 PATCH: stable saved sync + Paystack Coming Soon ──
+function showPaystackComingSoon(){
+  toast('💳 Paystack payment is coming soon');
+  var box=document.getElementById('company-track-results');
+  if(box){
+    box.innerHTML='<div class="mini-note"><strong>PRO payment coming soon.</strong><br>Paystack keys will be added when ready. For now, you can keep using saved articles and Company Tracker preview.</div>';
+  }
+}
+
+// Avoid needing a database unique constraint for saved_articles.
+saveCloudArticle = async function(a){
+  if(!flashSB||!flashUser||!a)return;
+  try{
+    const payload={
+      user_id:flashUser.id,
+      article_id:String(a.id),
+      title:a.title||'',
+      source:a.source||'',
+      link:a.link||'',
+      image_url:a.img||'',
+      category:a.cat||'',
+      published_at:a.pub||null
+    };
+    const existing=await flashSB.from('saved_articles')
+      .select('id')
+      .eq('user_id',flashUser.id)
+      .eq('article_id',String(a.id))
+      .limit(1);
+    if(existing.error) throw existing.error;
+    if(existing.data && existing.data.length){
+      await flashSB.from('saved_articles').update(payload).eq('id',existing.data[0].id);
+    }else{
+      await flashSB.from('saved_articles').insert(payload);
+    }
+  }catch(e){console.warn('Cloud save error',e);toast('Saved locally. Cloud sync will retry later.');}
+};
+
+// Keep Supabase saved count clean after Clear All.
+document.addEventListener('DOMContentLoaded',function(){
+  var clearBtn=document.getElementById('sv-clr');
+  if(clearBtn){
+    clearBtn.addEventListener('click',function(){
+      if(flashUser) clearCloudSaved();
+      updateProfileSavedCount();
+    });
+  }
+});
+
+// Add Enter key support for company tracker.
+document.addEventListener('DOMContentLoaded',function(){
+  var ci=document.getElementById('company-track-input');
+  if(ci){ci.addEventListener('keydown',function(e){if(e.key==='Enter')runCompanyTracker();});}
+});
 
 </script>
 </body>
