@@ -9,6 +9,7 @@
   <meta name="description" content="Flash Nigeria — Flash. News. Nigeria."/>
   <meta name="theme-color" content="#ffffff" id="theme-meta"/>
   <title>Flash Nigeria ⚡</title>
+  <!-- FIX VERSION: news-api-no-cache-18s -->
   <!-- SEO -->
   <meta property="og:title" content="Flash Nigeria ⚡ — Flash. News. Nigeria."/>
   <meta property="og:description" content="Nigeria's fastest news app. Flash headlines from Vanguard, Punch, Channels TV, Guardian Nigeria, Premium Times, Daily Post and more."/>
@@ -1133,7 +1134,7 @@
 </div>
 
 <script>
-const API='https://flash-nigeria.vercel.app/api/news', CACHE_K='fn5_c', OFFLINE_K='fn5_off', CACHE_TTL=8*60*1000;
+const API='https://www.flashnigeria.com/api/news', CACHE_K='fn6_c', OFFLINE_K='fn6_off', CACHE_TTL=2*60*1000;
 const SAVED_K='fn5_sv', THEME_K='fn5_theme', PIDGIN_K='fn5_pidgin';
 const SRCH_HIST_K='fn5_sh', NOTIF_K='fn5_notif', POLL_K='fn5_poll', CLICKS_K='fn5_clicks';
 const RATE_K='fn5_rates', RATE_TTL=60*60*1000; // rates cache 1hr
@@ -1418,7 +1419,7 @@ async function loadNews(paginate=false){ // always returns Promise
     const p=new URLSearchParams();
     if(cat) p.set('category',cat);
     if(paginate&&nextPg) p.set('page',nextPg);
-    const r=await fetch(`${API}?${p}`);
+    const r=await fetch(`${API}?${p}&_=${Date.now()}`, {cache:'no-store'});
     if(!r.ok) throw new Error('HTTP '+r.status);
     const d=await r.json();
     if(d.status==='ok'){
@@ -1450,7 +1451,7 @@ function startNewCheck(){
   setInterval(async()=>{
     if(view!=='feed'||busy||!navigator.onLine) return;
     try{
-      const r=await fetch(API); const d=await r.json();
+      const r=await fetch(`${API}?_=${Date.now()}`, {cache:'no-store'}); const d=await r.json();
       if(d.status==='ok'&&d.articles?.length){
         const newIds=d.articles.filter(a=>!arts.find(x=>x.id===a.id));
         if(newIds.length>0){
@@ -1791,7 +1792,7 @@ async function doSearch(q){
   box.innerHTML=`<div class="mty"><div class="ico" style="animation:spin .8s linear infinite;display:inline-block">⚡</div><p>Searching…</p></div>`;
   const local=arts.filter(a=>(a.title+' '+(a.desc||'')+' '+a.source).toLowerCase().includes(q.toLowerCase()));
   if(local.length){renderSearchRes(local,box); return;}
-  try{const r=await fetch(`${API}?q=${encodeURIComponent(q)}`); const d=await r.json(); if(d.status==='ok'&&d.articles?.length) renderSearchRes(d.articles,box); else box.innerHTML=`<div class="mty"><div class="ico">🔍</div><p>No results for "<strong>${q}</strong>"</p></div>`;}catch{box.innerHTML=`<div class="mty"><div class="ico">📡</div><p>Search failed.</p></div>`;}
+  try{const r=await fetch(`${API}?q=${encodeURIComponent(q)}&_=${Date.now()}`, {cache:'no-store'}); const d=await r.json(); if(d.status==='ok'&&d.articles?.length) renderSearchRes(d.articles,box); else box.innerHTML=`<div class="mty"><div class="ico">🔍</div><p>No results for "<strong>${q}</strong>"</p></div>`;}catch{box.innerHTML=`<div class="mty"><div class="ico">📡</div><p>Search failed.</p></div>`;}
 }
 function renderSearchRes(items,box){box.innerHTML=items.map((a,i)=>cardHTML(a,i)).join(''); box.querySelectorAll('.nc').forEach((el,i)=>bindCard(el,items[i]));}
 function bindModal(){
@@ -1842,7 +1843,7 @@ function bindNotifications(){
 }
 function scheduleNewsCheck(){checkForTrending(); setInterval(checkForTrending,30*60*1000);}
 async function checkForTrending(){if(Notification.permission!=='granted') return; if('serviceWorker' in navigator&&navigator.serviceWorker.controller){navigator.serviceWorker.controller.postMessage({type:'CHECK_NEWS'});}}
-if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('/sw.js').catch(e=>console.log('SW:',e));});}
+if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.getRegistrations().then(rs=>rs.forEach(r=>r.unregister())).catch(e=>console.log('SW unregister:',e));});}
 let tT;
 function toast(msg){const el=document.getElementById('toast'); el.textContent=msg; el.classList.add('on'); clearTimeout(tT); tT=setTimeout(()=>el.classList.remove('on'),2500);}
 function ago(ds){if(!ds)return''; const s=Math.floor((Date.now()-new Date(ds))/1000); if(s<60)return'Just now'; if(s<3600)return Math.floor(s/60)+'m ago'; if(s<86400)return Math.floor(s/3600)+'h ago'; return Math.floor(s/86400)+'d ago';}
@@ -2017,7 +2018,7 @@ async function processVPQuery(query){
   }
   try{
     const p=new URLSearchParams(); if(searchTerm) p.set('q',searchTerm); if(catQ&&!srcQ) p.set('category',catQ);
-    const r=await fetch(`${API}?${p}`); if(!r.ok) throw new Error('HTTP '+r.status); const d=await r.json();
+    const r=await fetch(`${API}?${p}&_=${Date.now()}`, {cache:'no-store'}); if(!r.ok) throw new Error('HTTP '+r.status); const d=await r.json();
     if(d.status==='ok'&&d.articles?.length){let res=d.articles; if(srcQ){const f=res.filter(a=>a.source.toLowerCase().replace(/\s/g,'').includes(srcQ.replace(/\s/g,''))); if(f.length)res=f;} vpArts=res.slice(0,5); renderVPCards(vpArts); setStatus('✅ Found '+vpArts.length+' stories','ok'); speakHeadlines(vpArts,srcQ,catQ,q.includes('break'));}
     else setStatus('No results. Try different keywords.','err');
   }catch(e){setStatus('Error: '+e.message,'err');}
