@@ -750,6 +750,28 @@
     .auth-field{margin-bottom:10px}.auth-field label{display:block;font-size:11px;color:var(--ink3);font-weight:800;text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}.auth-field input{width:100%;padding:13px 12px;border-radius:10px;border:1.5px solid var(--border2);background:var(--bg);color:var(--ink);font:inherit;outline:none}.auth-field input:focus{border-color:var(--gold)}
     .auth-submit{width:100%;padding:13px;border-radius:10px;background:var(--gold);color:#fff;font-family:var(--font-hd);font-size:15px;font-weight:900;letter-spacing:.05em;text-transform:uppercase;margin-top:4px}.auth-note{font-size:12px;color:var(--ink3);line-height:1.55;margin-top:10px;text-align:center;}
 
+
+
+    /* FLASH PRO V4 DASHBOARD */
+    .dash-grid{display:grid;grid-template-columns:1fr;gap:12px;margin:12px 0;}
+    .dash-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow-s);padding:14px;border:1px solid var(--border);}
+    .dash-title{font-family:var(--font-hd);font-size:14px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;}
+    .dash-metric{font-family:var(--font-hd);font-size:28px;font-weight:900;color:var(--ink);line-height:1;}
+    .dash-sub{font-size:12px;color:var(--ink3);margin-top:5px;line-height:1.45;}
+    .follow-chip-wrap{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+    .follow-chip{font-size:12px;font-weight:800;border:1px solid var(--border2);background:var(--bg);color:var(--ink3);border-radius:20px;padding:6px 10px;cursor:pointer;}
+    .follow-chip.on{background:var(--gold-bg);color:var(--gold);border-color:var(--gold-border);}
+    .notif-list{display:flex;flex-direction:column;gap:8px;margin-top:10px;}
+    .notif-item{padding:10px;border-radius:10px;background:var(--bg);border:1px solid var(--border);font-size:12px;color:var(--ink2);}
+    .notif-item strong{display:block;color:var(--ink);font-size:13px;margin-bottom:2px;}
+    .tracker-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0;}
+    .tracker-stat{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:9px;text-align:center;}
+    .tracker-stat b{font-family:var(--font-hd);font-size:22px;color:var(--gold);display:block;line-height:1;}
+    .tracker-stat span{font-size:10px;color:var(--ink4);font-weight:800;text-transform:uppercase;letter-spacing:.06em;}
+    .pro-badge{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#16a34a,#0f7a34);color:#fff;border-radius:999px;padding:6px 10px;font-family:var(--font-hd);font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;}
+    .private-note{font-size:12px;color:var(--ink3);line-height:1.5;}
+    @media(min-width:760px){.dash-grid{grid-template-columns:repeat(3,1fr)}}
+
     /* TABLET */
     @media(min-width:540px){
       .card-list{display:grid;grid-template-columns:1fr 1fr;}
@@ -983,17 +1005,36 @@
             <div class="profile-card">
               <div class="profile-label">Plan</div>
               <div class="profile-value" id="profile-plan">Free</div>
-              <div class="mini-note">Paystack subscription is coming soon. Building continues while payment keys are prepared.</div>
-              <button class="profile-btn gold" onclick="showPaystackComingSoon()">♛ Upgrade to PRO <span style='font-size:10px;opacity:.9'>(Coming Soon)</span></button>
+              <div class="mini-note">Your account is active. PRO access will be enabled for selected users first.</div>
+              <button class="profile-btn gold" onclick="requestProAccess()">♛ Request PRO Access</button>
             </div>
             <div class="profile-card">
               <div class="profile-label">Saved Articles</div>
               <div class="profile-value" id="profile-saved-count">0</div>
-              <div class="mini-note">Articles you save will appear here.</div>
+              <div class="mini-note">Articles you save sync to your Flash account.</div>
             </div>
           </div>
 
+          <div class="dash-grid">
+            <div class="dash-card"><div class="dash-title">Saved News</div><div class="dash-metric" id="dash-saved-count">0</div><div class="dash-sub">Reading list across devices.</div></div>
+            <div class="dash-card"><div class="dash-title">Following</div><div class="dash-metric" id="dash-follow-count">0</div><div class="dash-sub">Companies and topics you monitor.</div></div>
+            <div class="dash-card"><div class="dash-title">Alerts</div><div class="dash-metric" id="dash-alert-count">0</div><div class="dash-sub">Personal news updates.</div></div>
+          </div>
+
           <button class="profile-btn gold" onclick="switchView('saved')">🔖 View Saved News</button>
+
+          <div class="profile-card span-all" style="margin-top:12px;">
+            <div class="profile-label">Follow Topics</div>
+            <div class="profile-value">Choose the topics you want Flash Nigeria to watch for you.</div>
+            <div class="follow-chip-wrap" id="topic-chip-wrap">
+              <button class="follow-chip" data-topic="Politics" onclick="toggleTopicFollow('Politics')">Politics</button>
+              <button class="follow-chip" data-topic="Business" onclick="toggleTopicFollow('Business')">Business</button>
+              <button class="follow-chip" data-topic="Sports" onclick="toggleTopicFollow('Sports')">Sports</button>
+              <button class="follow-chip" data-topic="Entertainment" onclick="toggleTopicFollow('Entertainment')">Entertainment</button>
+              <button class="follow-chip" data-topic="Technology" onclick="toggleTopicFollow('Technology')">Technology</button>
+              <button class="follow-chip" data-topic="Health" onclick="toggleTopicFollow('Health')">Health</button>
+            </div>
+          </div>
 
           <div class="profile-card span-all" style="margin-top:12px;">
             <div class="profile-label">Company Tracker</div>
@@ -1004,15 +1045,25 @@
             </div>
             <div class="tracker-results" id="company-track-results"></div>
             <div class="pro-lock">
-              <div><strong>PRO feature preview</strong><span>Full alerts and PDF reports will unlock after payment setup.</span></div>
+              <div><strong>Monitor this keyword</strong><span>Follow it and it will appear inside your dashboard alerts.</span></div>
               <button onclick="followTrackedCompany()">Follow</button>
             </div>
           </div>
 
+          <div class="profile-card span-all" style="margin-top:12px;">
+            <div class="profile-label">Notification Center</div>
+            <div class="profile-value">Your personalized Flash Nigeria updates.</div>
+            <div class="notif-list" id="flash-notification-list"></div>
+          </div>
+
+          <div class="profile-card span-all" style="margin-top:12px;">
+            <div class="profile-label">PRO Dashboard</div>
+            <div class="profile-value"><span class="pro-badge">♛ PRO Ready</span></div>
+            <div class="private-note" style="margin-top:10px;">Executive brief, company reports, PDF exports, and AI summaries are being staged behind your account dashboard. Public visitors will not see payment setup details.</div>
+          </div>
+
           <button class="profile-btn light" onclick="logoutFlash()">Logout ↪</button>
         </div>
-
-        <div class="profile-card"><div class="profile-label">Coming Next</div><div class="profile-value">Saved news sync, Follow Companies, notification center, Paystack subscriptions coming soon, PRO Dashboard, and PDF reports.</div></div>
       </div>
     </div>
 
@@ -1545,6 +1596,7 @@ async function loadNews(paginate=false){ // always returns Promise
       if(!paginate&&!cat){setCache(fresh); saveOfflineCache(fresh);}
       updateTicker(fresh); renderFeed(); updateCatCounts();
       if(!paginate) renderMostRead(); // Breaking strip: load once only
+      if(typeof renderFlashDashboard==='function') renderFlashDashboard();
       // Show/hide Load More button
       var lmBtn = document.getElementById('load-more');
       if(lmBtn){ lmBtn.style.display = nextPg ? 'block' : 'none'; lmBtn.textContent='Load More Stories'; lmBtn.disabled=false; }
@@ -2417,7 +2469,7 @@ function toggleNotifications(){
 const FLASH_SUPABASE_URL="https://asayqggcbtonwzwcfjya.supabase.co";
 const FLASH_SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzYXlxZ2djYnRvbnd6d2NmanlhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI2NDgzNDAsImV4cCI6MjA5ODIyNDM0MH0.DXcl2jLw3cpy_uJx3lvS4xOAxkVLlrrQmwbjPrkwZco";
 let flashSB=null, flashUser=null, authMode='login';
-function initFlashAuth(){try{if(!window.supabase)return;flashSB=window.supabase.createClient(FLASH_SUPABASE_URL,FLASH_SUPABASE_ANON_KEY);flashSB.auth.getSession().then(({data})=>{flashUser=data&&data.session?data.session.user:null;updateAuthUI();if(flashUser){loadCloudSaved();cleanAuthUrl('✅ Welcome back');}else{cleanExpiredAuthUrl();}});flashSB.auth.onAuthStateChange((event,session)=>{flashUser=session?session.user:null;updateAuthUI();if(flashUser){loadCloudSaved();if(event==='SIGNED_IN')cleanAuthUrl('✅ Welcome back');}else{saved=JSON.parse(localStorage.getItem(SAVED_K)||'[]');renderSaved();}});}catch(e){console.warn('Auth init error',e);}}
+function initFlashAuth(){try{if(!window.supabase)return;flashSB=window.supabase.createClient(FLASH_SUPABASE_URL,FLASH_SUPABASE_ANON_KEY);flashSB.auth.getSession().then(({data})=>{flashUser=data&&data.session?data.session.user:null;updateAuthUI();if(flashUser){loadCloudSaved();loadFlashPersonalization();cleanAuthUrl('✅ Welcome back');}else{cleanExpiredAuthUrl();}});flashSB.auth.onAuthStateChange((event,session)=>{flashUser=session?session.user:null;updateAuthUI();if(flashUser){loadCloudSaved();loadFlashPersonalization();if(event==='SIGNED_IN')cleanAuthUrl('✅ Welcome back');}else{saved=JSON.parse(localStorage.getItem(SAVED_K)||'[]');renderSaved();}});}catch(e){console.warn('Auth init error',e);}}
 function cleanAuthUrl(msg){if(location.hash&&(/access_token|refresh_token|type=signup|error/.test(location.hash))){history.replaceState({},document.title,location.pathname);if(msg)toast(msg);}}
 function cleanExpiredAuthUrl(){if(location.hash&&/otp_expired|access_denied|error=/.test(location.hash)){toast('Email link expired. Please sign up or login again.');history.replaceState({},document.title,location.pathname);}}
 function openAuthModal(mode){setAuthMode(mode||'login');document.getElementById('auth-modal').classList.add('on');}
@@ -2426,7 +2478,7 @@ function setAuthMode(mode){authMode=mode==='signup'?'signup':'login';document.ge
 async function submitAuth(){if(!flashSB){toast('Auth not ready. Refresh and try again.');return;}const email=document.getElementById('auth-email').value.trim();const password=document.getElementById('auth-password').value;const fullName=document.getElementById('auth-name').value.trim();const msg=document.getElementById('auth-message');if(!email||!password){msg.textContent='Enter email and password.';return;}msg.textContent='Please wait...';try{let res;if(authMode==='signup'){res=await flashSB.auth.signUp({email,password,options:{data:{full_name:fullName}}});if(res.error)throw res.error;msg.textContent='Account created. Check your email if confirmation is required.';toast('✅ Flash account created');}else{res=await flashSB.auth.signInWithPassword({email,password});if(res.error)throw res.error;msg.textContent='Logged in successfully.';toast('✅ Logged in');closeAuthModal();}}catch(e){msg.textContent=e.message||'Authentication failed.';toast('⚠️ '+msg.textContent);}}
 async function logoutFlash(){if(!flashSB)return;await flashSB.auth.signOut();toast('Logged out');updateAuthUI();}
 function updateAuthUI(){const btn=document.getElementById('auth-open-btn');const logged=!!flashUser;if(btn){btn.textContent=logged?'Account':'Login';btn.onclick=logged?function(){switchView('profile')}:function(){openAuthModal('login')}}const out=document.getElementById('profile-logged-out'),inn=document.getElementById('profile-logged-in');if(out&&inn){out.style.display=logged?'none':'block';inn.style.display=logged?'block':'none';}const emailEl=document.getElementById('profile-email');if(emailEl)emailEl.textContent=logged?flashUser.email:'—';const planEl=document.getElementById('profile-plan');if(planEl)planEl.textContent=logged?'Free — PRO ready':'Free';const av=document.getElementById('profile-avatar');if(av){const seed=logged?(flashUser.user_metadata?.full_name||flashUser.email||'F'):'⚡';av.textContent=logged?seed.trim().charAt(0).toUpperCase():'⚡';}const ver=document.getElementById('profile-verified');if(ver&&logged){ver.textContent=flashUser.email_confirmed_at?'● Email verified':'○ Email not verified yet';ver.style.color=flashUser.email_confirmed_at?'var(--green)':'var(--red)';}updateProfileSavedCount();}
-function updateProfileSavedCount(){const el=document.getElementById('profile-saved-count');if(el)el.textContent=String(saved.length||0);}
+function updateProfileSavedCount(){const el=document.getElementById('profile-saved-count');if(el)el.textContent=String(saved.length||0);const d=document.getElementById('dash-saved-count');if(d)d.textContent=String(saved.length||0);}
 async function loadCloudSaved(){if(!flashSB||!flashUser)return;try{const {data,error}=await flashSB.from('saved_articles').select('*').eq('user_id',flashUser.id).order('created_at',{ascending:false});if(error)throw error;saved=(data||[]).map(row=>({id:row.article_id,title:row.title,source:row.source,link:row.link,img:row.image_url,cat:row.category,pub:row.published_at}));localStorage.setItem(SAVED_K,JSON.stringify(saved));renderSaved();updateBadge();updateProfileSavedCount();}catch(e){console.warn('Cloud saved load error',e);}}
 async function saveCloudArticle(a){if(!flashSB||!flashUser||!a)return;try{await flashSB.from('saved_articles').upsert({user_id:flashUser.id,article_id:String(a.id),title:a.title||'',source:a.source||'',link:a.link||'',image_url:a.img||'',category:a.cat||'',published_at:a.pub||null},{onConflict:'user_id,article_id'});}catch(e){console.warn('Cloud save error',e);}}
 async function removeCloudArticle(a){if(!flashSB||!flashUser||!a)return;try{await flashSB.from('saved_articles').delete().eq('user_id',flashUser.id).eq('article_id',String(a.id));}catch(e){console.warn('Cloud remove error',e);}}
@@ -2449,24 +2501,75 @@ async function runCompanyTracker(){
   }
   results=results.slice(0,8);
   if(!results.length){box.innerHTML=`<div class="mini-note">No current story found for <strong>${q}</strong>. Try another keyword.</div>`;return;}
-  box.innerHTML=`<div class="mini-note"><strong>${results.length}</strong> current mention${results.length===1?'':'s'} found for <strong>${q}</strong>.</div>`+results.map((a,i)=>`<div class="tracker-result" data-i="${i}"><div class="tracker-src">${a.source||'Flash Nigeria'} · ${ago(a.pub)}</div><div class="tracker-title">${getTitle(a)}</div></div>`).join('');
+  const srcs=[...new Set(results.map(a=>a.source||'Flash Nigeria'))];box.innerHTML=`<div class="tracker-stats"><div class="tracker-stat"><b>${results.length}</b><span>Mentions</span></div><div class="tracker-stat"><b>${srcs.length}</b><span>Sources</span></div><div class="tracker-stat"><b>${results.filter(isTrending).length}</b><span>Trending</span></div></div><div class="mini-note"><strong>${results.length}</strong> current mention${results.length===1?'':'s'} found for <strong>${q}</strong>.</div>`+results.map((a,i)=>`<div class="tracker-result" data-i="${i}"><div class="tracker-src">${a.source||'Flash Nigeria'} · ${ago(a.pub)}</div><div class="tracker-title">${getTitle(a)}</div></div>`).join('');
   box.querySelectorAll('.tracker-result').forEach((el,i)=>el.addEventListener('click',()=>openArt(results[i])));
 }
 async function followTrackedCompany(){
   const q=(lastTrackedCompany||(document.getElementById('company-track-input')?.value||'')).trim();
   if(!q){toast('Enter a company first');return;}
   if(!flashUser){toast('Login to follow companies');openAuthModal('login');return;}
-  try{await flashSB.from('followed_companies').upsert({user_id:flashUser.id,company_name:q},{onConflict:'user_id,company_name'});toast('⭐ Following '+q);}catch(e){toast('Could not follow yet');console.warn(e);}
+  try{await flashSB.from('followed_companies').upsert({user_id:flashUser.id,company_name:q},{onConflict:'user_id,company_name'});if(!flashFollowedCompanies.includes(q))flashFollowedCompanies.unshift(q);toast('⭐ Following '+q);addLocalNotification('Company followed','You are now monitoring '+q+'.');renderFlashDashboard();}catch(e){toast('Could not follow yet');console.warn(e);}
 }
 
 
-// ── FLASH NIGERIA PRO V3 PATCH: stable saved sync + Paystack Coming Soon ──
-function showPaystackComingSoon(){
-  toast('💳 Paystack payment is coming soon');
-  var box=document.getElementById('company-track-results');
-  if(box){
-    box.innerHTML='<div class="mini-note"><strong>PRO payment coming soon.</strong><br>Paystack keys will be added when ready. For now, you can keep using saved articles and Company Tracker preview.</div>';
+// ── FLASH NIGERIA PRO V4: account, saved, follows, alerts, dashboard ──
+let flashFollowedCompanies=[], flashFollowedTopics=[], flashNotifications=[];
+function requestProAccess(){
+  if(!flashUser){toast('Login to request PRO access');openAuthModal('login');return;}
+  toast('♛ PRO access request received');
+  addLocalNotification('PRO Access','Your account is marked for early PRO access review.');
+}
+async function loadFlashPersonalization(){
+  if(!flashSB||!flashUser)return;
+  try{
+    const [companies,topics,notes]=await Promise.all([
+      flashSB.from('followed_companies').select('*').eq('user_id',flashUser.id).order('created_at',{ascending:false}),
+      flashSB.from('followed_topics').select('*').eq('user_id',flashUser.id).order('created_at',{ascending:false}),
+      flashSB.from('notifications').select('*').eq('user_id',flashUser.id).order('created_at',{ascending:false}).limit(10)
+    ]);
+    flashFollowedCompanies=(companies.data||[]).map(x=>x.company_name);
+    flashFollowedTopics=(topics.data||[]).map(x=>x.topic);
+    flashNotifications=(notes.data||[]);
+    renderFlashDashboard();
+  }catch(e){console.warn('Personalization load error',e);renderFlashDashboard();}
+}
+function renderFlashDashboard(){
+  const savedCt=document.getElementById('dash-saved-count'); if(savedCt)savedCt.textContent=String(saved.length||0);
+  const fCt=document.getElementById('dash-follow-count'); if(fCt)fCt.textContent=String((flashFollowedCompanies.length||0)+(flashFollowedTopics.length||0));
+  const aCt=document.getElementById('dash-alert-count'); if(aCt)aCt.textContent=String(flashNotifications.length||0);
+  document.querySelectorAll('.follow-chip').forEach(btn=>btn.classList.toggle('on',flashFollowedTopics.includes(btn.dataset.topic)));
+  const list=document.getElementById('flash-notification-list');
+  if(list){
+    const local = flashNotifications.length ? flashNotifications : buildSmartAlerts();
+    list.innerHTML = local.length ? local.slice(0,6).map(n=>`<div class="notif-item"><strong>${n.title||'Flash Alert'}</strong>${n.message||''}</div>`).join('') : '<div class="mini-note">No personal alerts yet. Follow topics or companies to begin.</div>';
   }
+}
+function buildSmartAlerts(){
+  const alerts=[];
+  const follows=[...flashFollowedCompanies,...flashFollowedTopics];
+  follows.forEach(f=>{
+    const found=(arts||[]).filter(a=>((a.title||'')+' '+(a.desc||'')+' '+(a.cat||'')).toLowerCase().includes(String(f).toLowerCase())).slice(0,1);
+    if(found.length) alerts.push({title:'New mention: '+f,message:getTitle(found[0])});
+  });
+  return alerts;
+}
+function addLocalNotification(title,message){
+  flashNotifications.unshift({title,message,created_at:new Date().toISOString()});
+  renderFlashDashboard();
+}
+async function toggleTopicFollow(topic){
+  if(!flashUser){toast('Login to follow topics');openAuthModal('login');return;}
+  try{
+    if(flashFollowedTopics.includes(topic)){
+      await flashSB.from('followed_topics').delete().eq('user_id',flashUser.id).eq('topic',topic);
+      flashFollowedTopics=flashFollowedTopics.filter(x=>x!==topic);toast('Removed '+topic);
+    }else{
+      await flashSB.from('followed_topics').upsert({user_id:flashUser.id,topic},{onConflict:'user_id,topic'});
+      flashFollowedTopics.unshift(topic);toast('⭐ Following '+topic);
+      addLocalNotification('Topic followed', 'You are now following '+topic+'.');
+    }
+    renderFlashDashboard();
+  }catch(e){toast('Could not update topic');console.warn(e);}
 }
 
 // Avoid needing a database unique constraint for saved_articles.
