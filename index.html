@@ -86,7 +86,7 @@
     #ticker{background:var(--ink);color:#fff;height:30px;display:flex;align-items:center;overflow:hidden;flex-shrink:0;transition:background .2s;}
     .ticker-lbl{font-family:var(--font-hd);font-weight:900;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:0 12px;white-space:nowrap;background:linear-gradient(90deg,#16a34a,#eab308);color:#fff;height:100%;display:flex;align-items:center;flex-shrink:0;}
     .ticker-wrap{flex:1;overflow:hidden;}
-    .ticker-track{display:flex;white-space:nowrap;animation:tick 50s linear infinite;}
+    .ticker-track{display:flex;white-space:nowrap;animation:tick 12s linear infinite;will-change:transform;}
     .ticker-track:hover{animation-play-state:paused;}
     .ticker-item{font-size:12px;font-weight:500;padding:0 22px;opacity:.9;}
     @keyframes tick{from{transform:translateX(0);}to{transform:translateX(-50%);}}
@@ -715,7 +715,8 @@
       .nc{flex-direction:column;}
       .nc-img{width:100%;min-height:130px;}
     }
-  </style>
+  /* FLASH NIGERIA TICKER FAST FIX: 12s */
+</style>
   <!-- Structured Data for Google -->
   <script type="application/ld+json">
   {
