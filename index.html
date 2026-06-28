@@ -721,6 +721,28 @@
     .profile-value{font-size:14px;color:var(--ink);font-weight:700;word-break:break-word;}
     .profile-btn{width:100%;padding:12px;border-radius:10px;margin-top:10px;font-family:var(--font-hd);font-size:14px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;background:var(--ink);color:var(--card);}
     .profile-btn.gold{background:var(--gold);color:#fff}.profile-btn.light{background:var(--bg);color:var(--ink);border:1.5px solid var(--border2);}
+    .profile-top{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+    .profile-back{width:38px;height:38px;border-radius:10px;background:var(--card);border:1.5px solid var(--border2);box-shadow:var(--shadow-s);display:flex;align-items:center;justify-content:center;color:var(--ink);}
+    .profile-top-title{font-family:var(--font-hd);font-size:18px;font-weight:900;letter-spacing:.03em;text-transform:uppercase;}
+    .pro-head{display:flex;align-items:center;justify-content:space-between;gap:14px;}
+    .pro-avatar{width:70px;height:70px;border-radius:18px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-family:var(--font-hd);font-size:34px;font-weight:900;color:#d1fae5;box-shadow:inset 0 0 0 1px rgba(255,255,255,.16);flex-shrink:0;}
+    .profile-grid{display:grid;grid-template-columns:1fr;gap:12px;}
+    .verified-line{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:12px;color:var(--green);font-weight:700;}
+    .mini-note{font-size:12px;color:var(--ink3);line-height:1.5;margin-top:5px;font-weight:500;}
+    .tracker-box{display:flex;gap:8px;margin-top:10px;}
+    .tracker-box input{flex:1;min-width:0;padding:12px;border-radius:10px;border:1.5px solid var(--border2);background:var(--bg);color:var(--ink);font:inherit;outline:none;}
+    .tracker-box input:focus{border-color:var(--gold);}
+    .tracker-box button{padding:0 14px;border-radius:10px;background:var(--gold);color:#fff;font-family:var(--font-hd);font-weight:900;letter-spacing:.04em;text-transform:uppercase;}
+    .tracker-results{margin-top:12px;display:flex;flex-direction:column;gap:8px;}
+    .tracker-result{padding:10px;border-radius:10px;background:var(--bg);border:1px solid var(--border);cursor:pointer;}
+    .tracker-result:hover{border-color:var(--gold);}
+    .tracker-src{font-size:11px;color:var(--ink3);font-weight:700;margin-bottom:4px;}
+    .tracker-title{font-family:var(--font-hd);font-size:15px;font-weight:800;line-height:1.2;color:var(--ink);}
+    .pro-lock{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--gold-bg);border:1.5px solid var(--gold-border);border-radius:12px;padding:12px;margin-top:12px;}
+    .pro-lock strong{font-family:var(--font-hd);font-size:15px;font-weight:900;color:var(--ink);}
+    .pro-lock span{display:block;font-size:12px;color:var(--ink3);margin-top:2px;}
+    .pro-lock button{background:var(--gold);color:#fff;border-radius:9px;padding:9px 12px;font-family:var(--font-hd);font-weight:900;white-space:nowrap;}
+    @media(min-width:760px){.profile-grid{grid-template-columns:1fr 1fr 1fr}.profile-card.span-all{grid-column:1/-1}.pro-card{padding:24px 28px}.pro-title{font-size:32px}}
     #auth-modal{position:fixed;inset:0;z-index:700;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.62);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);}
     #auth-modal.on{display:flex}.auth-sheet{width:100%;max-width:480px;background:var(--card);color:var(--ink);border-radius:24px 24px 0 0;padding:18px 16px 28px;box-shadow:0 -5px 28px rgba(0,0,0,.35);}
     .auth-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.auth-title{font-family:var(--font-hd);font-size:24px;font-weight:900;letter-spacing:.02em}.auth-x{width:36px;height:36px;border-radius:50%;background:var(--bg);font-weight:900}
@@ -925,11 +947,72 @@
 
 
     <div id="profile-view" class="view">
-      <div style="padding:16px 16px calc(var(--nav-h) + 16px);">
-        <div class="pro-card"><div class="pro-title">Flash Nigeria PRO</div><div class="pro-sub">Your account is ready for saved articles, company tracking, alerts, and future PRO tools.</div></div>
-        <div id="profile-logged-out" class="profile-card"><div class="profile-label">Account</div><div class="profile-value">You are not logged in yet.</div><button class="profile-btn gold" onclick="openAuthModal('signup')">Create Free Account</button><button class="profile-btn light" onclick="openAuthModal('login')">Login</button></div>
-        <div id="profile-logged-in" style="display:none"><div class="profile-card"><div class="profile-label">Logged in as</div><div class="profile-value" id="profile-email">—</div></div><div class="profile-card"><div class="profile-label">Plan</div><div class="profile-value" id="profile-plan">Free</div></div><div class="profile-card"><div class="profile-label">Saved Articles</div><div class="profile-value" id="profile-saved-count">0</div></div><button class="profile-btn gold" onclick="switchView('saved')">View Saved News</button><button class="profile-btn light" onclick="logoutFlash()">Logout</button></div>
-        <div class="profile-card"><div class="profile-label">Coming Next</div><div class="profile-value">Company Tracker, Follow Topics, Follow Companies, PRO Dashboard, and alerts.</div></div>
+      <div style="padding:14px 16px calc(var(--nav-h) + 16px);">
+        <div class="profile-top">
+          <button class="profile-back" onclick="switchView('feed')" title="Back to home">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/><line x1="10" y1="12" x2="21" y2="12"/></svg>
+          </button>
+          <div class="profile-top-title">Back to News</div>
+        </div>
+        <div class="pro-card">
+          <div class="pro-head">
+            <div class="pro-avatar" id="profile-avatar">⚡</div>
+            <div style="flex:1;min-width:0">
+              <div class="pro-title">Flash Nigeria PRO</div>
+              <div class="pro-sub">Your account is ready for saved articles, company tracking, alerts, and future PRO tools.</div>
+            </div>
+            <button class="profile-btn light" style="width:auto;margin:0;color:#fff;background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.35)" onclick="toast('Profile editing is coming next')">Edit Profile</button>
+          </div>
+        </div>
+
+        <div id="profile-logged-out" class="profile-card">
+          <div class="profile-label">Account</div>
+          <div class="profile-value">You are not logged in yet.</div>
+          <div class="mini-note">Create a free account to save articles across devices and prepare for Flash Nigeria PRO.</div>
+          <button class="profile-btn gold" onclick="openAuthModal('signup')">Create Free Account</button>
+          <button class="profile-btn light" onclick="openAuthModal('login')">Login</button>
+        </div>
+
+        <div id="profile-logged-in" style="display:none">
+          <div class="profile-grid">
+            <div class="profile-card">
+              <div class="profile-label">Logged in as</div>
+              <div class="profile-value" id="profile-email">—</div>
+              <div class="verified-line" id="profile-verified">● Email verified</div>
+            </div>
+            <div class="profile-card">
+              <div class="profile-label">Plan</div>
+              <div class="profile-value" id="profile-plan">Free</div>
+              <div class="mini-note">Upgrade anytime to unlock PRO tools.</div>
+              <button class="profile-btn gold" onclick="toast('Paystack upgrade is next')">♛ Upgrade to PRO</button>
+            </div>
+            <div class="profile-card">
+              <div class="profile-label">Saved Articles</div>
+              <div class="profile-value" id="profile-saved-count">0</div>
+              <div class="mini-note">Articles you save will appear here.</div>
+            </div>
+          </div>
+
+          <button class="profile-btn gold" onclick="switchView('saved')">🔖 View Saved News</button>
+
+          <div class="profile-card span-all" style="margin-top:12px;">
+            <div class="profile-label">Company Tracker</div>
+            <div class="profile-value">Track any company, politician, or topic from Flash Nigeria headlines.</div>
+            <div class="tracker-box">
+              <input id="company-track-input" placeholder="Try Dangote, MTN, Tinubu, CBN…"/>
+              <button onclick="runCompanyTracker()">Track</button>
+            </div>
+            <div class="tracker-results" id="company-track-results"></div>
+            <div class="pro-lock">
+              <div><strong>PRO feature preview</strong><span>Full alerts and PDF reports will unlock after payment setup.</span></div>
+              <button onclick="followTrackedCompany()">Follow</button>
+            </div>
+          </div>
+
+          <button class="profile-btn light" onclick="logoutFlash()">Logout ↪</button>
+        </div>
+
+        <div class="profile-card"><div class="profile-label">Coming Next</div><div class="profile-value">Company alerts, Follow Topics, Paystack subscriptions, PRO Dashboard, and PDF reports.</div></div>
       </div>
     </div>
 
@@ -2334,13 +2417,15 @@ function toggleNotifications(){
 const FLASH_SUPABASE_URL="https://asayqggcbtonwzwcfjya.supabase.co";
 const FLASH_SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzYXlxZ2djYnRvbnd6d2NmanlhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI2NDgzNDAsImV4cCI6MjA5ODIyNDM0MH0.DXcl2jLw3cpy_uJx3lvS4xOAxkVLlrrQmwbjPrkwZco";
 let flashSB=null, flashUser=null, authMode='login';
-function initFlashAuth(){try{if(!window.supabase)return;flashSB=window.supabase.createClient(FLASH_SUPABASE_URL,FLASH_SUPABASE_ANON_KEY);flashSB.auth.getSession().then(({data})=>{flashUser=data&&data.session?data.session.user:null;updateAuthUI();if(flashUser)loadCloudSaved();});flashSB.auth.onAuthStateChange((event,session)=>{flashUser=session?session.user:null;updateAuthUI();if(flashUser)loadCloudSaved();else{saved=JSON.parse(localStorage.getItem(SAVED_K)||'[]');renderSaved();}});}catch(e){console.warn('Auth init error',e);}}
+function initFlashAuth(){try{if(!window.supabase)return;flashSB=window.supabase.createClient(FLASH_SUPABASE_URL,FLASH_SUPABASE_ANON_KEY);flashSB.auth.getSession().then(({data})=>{flashUser=data&&data.session?data.session.user:null;updateAuthUI();if(flashUser){loadCloudSaved();cleanAuthUrl('✅ Welcome back');}else{cleanExpiredAuthUrl();}});flashSB.auth.onAuthStateChange((event,session)=>{flashUser=session?session.user:null;updateAuthUI();if(flashUser){loadCloudSaved();if(event==='SIGNED_IN')cleanAuthUrl('✅ Welcome back');}else{saved=JSON.parse(localStorage.getItem(SAVED_K)||'[]');renderSaved();}});}catch(e){console.warn('Auth init error',e);}}
+function cleanAuthUrl(msg){if(location.hash&&(/access_token|refresh_token|type=signup|error/.test(location.hash))){history.replaceState({},document.title,location.pathname);if(msg)toast(msg);}}
+function cleanExpiredAuthUrl(){if(location.hash&&/otp_expired|access_denied|error=/.test(location.hash)){toast('Email link expired. Please sign up or login again.');history.replaceState({},document.title,location.pathname);}}
 function openAuthModal(mode){setAuthMode(mode||'login');document.getElementById('auth-modal').classList.add('on');}
 function closeAuthModal(){document.getElementById('auth-modal').classList.remove('on');}
 function setAuthMode(mode){authMode=mode==='signup'?'signup':'login';document.getElementById('auth-login-tab').classList.toggle('on',authMode==='login');document.getElementById('auth-signup-tab').classList.toggle('on',authMode==='signup');document.getElementById('auth-name-wrap').style.display=authMode==='signup'?'block':'none';document.getElementById('auth-submit-btn').textContent=authMode==='signup'?'Create Account':'Login';document.getElementById('auth-message').textContent=authMode==='signup'?'Create a free Flash Nigeria account. You may need to confirm your email.':'Login to sync your saved stories across devices.';}
 async function submitAuth(){if(!flashSB){toast('Auth not ready. Refresh and try again.');return;}const email=document.getElementById('auth-email').value.trim();const password=document.getElementById('auth-password').value;const fullName=document.getElementById('auth-name').value.trim();const msg=document.getElementById('auth-message');if(!email||!password){msg.textContent='Enter email and password.';return;}msg.textContent='Please wait...';try{let res;if(authMode==='signup'){res=await flashSB.auth.signUp({email,password,options:{data:{full_name:fullName}}});if(res.error)throw res.error;msg.textContent='Account created. Check your email if confirmation is required.';toast('✅ Flash account created');}else{res=await flashSB.auth.signInWithPassword({email,password});if(res.error)throw res.error;msg.textContent='Logged in successfully.';toast('✅ Logged in');closeAuthModal();}}catch(e){msg.textContent=e.message||'Authentication failed.';toast('⚠️ '+msg.textContent);}}
 async function logoutFlash(){if(!flashSB)return;await flashSB.auth.signOut();toast('Logged out');updateAuthUI();}
-function updateAuthUI(){const btn=document.getElementById('auth-open-btn');const logged=!!flashUser;if(btn){btn.textContent=logged?'Account':'Login';btn.onclick=logged?function(){switchView('profile')}:function(){openAuthModal('login')}}const out=document.getElementById('profile-logged-out'),inn=document.getElementById('profile-logged-in');if(out&&inn){out.style.display=logged?'none':'block';inn.style.display=logged?'block':'none';}const emailEl=document.getElementById('profile-email');if(emailEl)emailEl.textContent=logged?flashUser.email:'—';const planEl=document.getElementById('profile-plan');if(planEl)planEl.textContent=logged?'Free — PRO ready':'Free';updateProfileSavedCount();}
+function updateAuthUI(){const btn=document.getElementById('auth-open-btn');const logged=!!flashUser;if(btn){btn.textContent=logged?'Account':'Login';btn.onclick=logged?function(){switchView('profile')}:function(){openAuthModal('login')}}const out=document.getElementById('profile-logged-out'),inn=document.getElementById('profile-logged-in');if(out&&inn){out.style.display=logged?'none':'block';inn.style.display=logged?'block':'none';}const emailEl=document.getElementById('profile-email');if(emailEl)emailEl.textContent=logged?flashUser.email:'—';const planEl=document.getElementById('profile-plan');if(planEl)planEl.textContent=logged?'Free — PRO ready':'Free';const av=document.getElementById('profile-avatar');if(av){const seed=logged?(flashUser.user_metadata?.full_name||flashUser.email||'F'):'⚡';av.textContent=logged?seed.trim().charAt(0).toUpperCase():'⚡';}const ver=document.getElementById('profile-verified');if(ver&&logged){ver.textContent=flashUser.email_confirmed_at?'● Email verified':'○ Email not verified yet';ver.style.color=flashUser.email_confirmed_at?'var(--green)':'var(--red)';}updateProfileSavedCount();}
 function updateProfileSavedCount(){const el=document.getElementById('profile-saved-count');if(el)el.textContent=String(saved.length||0);}
 async function loadCloudSaved(){if(!flashSB||!flashUser)return;try{const {data,error}=await flashSB.from('saved_articles').select('*').eq('user_id',flashUser.id).order('created_at',{ascending:false});if(error)throw error;saved=(data||[]).map(row=>({id:row.article_id,title:row.title,source:row.source,link:row.link,img:row.image_url,cat:row.category,pub:row.published_at}));localStorage.setItem(SAVED_K,JSON.stringify(saved));renderSaved();updateBadge();updateProfileSavedCount();}catch(e){console.warn('Cloud saved load error',e);}}
 async function saveCloudArticle(a){if(!flashSB||!flashUser||!a)return;try{await flashSB.from('saved_articles').upsert({user_id:flashUser.id,article_id:String(a.id),title:a.title||'',source:a.source||'',link:a.link||'',image_url:a.img||'',category:a.cat||'',published_at:a.pub||null},{onConflict:'user_id,article_id'});}catch(e){console.warn('Cloud save error',e);}}
@@ -2348,6 +2433,31 @@ async function removeCloudArticle(a){if(!flashSB||!flashUser||!a)return;try{awai
 async function clearCloudSaved(){if(!flashSB||!flashUser)return;try{await flashSB.from('saved_articles').delete().eq('user_id',flashUser.id);}catch(e){console.warn('Cloud clear error',e);}}
 const _oldToggleSave=toggleSave;toggleSave=function(a,btn){const wasSaved=saved.some(s=>s.id===a.id);_oldToggleSave(a,btn);if(flashUser){if(wasSaved)removeCloudArticle(a);else saveCloudArticle(a);}else{toast('📌 Saved on this device. Login to sync.');}updateProfileSavedCount();};
 const _oldRenderSaved=renderSaved;renderSaved=function(){_oldRenderSaved();updateProfileSavedCount();};
+
+let lastTrackedCompany='';
+async function runCompanyTracker(){
+  const inp=document.getElementById('company-track-input');
+  const box=document.getElementById('company-track-results');
+  if(!inp||!box)return;
+  const q=inp.value.trim();
+  if(!q){box.innerHTML='<div class="mini-note">Enter a company, politician, or keyword first.</div>';return;}
+  lastTrackedCompany=q;
+  box.innerHTML='<div class="mini-note">Searching Flash Nigeria headlines…</div>';
+  let results=(arts||[]).filter(a=>((a.title||'')+' '+(a.desc||'')+' '+(a.source||'')).toLowerCase().includes(q.toLowerCase()));
+  if(results.length<3){
+    try{const r=await fetch(`${API}?q=${encodeURIComponent(q)}&_=${Date.now()}`,{cache:'no-store'});const d=await r.json();if(d.status==='ok'&&d.articles)results=d.articles;}catch(e){}
+  }
+  results=results.slice(0,8);
+  if(!results.length){box.innerHTML=`<div class="mini-note">No current story found for <strong>${q}</strong>. Try another keyword.</div>`;return;}
+  box.innerHTML=`<div class="mini-note"><strong>${results.length}</strong> current mention${results.length===1?'':'s'} found for <strong>${q}</strong>.</div>`+results.map((a,i)=>`<div class="tracker-result" data-i="${i}"><div class="tracker-src">${a.source||'Flash Nigeria'} · ${ago(a.pub)}</div><div class="tracker-title">${getTitle(a)}</div></div>`).join('');
+  box.querySelectorAll('.tracker-result').forEach((el,i)=>el.addEventListener('click',()=>openArt(results[i])));
+}
+async function followTrackedCompany(){
+  const q=(lastTrackedCompany||(document.getElementById('company-track-input')?.value||'')).trim();
+  if(!q){toast('Enter a company first');return;}
+  if(!flashUser){toast('Login to follow companies');openAuthModal('login');return;}
+  try{await flashSB.from('followed_companies').upsert({user_id:flashUser.id,company_name:q},{onConflict:'user_id,company_name'});toast('⭐ Following '+q);}catch(e){toast('Could not follow yet');console.warn(e);}
+}
 
 </script>
 </body>
