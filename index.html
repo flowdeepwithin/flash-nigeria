@@ -770,6 +770,13 @@
     .tracker-stat span{font-size:10px;color:var(--ink4);font-weight:800;text-transform:uppercase;letter-spacing:.06em;}
     .pro-badge{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#16a34a,#0f7a34);color:#fff;border-radius:999px;padding:6px 10px;font-family:var(--font-hd);font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;}
     .private-note{font-size:12px;color:var(--ink3);line-height:1.5;}
+
+    .pro-feature-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-top:12px;}
+    .pro-feature-card{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:12px;}
+    .pro-feature-card strong{display:block;font-family:var(--font-hd);font-size:15px;font-weight:900;color:var(--ink);letter-spacing:.02em;}
+    .pro-feature-card span{display:block;font-size:12px;color:var(--ink3);line-height:1.45;margin-top:3px;}
+    .available-soon{display:inline-flex;align-items:center;gap:6px;margin-top:12px;background:var(--gold-bg);color:var(--gold);border:1.5px solid var(--gold-border);border-radius:999px;padding:7px 12px;font-family:var(--font-hd);font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;}
+    @media(min-width:760px){.pro-feature-grid{grid-template-columns:repeat(2,1fr)}}
     @media(min-width:760px){.dash-grid{grid-template-columns:repeat(3,1fr)}}
 
     /* TABLET */
@@ -981,7 +988,7 @@
             <div class="pro-avatar" id="profile-avatar">⚡</div>
             <div style="flex:1;min-width:0">
               <div class="pro-title">Flash Nigeria PRO</div>
-              <div class="pro-sub">Your account is ready for saved articles, company tracking, alerts, and future PRO tools.</div>
+              <div class="pro-sub">Your premium news workspace for saved articles, company tracking, alerts, executive briefs, and future intelligence tools.</div>
             </div>
             <button class="profile-btn light" style="width:auto;margin:0;color:#fff;background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.35)" onclick="toast('Profile editing is coming next')">Edit Profile</button>
           </div>
@@ -990,7 +997,7 @@
         <div id="profile-logged-out" class="profile-card">
           <div class="profile-label">Account</div>
           <div class="profile-value">You are not logged in yet.</div>
-          <div class="mini-note">Create a free account to save articles across devices and prepare for Flash Nigeria PRO.</div>
+          <div class="mini-note">Create a free account to save articles, follow topics, and prepare your personalized Flash Nigeria workspace.</div>
           <button class="profile-btn gold" onclick="openAuthModal('signup')">Create Free Account</button>
           <button class="profile-btn light" onclick="openAuthModal('login')">Login</button>
         </div>
@@ -1038,28 +1045,37 @@
 
           <div class="profile-card span-all" style="margin-top:12px;">
             <div class="profile-label">Company Tracker</div>
-            <div class="profile-value">Track any company, politician, or topic from Flash Nigeria headlines.</div>
+            <div class="profile-value">Search across Flash Nigeria headlines to monitor companies, organizations, public figures, or topics in real time.</div>
             <div class="tracker-box">
               <input id="company-track-input" placeholder="Try Dangote, MTN, Tinubu, CBN…"/>
               <button onclick="runCompanyTracker()">Track</button>
             </div>
             <div class="tracker-results" id="company-track-results"></div>
             <div class="pro-lock">
-              <div><strong>Monitor this keyword</strong><span>Follow it and it will appear inside your dashboard alerts.</span></div>
+              <div><strong>Follow this keyword</strong><span>Add it to your intelligence dashboard for personalized news updates.</span></div>
               <button onclick="followTrackedCompany()">Follow</button>
             </div>
           </div>
 
           <div class="profile-card span-all" style="margin-top:12px;">
             <div class="profile-label">Notification Center</div>
-            <div class="profile-value">Your personalized Flash Nigeria updates.</div>
+            <div class="profile-value">You are all caught up. Follow companies or topics to receive personalized news alerts.</div>
             <div class="notif-list" id="flash-notification-list"></div>
           </div>
 
           <div class="profile-card span-all" style="margin-top:12px;">
             <div class="profile-label">PRO Dashboard</div>
-            <div class="profile-value"><span class="pro-badge">♛ PRO Ready</span></div>
-            <div class="private-note" style="margin-top:10px;">Executive brief, company reports, PDF exports, and AI summaries are being staged behind your account dashboard. Public visitors will not see payment setup details.</div>
+            <div class="profile-value"><span class="pro-badge">♛ Flash Nigeria PRO</span></div>
+            <div class="private-note" style="margin-top:10px;">Flash Nigeria PRO is your premium intelligence workspace. Unlock executive news briefings, company tracking, personalized alerts, AI-powered research, PDF reports, and advanced market insights designed to help professionals stay ahead.</div>
+            <div class="pro-feature-grid">
+              <div class="pro-feature-card"><strong>🗞️ Executive Daily Brief</strong><span>Morning summary of Nigeria's top stories and key developments.</span></div>
+              <div class="pro-feature-card"><strong>🏢 Company Intelligence</strong><span>Track companies, organizations, brands, and public figures.</span></div>
+              <div class="pro-feature-card"><strong>🔔 Personalized Alerts</strong><span>Follow topics and keywords that matter to you.</span></div>
+              <div class="pro-feature-card"><strong>📄 PDF Reports</strong><span>Export professional intelligence reports for meetings and records.</span></div>
+              <div class="pro-feature-card"><strong>🤖 AI Research Assistant</strong><span>Ask questions about Nigerian news, policy, business, and events.</span></div>
+              <div class="pro-feature-card"><strong>📊 Market Insights</strong><span>Business, economy, currency, and sector intelligence in one place.</span></div>
+            </div>
+            <div class="available-soon">🚀 Available Soon</div>
           </div>
 
           <button class="profile-btn light" onclick="logoutFlash()">Logout ↪</button>
