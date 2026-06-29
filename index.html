@@ -770,6 +770,12 @@
     .tracker-results{margin-top:12px;display:flex;flex-direction:column;gap:8px;}
     .tracker-result{padding:10px;border-radius:10px;background:var(--bg);border:1px solid var(--border);cursor:pointer;}
     .tracker-result:hover{border-color:var(--gold);}
+    .tracker-related{margin-top:12px;border-top:1px solid var(--border);padding-top:12px;}
+    .tracker-related-hd{font-family:var(--font-hd);font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;color:var(--ink);margin-bottom:4px;}
+    .tracker-related-sub{font-size:12px;color:var(--ink3);line-height:1.45;margin-bottom:8px;}
+    .tracker-related-list{display:flex;flex-direction:column;gap:7px;}
+    .tracker-related-card{padding:9px 10px;border-radius:10px;background:var(--card);border:1px solid var(--border2);cursor:pointer;}
+    .tracker-related-card:hover{border-color:var(--gold);background:var(--gold-bg);}
     .tracker-quick{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px;}
     .tracker-quick button{font-family:var(--font-hd);font-size:12px;font-weight:800;letter-spacing:.03em;padding:6px 10px;border-radius:20px;border:1px solid var(--border2);background:var(--card);color:var(--ink3);}
     .tracker-quick button:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-bg);}
@@ -1122,7 +1128,7 @@
 
           <div class="profile-card span-all" style="margin-top:12px;">
             <div class="profile-label">Company Tracker</div>
-            <div class="profile-value">Search exact headline mentions only. If the name is not in the headline, it will not show here.</div>
+            <div class="profile-value">Search exact headline mentions first. If none is found, Flash Intelligence will show clearly-labeled related category stories.</div>
             <div class="tracker-box">
               <input id="company-track-input" placeholder="Try Dangote, MTN, Tinubu, CBN, Davido…"/>
               <button onclick="runCompanyTracker()">Track</button>
@@ -2612,6 +2618,29 @@ function quickTrack(term){
   if(inp) inp.value=term;
   runCompanyTracker();
 }
+function trackerCategoryFor(term){
+  const q=String(term||'').toLowerCase();
+  const celebs=['davido','wizkid','burna boy','rema','tems','funke akindele','ayra starr','tiwa savage','asake','odumodublvck'];
+  const sports=['osimhen','super eagles','football','arsenal','chelsea','man united'];
+  const politics=['tinubu','peter obi','atiku','wike','akpabio','senate','inec','election'];
+  const business=['cbn','dangote','mtn','airtel','glo','access bank','gtbank','zenith','naira','fuel','bank'];
+  if(celebs.some(x=>q.includes(x))) return {cat:'entertainment',label:'Related entertainment stories'};
+  if(sports.some(x=>q.includes(x))) return {cat:'sports',label:'Related sports stories'};
+  if(politics.some(x=>q.includes(x))) return {cat:'politics',label:'Related politics stories'};
+  if(business.some(x=>q.includes(x))) return {cat:'business',label:'Related business and economy stories'};
+  return {cat:'',label:'Related current stories'};
+}
+function getTrackerRelatedStories(term){
+  const meta=trackerCategoryFor(term);
+  let pool=(arts||[]).filter(a=>meta.cat ? a.cat===meta.cat : true);
+  if(!pool.length && meta.cat){ pool=(arts||[]).filter(a=>String(a.title+' '+(a.desc||'')).toLowerCase().includes(meta.cat)); }
+  return pool.sort((a,b)=>new Date(b.pub||0)-new Date(a.pub||0));
+}
+function renderTrackerRelated(term, related){
+  const meta=trackerCategoryFor(term);
+  return `<div class="tracker-related"><div class="tracker-related-hd">${meta.label}</div><div class="tracker-related-sub">These are not exact mentions of <strong>${term}</strong>. They are related headlines from the same category so the tracker stays accurate but still useful.</div><div class="tracker-related-list">`+
+    related.map(a=>`<div class="tracker-related-card"><div class="tracker-src">${a.source||'Flash Nigeria'} · ${ago(a.pub)}</div><div class="tracker-title">${getTitle(a)}</div></div>`).join('')+`</div></div>`;
+}
 async function runCompanyTracker(){
   const inp=document.getElementById('company-track-input');
   const box=document.getElementById('company-track-results');
@@ -2639,7 +2668,10 @@ async function runCompanyTracker(){
 
   results=results.slice(0,8);
   if(!results.length){
-    box.innerHTML=`<div class="mini-note">No exact headline mention found for <strong>${q}</strong> right now. Try another company, public figure, celebrity, or topic.</div>`;
+    const related=getTrackerRelatedStories(q).slice(0,5);
+    box.innerHTML=`<div class="mini-note">No exact headline mention found for <strong>${q}</strong> right now.</div>` +
+      (related.length ? renderTrackerRelated(q, related) : `<div class="mini-note">Try another company, public figure, celebrity, or topic.</div>`);
+    box.querySelectorAll('.tracker-related-card').forEach((el,i)=>el.addEventListener('click',()=>openArt(related[i])));
     return;
   }
   const srcs=[...new Set(results.map(a=>a.source||'Flash Nigeria'))];
