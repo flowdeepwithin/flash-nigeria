@@ -1128,7 +1128,7 @@
 
           <div class="profile-card span-all" style="margin-top:12px;">
             <div class="profile-label">Company Tracker</div>
-            <div class="profile-value">Search exact headline mentions first. If none is found, Flash Intelligence will show clearly-labeled related category stories.</div>
+            <div class="profile-value">Search exact mentions from the latest 48-hour Flash Nigeria window. Exact matches show first; related stories are clearly labeled.</div>
             <div class="tracker-box">
               <input id="company-track-input" placeholder="Try Dangote, MTN, Tinubu, CBN, Davido…"/>
               <button onclick="runCompanyTracker()">Track</button>
@@ -2641,41 +2641,101 @@ function renderTrackerRelated(term, related){
   return `<div class="tracker-related"><div class="tracker-related-hd">${meta.label}</div><div class="tracker-related-sub">These are not exact mentions of <strong>${term}</strong>. They are related headlines from the same category so the tracker stays accurate but still useful.</div><div class="tracker-related-list">`+
     related.map(a=>`<div class="tracker-related-card"><div class="tracker-src">${a.source||'Flash Nigeria'} · ${ago(a.pub)}</div><div class="tracker-title">${getTitle(a)}</div></div>`).join('')+`</div></div>`;
 }
+function withinTracker48h(a){
+  if(!a || !a.pub) return true;
+  const t=new Date(a.pub).getTime();
+  if(!Number.isFinite(t)) return true;
+  return Date.now()-t <= 48*60*60*1000;
+}
+function trackerSortRecent(list){
+  return (list||[]).slice().sort((a,b)=>new Date(b.pub||0)-new Date(a.pub||0));
+}
+async function fetchTrackerWindow(q){
+  const collected=[];
+  const seen=new Set();
+  function addMany(items){
+    (items||[]).forEach(a=>{
+      const k=String(a.id||a.link||a.title||'');
+      if(k && !seen.has(k)){seen.add(k);collected.push(a);}
+    });
+  }
+  addMany((arts||[]).filter(withinTracker48h));
+  let page=null;
+  for(let i=0;i<6;i++){
+    try{
+      const p=new URLSearchParams();
+      p.set('q',q);
+      if(page) p.set('page',page);
+      p.set('_',Date.now()+''+i);
+      const r=await fetch(`${API}?${p.toString()}`,{cache:'no-store'});
+      if(!r.ok) break;
+      const d=await r.json();
+      if(d.status!=='ok') break;
+      addMany((d.articles||[]).filter(withinTracker48h));
+      page=d.nextPage||null;
+      if(!page) break;
+      const oldest=(d.articles||[]).map(a=>new Date(a.pub||0).getTime()).filter(Number.isFinite).sort((a,b)=>a-b)[0];
+      if(oldest && Date.now()-oldest>48*60*60*1000) break;
+    }catch(e){break;}
+  }
+  return trackerSortRecent(collected);
+}
+async function fetchRelatedTrackerWindow(term){
+  const meta=trackerCategoryFor(term);
+  const collected=[];
+  const seen=new Set();
+  function addMany(items){
+    (items||[]).forEach(a=>{
+      const k=String(a.id||a.link||a.title||'');
+      if(k && !seen.has(k)){seen.add(k);collected.push(a);}
+    });
+  }
+  addMany((arts||[]).filter(withinTracker48h));
+  if(meta.cat){
+    let page=null;
+    for(let i=0;i<4;i++){
+      try{
+        const p=new URLSearchParams();
+        p.set('category',meta.cat);
+        if(page) p.set('page',page);
+        p.set('_',Date.now()+''+i);
+        const r=await fetch(`${API}?${p.toString()}`,{cache:'no-store'});
+        if(!r.ok) break;
+        const d=await r.json();
+        if(d.status!=='ok') break;
+        addMany((d.articles||[]).filter(withinTracker48h));
+        page=d.nextPage||null;
+        if(!page) break;
+      }catch(e){break;}
+    }
+  }
+  let pool=collected.filter(a=>meta.cat ? a.cat===meta.cat : true);
+  if(!pool.length) pool=collected;
+  return trackerSortRecent(pool);
+}
 async function runCompanyTracker(){
   const inp=document.getElementById('company-track-input');
   const box=document.getElementById('company-track-results');
   if(!inp||!box)return;
   const q=inp.value.trim();
-  if(!q){box.innerHTML='<div class="mini-note">Enter a company, politician, or keyword first.</div>';return;}
+  if(!q){box.innerHTML='<div class="mini-note">Enter a company, public figure, celebrity, or topic first.</div>';return;}
   lastTrackedCompany=q;
-  box.innerHTML='<div class="mini-note">Searching exact headline mentions only…</div>';
+  box.innerHTML='<div class="mini-note">Searching the latest 48 hours for exact headline mentions…</div>';
 
-  // First search the loaded headlines strictly.
-  let results=(arts||[]).filter(a=>trackerMatches(a,q));
+  let windowStories=await fetchTrackerWindow(q);
+  let results=windowStories.filter(a=>trackerMatches(a,q));
+  results=trackerSortRecent(results).slice(0,12);
 
-  // Then ask the live API, but still strictly filter the returned stories.
-  if(results.length<3){
-    try{
-      const r=await fetch(`${API}?q=${encodeURIComponent(q)}&_=${Date.now()}`,{cache:'no-store'});
-      const d=await r.json();
-      if(d.status==='ok'&&d.articles){
-        const live=(d.articles||[]).filter(a=>trackerMatches(a,q));
-        const seen=new Set(results.map(a=>String(a.id||a.link||a.title)));
-        live.forEach(a=>{const k=String(a.id||a.link||a.title);if(!seen.has(k)){seen.add(k);results.push(a);}});
-      }
-    }catch(e){}
-  }
-
-  results=results.slice(0,8);
   if(!results.length){
-    const related=getTrackerRelatedStories(q).slice(0,5);
-    box.innerHTML=`<div class="mini-note">No exact headline mention found for <strong>${q}</strong> right now.</div>` +
+    const related=(await fetchRelatedTrackerWindow(q)).filter(a=>!trackerMatches(a,q)).slice(0,8);
+    box.innerHTML=`<div class="mini-note">No exact headline mention found for <strong>${q}</strong> in the latest 48 hours.</div>` +
       (related.length ? renderTrackerRelated(q, related) : `<div class="mini-note">Try another company, public figure, celebrity, or topic.</div>`);
     box.querySelectorAll('.tracker-related-card').forEach((el,i)=>el.addEventListener('click',()=>openArt(related[i])));
     return;
   }
   const srcs=[...new Set(results.map(a=>a.source||'Flash Nigeria'))];
-  box.innerHTML=`<div class="tracker-stats"><div class="tracker-stat"><b>${results.length}</b><span>Exact Mentions</span></div><div class="tracker-stat"><b>${srcs.length}</b><span>Sources</span></div><div class="tracker-stat"><b>${results.filter(isTrending).length}</b><span>Trending</span></div></div><div class="mini-note"><strong>${results.length}</strong> exact current mention${results.length===1?'':'s'} found for <strong>${q}</strong>.</div>`+results.map((a,i)=>`<div class="tracker-result" data-i="${i}"><div class="tracker-src">${a.source||'Flash Nigeria'} · ${ago(a.pub)}</div><div class="tracker-title">${getTitle(a)}</div></div>`).join('');
+  const newest=results[0]?.pub?ago(results[0].pub):'recent';
+  box.innerHTML=`<div class="tracker-stats"><div class="tracker-stat"><b>${results.length}</b><span>48H Mentions</span></div><div class="tracker-stat"><b>${srcs.length}</b><span>Sources</span></div><div class="tracker-stat"><b>${results.filter(isTrending).length}</b><span>Trending</span></div></div><div class="mini-note"><strong>${results.length}</strong> exact headline mention${results.length===1?'':'s'} found for <strong>${q}</strong> in the latest 48 hours. Most recent: ${newest}.</div>`+results.map((a,i)=>`<div class="tracker-result" data-i="${i}"><div class="tracker-src">${a.source||'Flash Nigeria'} · ${ago(a.pub)}</div><div class="tracker-title">${getTitle(a)}</div></div>`).join('');
   box.querySelectorAll('.tracker-result').forEach((el,i)=>el.addEventListener('click',()=>openArt(results[i])));
 }
 async function followTrackedCompany(){
