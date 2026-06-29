@@ -425,8 +425,40 @@
     .ab-social-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-bg);}
     .ab-social-btn.wa{color:var(--green);border-color:var(--green-border);background:var(--green-bg);}
 
+
+
+    /* MY FEED */
+    #myfeed-view{padding:14px 16px calc(var(--nav-h) + 16px);}
+    .mf-hero{background:linear-gradient(135deg,#052e1a,#0f6b39);color:#fff;border-radius:16px;padding:20px 18px;box-shadow:var(--shadow-m);margin-bottom:12px;position:relative;overflow:hidden;}
+    .mf-hero:after{content:'';position:absolute;right:-60px;top:-60px;width:170px;height:170px;border-radius:50%;background:rgba(255,255,255,.08);}
+    .mf-kicker{font-family:var(--font-hd);font-size:12px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.68);}
+    .mf-title{font-family:var(--font-hd);font-size:28px;font-weight:900;line-height:1.05;margin:6px 0;}
+    .mf-sub{font-size:13px;color:rgba(255,255,255,.78);line-height:1.55;max-width:720px;}
+    .mf-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0;}
+    .mf-stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;box-shadow:var(--shadow-s);}
+    .mf-stat b{display:block;font-family:var(--font-hd);font-size:22px;font-weight:900;color:var(--gold);line-height:1;}
+    .mf-stat span{display:block;font-size:11px;color:var(--ink3);font-weight:800;text-transform:uppercase;letter-spacing:.06em;margin-top:5px;}
+    .mf-section{background:var(--card);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow-s);padding:14px;margin-top:12px;}
+    .mf-section-hd{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;}
+    .mf-section-title{font-family:var(--font-hd);font-size:15px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;color:var(--ink);}
+    .mf-section-note{font-size:12px;color:var(--ink4);}
+    .mf-chip-row{display:flex;gap:7px;flex-wrap:wrap;}
+    .mf-chip{font-size:12px;font-weight:800;border:1px solid var(--border2);background:var(--bg);color:var(--ink3);border-radius:20px;padding:6px 11px;}
+    .mf-chip.on{background:var(--gold-bg);border-color:var(--gold-border);color:var(--gold);}
+    .mf-list{display:flex;flex-direction:column;gap:9px;}
+    .mf-item{display:flex;gap:10px;align-items:flex-start;padding:10px;border:1px solid var(--border);border-radius:12px;background:var(--bg);cursor:pointer;transition:all .15s;}
+    .mf-item:hover{border-color:var(--gold-border);background:var(--gold-bg);}
+    .mf-ico{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--card);border:1px solid var(--border2);font-size:17px;}
+    .mf-meta{font-size:11px;color:var(--ink3);font-weight:700;margin-bottom:3px;}
+    .mf-headline{font-family:var(--font-hd);font-size:16px;font-weight:900;line-height:1.15;color:var(--ink);}
+    .mf-empty{padding:18px;text-align:center;color:var(--ink3);font-size:13px;line-height:1.6;background:var(--bg);border-radius:12px;border:1px dashed var(--border2);}
+    .mf-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;}
+    .mf-btn{font-family:var(--font-hd);font-size:13px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;border-radius:10px;padding:11px;border:1.5px solid var(--border2);background:var(--card);color:var(--ink);}
+    .mf-btn.gold{background:var(--gold);border-color:var(--gold);color:#fff;}
+    @media(max-width:540px){.mf-stats{grid-template-columns:1fr 1fr 1fr}.mf-title{font-size:24px}.mf-actions{grid-template-columns:1fr}}
+
     /* NAV */
-    #nav{height:var(--nav-h);background:var(--nav-bg);border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(5,1fr);flex-shrink:0;z-index:10;transition:background .2s;}
+    #nav{height:var(--nav-h);background:var(--nav-bg);border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(6,1fr);flex-shrink:0;z-index:10;transition:background .2s;}
     .ni{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--ink4);transition:color .15s;position:relative;}
     .ni.on{color:var(--ink);}
     .ni svg{width:20px;height:20px;}
@@ -736,6 +768,9 @@
     .tracker-results{margin-top:12px;display:flex;flex-direction:column;gap:8px;}
     .tracker-result{padding:10px;border-radius:10px;background:var(--bg);border:1px solid var(--border);cursor:pointer;}
     .tracker-result:hover{border-color:var(--gold);}
+    .tracker-quick{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px;}
+    .tracker-quick button{font-family:var(--font-hd);font-size:12px;font-weight:800;letter-spacing:.03em;padding:6px 10px;border-radius:20px;border:1px solid var(--border2);background:var(--card);color:var(--ink3);}
+    .tracker-quick button:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-bg);}
     .tracker-src{font-size:11px;color:var(--ink3);font-weight:700;margin-bottom:4px;}
     .tracker-title{font-family:var(--font-hd);font-size:15px;font-weight:800;line-height:1.2;color:var(--ink);}
     .pro-lock{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--gold-bg);border:1.5px solid var(--gold-border);border-radius:12px;padding:12px;margin-top:12px;}
@@ -959,6 +994,45 @@
       </div>
     </div>
 
+
+
+    <div id="myfeed-view" class="view">
+      <div class="mf-hero">
+        <div class="mf-kicker">Personalized News</div>
+        <div class="mf-title" id="mf-greeting">My Feed</div>
+        <div class="mf-sub">A smarter Flash Nigeria feed built around your saved articles, followed topics, followed companies, and the latest headlines that matter to you.</div>
+      </div>
+      <div class="mf-stats">
+        <div class="mf-stat"><b id="mf-saved-count">0</b><span>Saved</span></div>
+        <div class="mf-stat"><b id="mf-follow-count">0</b><span>Following</span></div>
+        <div class="mf-stat"><b id="mf-alert-count">0</b><span>Alerts</span></div>
+      </div>
+      <div class="mf-section">
+        <div class="mf-section-hd"><div class="mf-section-title">⭐ Your Interests</div><div class="mf-section-note">Topics & companies you follow</div></div>
+        <div class="mf-chip-row" id="mf-interest-chips"></div>
+      </div>
+      <div class="mf-section">
+        <div class="mf-section-hd"><div class="mf-section-title">🔥 Breaking For You</div><button class="rfsh-btn" onclick="renderMyFeed()">Refresh</button></div>
+        <div class="mf-list" id="mf-personal-list"></div>
+      </div>
+      <div class="mf-section">
+        <div class="mf-section-hd"><div class="mf-section-title">📚 Saved Articles</div><button class="rfsh-btn" onclick="switchView('saved')">View All</button></div>
+        <div class="mf-list" id="mf-saved-list"></div>
+      </div>
+      <div class="mf-section">
+        <div class="mf-section-hd"><div class="mf-section-title">🔔 Latest Alerts</div><div class="mf-section-note">From followed items</div></div>
+        <div class="mf-list" id="mf-alert-list"></div>
+      </div>
+      <div class="mf-section">
+        <div class="mf-section-hd"><div class="mf-section-title">📈 Trending Across Nigeria</div><div class="mf-section-note">Everyone sees this</div></div>
+        <div class="mf-list" id="mf-trending-list"></div>
+      </div>
+      <div class="mf-actions">
+        <button class="mf-btn gold" onclick="switchView('profile')">Manage My Feed</button>
+        <button class="mf-btn" onclick="switchView('feed')">Back to Home News</button>
+      </div>
+    </div>
+
     <div id="search-view" class="view">
       <div class="srch-bar">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -1045,10 +1119,23 @@
 
           <div class="profile-card span-all" style="margin-top:12px;">
             <div class="profile-label">Company Tracker</div>
-            <div class="profile-value">Search across Flash Nigeria headlines to monitor companies, organizations, public figures, or topics in real time.</div>
+            <div class="profile-value">Search exact headline mentions only. If the name is not in the headline, it will not show here.</div>
             <div class="tracker-box">
-              <input id="company-track-input" placeholder="Try Dangote, MTN, Tinubu, CBN…"/>
+              <input id="company-track-input" placeholder="Try Dangote, MTN, Tinubu, CBN, Davido…"/>
               <button onclick="runCompanyTracker()">Track</button>
+            </div>
+            <div class="tracker-quick" id="tracker-quick">
+              <button onclick="quickTrack('Tinubu')">Tinubu</button>
+              <button onclick="quickTrack('CBN')">CBN</button>
+              <button onclick="quickTrack('Dangote')">Dangote</button>
+              <button onclick="quickTrack('MTN')">MTN</button>
+              <button onclick="quickTrack('Davido')">Davido</button>
+              <button onclick="quickTrack('Wizkid')">Wizkid</button>
+              <button onclick="quickTrack('Burna Boy')">Burna Boy</button>
+              <button onclick="quickTrack('Rema')">Rema</button>
+              <button onclick="quickTrack('Tems')">Tems</button>
+              <button onclick="quickTrack('Osimhen')">Osimhen</button>
+              <button onclick="quickTrack('Funke Akindele')">Funke Akindele</button>
             </div>
             <div class="tracker-results" id="company-track-results"></div>
             <div class="pro-lock">
@@ -1162,6 +1249,7 @@
 
   <nav id="nav">
     <button class="ni on" data-v="feed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span class="ni-lbl">Home</span></button>
+    <button class="ni" data-v="myfeed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.5 6.5L21 9l-5 4.2 1.5 6.8L12 16.4 6.5 20 8 13.2 3 9l6.5-.5L12 2z"/></svg><span class="ni-lbl">My Feed</span></button>
     <button class="ni" data-v="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span class="ni-lbl">Search</span></button>
     <button class="ni" data-v="saved"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span class="ni-lbl">Saved</span><span class="ni-badge" id="sv-badge" style="display:none">0</span></button>
     <button class="ni" data-v="profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg><span class="ni-lbl">Profile</span></button>
@@ -1194,7 +1282,7 @@
     <button class="vp-close" id="vp-close2" onclick="document.getElementById('vp-close').click()" style="position:absolute;top:12px;right:12px;width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.08);border:2px solid rgba(0,0,0,.1);font-size:18px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
     <div class="vp-title">⚡ Flash Voice</div>
     <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:4px;">
-      <div class="vp-sub" style="margin:0;">Speak or type any topic — tap 💡 below</div>
+      <div class="vp-sub" style="margin:0;">Ask Flash Voice to find and read today’s headlines</div>
       <button id="vp-pidgin-btn" onclick="toggleVPPidgin()" style="font-family:var(--font-hd);font-size:11px;font-weight:800;letter-spacing:.04em;padding:4px 10px;border-radius:6px;border:1.5px solid var(--border2);color:var(--ink3);background:var(--bg);cursor:pointer;white-space:nowrap;transition:all .15s;">
         🗣️ PIDGIN
       </button>
@@ -1573,7 +1661,9 @@ function switchView(v){
   document.getElementById('cats').style.display=isAbout?'none':'';
   document.getElementById('rate-bar').style.display=isAbout?'none':'';
   document.getElementById('new-banner').classList.remove('show');
+  if(v==='myfeed') renderMyFeed();
 }
+
 
 // ── CATS ──
 function bindCats(){
@@ -2503,6 +2593,22 @@ const _oldToggleSave=toggleSave;toggleSave=function(a,btn){const wasSaved=saved.
 const _oldRenderSaved=renderSaved;renderSaved=function(){_oldRenderSaved();updateProfileSavedCount();};
 
 let lastTrackedCompany='';
+function trackerTitleText(a){return String(a && a.title ? a.title : '').toLowerCase();}
+function trackerMatches(a,q){
+  const term=(q||'').trim().toLowerCase();
+  if(!term) return false;
+  const title=trackerTitleText(a);
+  // Strict headline-only matching. This prevents unrelated headlines from showing
+  // just because the API returned them or a hidden description contained a word.
+  if(term.includes(' ')) return title.includes(term);
+  const escaped=term.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+  return new RegExp('(^|[^a-z0-9])'+escaped+'([^a-z0-9]|$)','i').test(title);
+}
+function quickTrack(term){
+  const inp=document.getElementById('company-track-input');
+  if(inp) inp.value=term;
+  runCompanyTracker();
+}
 async function runCompanyTracker(){
   const inp=document.getElementById('company-track-input');
   const box=document.getElementById('company-track-results');
@@ -2510,14 +2616,31 @@ async function runCompanyTracker(){
   const q=inp.value.trim();
   if(!q){box.innerHTML='<div class="mini-note">Enter a company, politician, or keyword first.</div>';return;}
   lastTrackedCompany=q;
-  box.innerHTML='<div class="mini-note">Searching Flash Nigeria headlines…</div>';
-  let results=(arts||[]).filter(a=>((a.title||'')+' '+(a.desc||'')+' '+(a.source||'')).toLowerCase().includes(q.toLowerCase()));
+  box.innerHTML='<div class="mini-note">Searching exact headline mentions only…</div>';
+
+  // First search the loaded headlines strictly.
+  let results=(arts||[]).filter(a=>trackerMatches(a,q));
+
+  // Then ask the live API, but still strictly filter the returned stories.
   if(results.length<3){
-    try{const r=await fetch(`${API}?q=${encodeURIComponent(q)}&_=${Date.now()}`,{cache:'no-store'});const d=await r.json();if(d.status==='ok'&&d.articles)results=d.articles;}catch(e){}
+    try{
+      const r=await fetch(`${API}?q=${encodeURIComponent(q)}&_=${Date.now()}`,{cache:'no-store'});
+      const d=await r.json();
+      if(d.status==='ok'&&d.articles){
+        const live=(d.articles||[]).filter(a=>trackerMatches(a,q));
+        const seen=new Set(results.map(a=>String(a.id||a.link||a.title)));
+        live.forEach(a=>{const k=String(a.id||a.link||a.title);if(!seen.has(k)){seen.add(k);results.push(a);}});
+      }
+    }catch(e){}
   }
+
   results=results.slice(0,8);
-  if(!results.length){box.innerHTML=`<div class="mini-note">No current story found for <strong>${q}</strong>. Try another keyword.</div>`;return;}
-  const srcs=[...new Set(results.map(a=>a.source||'Flash Nigeria'))];box.innerHTML=`<div class="tracker-stats"><div class="tracker-stat"><b>${results.length}</b><span>Mentions</span></div><div class="tracker-stat"><b>${srcs.length}</b><span>Sources</span></div><div class="tracker-stat"><b>${results.filter(isTrending).length}</b><span>Trending</span></div></div><div class="mini-note"><strong>${results.length}</strong> current mention${results.length===1?'':'s'} found for <strong>${q}</strong>.</div>`+results.map((a,i)=>`<div class="tracker-result" data-i="${i}"><div class="tracker-src">${a.source||'Flash Nigeria'} · ${ago(a.pub)}</div><div class="tracker-title">${getTitle(a)}</div></div>`).join('');
+  if(!results.length){
+    box.innerHTML=`<div class="mini-note">No exact headline mention found for <strong>${q}</strong> right now. Try another company, public figure, celebrity, or topic.</div>`;
+    return;
+  }
+  const srcs=[...new Set(results.map(a=>a.source||'Flash Nigeria'))];
+  box.innerHTML=`<div class="tracker-stats"><div class="tracker-stat"><b>${results.length}</b><span>Exact Mentions</span></div><div class="tracker-stat"><b>${srcs.length}</b><span>Sources</span></div><div class="tracker-stat"><b>${results.filter(isTrending).length}</b><span>Trending</span></div></div><div class="mini-note"><strong>${results.length}</strong> exact current mention${results.length===1?'':'s'} found for <strong>${q}</strong>.</div>`+results.map((a,i)=>`<div class="tracker-result" data-i="${i}"><div class="tracker-src">${a.source||'Flash Nigeria'} · ${ago(a.pub)}</div><div class="tracker-title">${getTitle(a)}</div></div>`).join('');
   box.querySelectorAll('.tracker-result').forEach((el,i)=>el.addEventListener('click',()=>openArt(results[i])));
 }
 async function followTrackedCompany(){
@@ -2554,6 +2677,7 @@ function renderFlashDashboard(){
   const fCt=document.getElementById('dash-follow-count'); if(fCt)fCt.textContent=String((flashFollowedCompanies.length||0)+(flashFollowedTopics.length||0));
   const aCt=document.getElementById('dash-alert-count'); if(aCt)aCt.textContent=String(flashNotifications.length||0);
   document.querySelectorAll('.follow-chip').forEach(btn=>btn.classList.toggle('on',flashFollowedTopics.includes(btn.dataset.topic)));
+  if(typeof renderMyFeed==='function') renderMyFeed();
   const list=document.getElementById('flash-notification-list');
   if(list){
     const local = flashNotifications.length ? flashNotifications : buildSmartAlerts();
@@ -2632,6 +2756,96 @@ document.addEventListener('DOMContentLoaded',function(){
   var ci=document.getElementById('company-track-input');
   if(ci){ci.addEventListener('keydown',function(e){if(e.key==='Enter')runCompanyTracker();});}
 });
+
+
+// ── FLASH NIGERIA MY FEED V6 ──
+function mfUserName(){
+  if(!flashUser) return 'Guest';
+  const n=(flashUser.user_metadata&&flashUser.user_metadata.full_name)||'';
+  if(n.trim()) return n.trim().split(' ')[0];
+  return (flashUser.email||'User').split('@')[0];
+}
+function mfFollowList(){
+  return [...(flashFollowedTopics||[]), ...(flashFollowedCompanies||[])].filter(Boolean);
+}
+function mfMatchesArticle(a,follow){
+  const hay=((a.title||'')+' '+(a.desc||'')+' '+(a.cat||'')+' '+(a.source||'')).toLowerCase();
+  return hay.includes(String(follow).toLowerCase());
+}
+function mfArticleHTML(a,ico){
+  return `<div class="mf-item" data-id="${a.id}"><div class="mf-ico">${ico||catEmoji(a.cat)}</div><div style="flex:1;min-width:0"><div class="mf-meta">${a.source||'Flash Nigeria'} · ${ago(a.pub)}${a.cat?' · '+a.cat:''}</div><div class="mf-headline">${getTitle(a)}</div></div></div>`;
+}
+function bindMfArticles(root,items){
+  if(!root) return;
+  root.querySelectorAll('.mf-item[data-id]').forEach(el=>{
+    el.addEventListener('click',()=>{
+      const art=items.find(a=>String(a.id)===String(el.dataset.id));
+      if(art) openArt(art);
+    });
+  });
+}
+function renderMyFeed(){
+  const greeting=document.getElementById('mf-greeting');
+  if(!greeting) return;
+  const name=mfUserName();
+  greeting.textContent=flashUser?`Welcome back, ${name} 👋`:'My Feed';
+  const savedCt=document.getElementById('mf-saved-count'); if(savedCt) savedCt.textContent=String(saved.length||0);
+  const follows=mfFollowList();
+  const fCt=document.getElementById('mf-follow-count'); if(fCt) fCt.textContent=String(follows.length||0);
+  const alerts=buildSmartAlerts();
+  const aCt=document.getElementById('mf-alert-count'); if(aCt) aCt.textContent=String((flashNotifications||[]).length||alerts.length||0);
+
+  const chips=document.getElementById('mf-interest-chips');
+  if(chips){
+    if(follows.length){
+      chips.innerHTML=follows.map(x=>`<span class="mf-chip on">${x}</span>`).join('');
+    }else{
+      chips.innerHTML='<div class="mf-empty">Follow topics or companies from your Profile to personalize this page.</div>';
+    }
+  }
+
+  const personalBox=document.getElementById('mf-personal-list');
+  let personal=[];
+  if(follows.length){
+    const seen=new Set();
+    follows.forEach(f=>{
+      (arts||[]).filter(a=>mfMatchesArticle(a,f)).forEach(a=>{ if(!seen.has(a.id)){seen.add(a.id); personal.push(a);} });
+    });
+  }
+  personal=personal.slice(0,8);
+  if(personalBox){
+    personalBox.innerHTML=personal.length?personal.map(a=>mfArticleHTML(a,'⭐')).join(''):'<div class="mf-empty">No matched headlines yet. Follow more topics or refresh the news feed.</div>';
+    bindMfArticles(personalBox,personal);
+  }
+
+  const savedBox=document.getElementById('mf-saved-list');
+  const savedItems=(saved||[]).slice(0,4);
+  if(savedBox){
+    savedBox.innerHTML=savedItems.length?savedItems.map(a=>mfArticleHTML(a,'📚')).join(''):'<div class="mf-empty">Save articles to build your personal reading library.</div>';
+    bindMfArticles(savedBox,savedItems);
+  }
+
+  const alertBox=document.getElementById('mf-alert-list');
+  const combinedAlerts=(flashNotifications&&flashNotifications.length?flashNotifications:alerts).slice(0,5);
+  if(alertBox){
+    alertBox.innerHTML=combinedAlerts.length?combinedAlerts.map(n=>`<div class="mf-item"><div class="mf-ico">🔔</div><div style="flex:1"><div class="mf-meta">Personal alert</div><div class="mf-headline">${n.title||'Flash Alert'}</div><div class="mini-note">${n.message||''}</div></div></div>`).join(''):'<div class="mf-empty">You are all caught up. Follow companies or topics to receive personal alerts.</div>';
+  }
+
+  const trendBox=document.getElementById('mf-trending-list');
+  let trending=[...(arts||[])].sort((a,b)=>(trendScore(b)-trendScore(a)) || (new Date(b.pub)-new Date(a.pub))).slice(0,6);
+  if(trendBox){
+    trendBox.innerHTML=trending.length?trending.map(a=>mfArticleHTML(a,'🔥')).join(''):'<div class="mf-empty">Trending stories will appear here after news loads.</div>';
+    bindMfArticles(trendBox,trending);
+  }
+}
+
+// Keep My Feed fresh after news, saved articles, and login changes.
+(function(){
+  const oldRenderFeed=renderFeed;
+  renderFeed=function(){ oldRenderFeed(); if(typeof renderMyFeed==='function') renderMyFeed(); };
+  const oldUpdateAuthUI=updateAuthUI;
+  updateAuthUI=function(){ oldUpdateAuthUI(); if(typeof renderMyFeed==='function') renderMyFeed(); };
+})();
 
 </script>
 </body>
