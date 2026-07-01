@@ -221,6 +221,35 @@
   .ticker span{font-size:13px!important;margin-right:34px!important;}
 }
 </style>
+
+
+<style>
+/* Phoenix v14 — lock Flash Trends into one clean swipe row on all screens */
+#homeTrends{
+  display:flex!important;
+  flex-wrap:nowrap!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  gap:10px!important;
+  padding:2px 4px 10px!important;
+  scroll-snap-type:x proximity;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none!important;
+}
+#homeTrends::-webkit-scrollbar{display:none!important;}
+#homeTrends .trend-card{
+  flex:0 0 auto!important;
+  scroll-snap-align:start;
+  white-space:nowrap!important;
+}
+@media(max-width:700px){
+  .section-head{align-items:center!important;}
+  #homeTrends{gap:8px!important;margin-right:-12px!important;padding-right:18px!important;}
+  #homeTrends .trend-card{max-width:185px!important;min-height:36px!important;padding:6px 10px!important;}
+  #homeTrends .trend-card b{max-width:128px!important;font-size:12.5px!important;}
+  #homeTrends .trend-card .ticon{width:20px!important;height:20px!important;font-size:10px!important;}
+}
+</style>
 </head>
 <body>
 <header class="topbar"><div class="app top-inner"><div class="brand" onclick="showPanel('home')"><span class="bolt">ϟ</span><span>FLASH</span> <span>NIGERIA</span></div><div class="top-actions"><button class="icon-btn" onclick="showPanel('intelligence')">⌕</button><button class="icon-btn" onclick="showPanel('myflash');toast('Alerts are inside My Flash')">🔔</button><button class="avatar" id="avatar" onclick="openAuthOrProfile()">B</button></div></div></header>
