@@ -9,7 +9,7 @@
   <meta name="description" content="Flash Nigeria — Flash. News. Nigeria."/>
   <meta name="theme-color" content="#ffffff" id="theme-meta"/>
   <title>Flash Nigeria ⚡</title>
-  <!-- FIX VERSION: news-api-no-cache-18s -->
+  <!-- FIX VERSION: v12-paystack-flash-intelligence -->
   <!-- SEO -->
   <meta property="og:title" content="Flash Nigeria ⚡ — Flash. News. Nigeria."/>
   <meta property="og:description" content="Nigeria's fastest news app. Flash headlines from Vanguard, Punch, Channels TV, Guardian Nigeria, Premium Times, Daily Post and more."/>
@@ -829,6 +829,11 @@
       .nc-img{width:100%;min-height:130px;}
     }
   
+
+    .intelligence-report-card{margin:12px 0;padding:14px;border-radius:14px;border:1.5px solid var(--gold-border);background:var(--gold-bg);display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap;}
+    .intelligence-report-card strong{font-family:var(--font-hd);font-size:15px;font-weight:900;color:var(--ink);}
+    .intelligence-report-card span{flex:1;min-width:220px;font-size:12px;color:var(--ink3);line-height:1.5;}
+    .intelligence-report-card button{background:var(--gold);color:#fff;border:none;border-radius:10px;padding:9px 14px;font-family:var(--font-hd);font-weight:900;text-transform:uppercase;letter-spacing:.04em;}
 </style>
   <!-- Structured Data for Google -->
   <script type="application/ld+json">
@@ -1095,8 +1100,8 @@
             <div class="profile-card">
               <div class="profile-label">Plan</div>
               <div class="profile-value" id="profile-plan">Free</div>
-              <div class="mini-note">Your account is active. PRO access will be enabled for selected users first.</div>
-              <button class="profile-btn gold" onclick="requestProAccess()">♛ Request PRO Access</button>
+              <div class="mini-note">Upgrade to unlock Flash Intelligence reports, executive briefings, PDF exports, and advanced tracking.</div>
+              <button class="profile-btn gold" onclick="requestProAccess()">♛ Upgrade to PRO — ₦10,000/mo</button>
             </div>
             <div class="profile-card">
               <div class="profile-label">Saved Articles</div>
@@ -1127,10 +1132,10 @@
           </div>
 
           <div class="profile-card span-all" style="margin-top:12px;">
-            <div class="profile-label">Company Tracker</div>
-            <div class="profile-value">Search exact mentions from the latest 48-hour Flash Nigeria window. Exact matches show first; related stories are clearly labeled.</div>
+            <div class="profile-label">Flash Intelligence</div>
+            <div class="profile-value">Search the Nigerian news ecosystem in real time. Track companies, public figures, celebrities, government agencies, banks, sports stars, and topics across the latest 48-hour window.</div>
             <div class="tracker-box">
-              <input id="company-track-input" placeholder="Try Dangote, MTN, Tinubu, CBN, Davido…"/>
+              <input id="company-track-input" placeholder="Try Tinubu, CBN, MTN, Dangote, Davido, Burna Boy…"/>
               <button onclick="runCompanyTracker()">Track</button>
             </div>
             <div class="tracker-quick" id="tracker-quick">
@@ -1148,7 +1153,7 @@
             </div>
             <div class="tracker-results" id="company-track-results"></div>
             <div class="pro-lock">
-              <div><strong>Follow this keyword</strong><span>Add it to your intelligence dashboard for personalized news updates.</span></div>
+              <div><strong>🔔 Follow this intelligence keyword</strong><span>Add it to My Feed and receive personalized news alerts when new mentions appear.</span></div>
               <button onclick="followTrackedCompany()">Follow</button>
             </div>
           </div>
@@ -1162,7 +1167,7 @@
           <div class="profile-card span-all" style="margin-top:12px;">
             <div class="profile-label">PRO Dashboard</div>
             <div class="profile-value"><span class="pro-badge">♛ Flash Nigeria PRO</span></div>
-            <div class="private-note" style="margin-top:10px;">Flash Nigeria PRO is your premium intelligence workspace. Unlock executive news briefings, company tracking, personalized alerts, AI-powered research, PDF reports, and advanced market insights designed to help professionals stay ahead.</div>
+            <div class="private-note" style="margin-top:10px;">Flash Nigeria PRO is your premium intelligence workspace. Subscribe to unlock executive news briefings, company tracking reports, personalized alerts, AI-powered research, PDF exports, and advanced market insights designed to help professionals stay ahead.</div>
             <div class="pro-feature-grid">
               <div class="pro-feature-card"><strong>🗞️ Executive Daily Brief</strong><span>Morning summary of Nigeria's top stories and key developments.</span></div>
               <div class="pro-feature-card"><strong>🏢 Company Intelligence</strong><span>Track companies, organizations, brands, and public figures.</span></div>
@@ -1171,7 +1176,7 @@
               <div class="pro-feature-card"><strong>🤖 AI Research Assistant</strong><span>Ask questions about Nigerian news, policy, business, and events.</span></div>
               <div class="pro-feature-card"><strong>📊 Market Insights</strong><span>Business, economy, currency, and sector intelligence in one place.</span></div>
             </div>
-            <div class="available-soon">🚀 Available Soon</div>
+            <button class="profile-btn gold" onclick="requestProAccess()">♛ Subscribe with Paystack</button>
           </div>
 
           <button class="profile-btn light" onclick="logoutFlash()">Logout ↪</button>
@@ -2735,7 +2740,7 @@ async function runCompanyTracker(){
   }
   const srcs=[...new Set(results.map(a=>a.source||'Flash Nigeria'))];
   const newest=results[0]?.pub?ago(results[0].pub):'recent';
-  box.innerHTML=`<div class="tracker-stats"><div class="tracker-stat"><b>${results.length}</b><span>48H Mentions</span></div><div class="tracker-stat"><b>${srcs.length}</b><span>Sources</span></div><div class="tracker-stat"><b>${results.filter(isTrending).length}</b><span>Trending</span></div></div><div class="mini-note"><strong>${results.length}</strong> exact headline mention${results.length===1?'':'s'} found for <strong>${q}</strong> in the latest 48 hours. Most recent: ${newest}.</div>`+results.map((a,i)=>`<div class="tracker-result" data-i="${i}"><div class="tracker-src">${a.source||'Flash Nigeria'} · ${ago(a.pub)}</div><div class="tracker-title">${getTitle(a)}</div></div>`).join('');
+  box.innerHTML=`<div class="tracker-stats"><div class="tracker-stat"><b>${results.length}</b><span>48H Mentions</span></div><div class="tracker-stat"><b>${srcs.length}</b><span>Sources</span></div><div class="tracker-stat"><b>${results.filter(isTrending).length}</b><span>Trending</span></div></div><div class="mini-note"><strong>${results.length}</strong> exact headline mention${results.length===1?'':'s'} found for <strong>${q}</strong> in the latest 48 hours. Most recent: ${newest}.</div><div class="intelligence-report-card"><strong>📊 Intelligence Report</strong><span>PRO users can turn these mentions into a professional briefing with timeline, sources, trends, and PDF export.</span><button onclick="requestProAccess()">Generate Report — PRO</button></div>`+results.map((a,i)=>`<div class="tracker-result" data-i="${i}"><div class="tracker-src">${a.source||'Flash Nigeria'} · ${ago(a.pub)}</div><div class="tracker-title">${getTitle(a)}</div></div>`).join('');
   box.querySelectorAll('.tracker-result').forEach((el,i)=>el.addEventListener('click',()=>openArt(results[i])));
 }
 async function followTrackedCompany(){
@@ -2749,9 +2754,10 @@ async function followTrackedCompany(){
 // ── FLASH NIGERIA PRO V4: account, saved, follows, alerts, dashboard ──
 let flashFollowedCompanies=[], flashFollowedTopics=[], flashNotifications=[];
 function requestProAccess(){
-  if(!flashUser){toast('Login to request PRO access');openAuthModal('login');return;}
-  toast('♛ PRO access request received');
-  addLocalNotification('PRO Access','Your account is marked for early PRO access review.');
+  const payUrl='https://paystack.shop/pay/5etlalgs33';
+  if(!flashUser){toast('Create or login to your Flash Nigeria account first');openAuthModal('login');return;}
+  addLocalNotification('PRO Subscription','Opening secure Paystack subscription page for Flash Nigeria PRO.');
+  window.open(payUrl,'_blank','noopener');
 }
 async function loadFlashPersonalization(){
   if(!flashSB||!flashUser)return;
@@ -2942,6 +2948,138 @@ function renderMyFeed(){
   updateAuthUI=function(){ oldUpdateAuthUI(); if(typeof renderMyFeed==='function') renderMyFeed(); };
 })();
 
+
+
+// ── FLASH NIGERIA v11: Smart Interest Matching / accurate My Feed ──
+const FN_INTERESTS = {
+  'tinubu': {label:'Tinubu', type:'politics', cat:'politics', aliases:['bola tinubu','president tinubu','president bola tinubu','asiwaju tinubu']},
+  'peter obi': {label:'Peter Obi', type:'politics', cat:'politics', aliases:['obi','labour party']},
+  'atiku': {label:'Atiku', type:'politics', cat:'politics', aliases:['atiku abubakar']},
+  'wike': {label:'Wike', type:'politics', cat:'politics', aliases:['nyesom wike']},
+  'cbn': {label:'CBN', type:'agency', cat:'business', aliases:['central bank','central bank of nigeria']},
+  'dangote': {label:'Dangote', type:'company', cat:'business', aliases:['dangote refinery','dangote group','aliko dangote']},
+  'mtn': {label:'MTN', type:'company', cat:'business', aliases:['mtn nigeria']},
+  'airtel': {label:'Airtel', type:'company', cat:'business', aliases:['airtel africa','airtel nigeria']},
+  'gtbank': {label:'GTBank', type:'bank', cat:'business', aliases:['gtco','gt bank','guaranty trust']},
+  'access bank': {label:'Access Bank', type:'bank', cat:'business', aliases:['access holdings']},
+  'davido': {label:'Davido', type:'celebrity', cat:'entertainment', aliases:['david adeleke']},
+  'wizkid': {label:'Wizkid', type:'celebrity', cat:'entertainment', aliases:['ayodeji balogun','big wiz']},
+  'burna boy': {label:'Burna Boy', type:'celebrity', cat:'entertainment', aliases:['damini ogulu']},
+  'rema': {label:'Rema', type:'celebrity', cat:'entertainment', aliases:['divine ikubor']},
+  'tems': {label:'Tems', type:'celebrity', cat:'entertainment', aliases:['temilade openiyi']},
+  'funke akindele': {label:'Funke Akindele', type:'celebrity', cat:'entertainment', aliases:['jenifa']},
+  'ayra starr': {label:'Ayra Starr', type:'celebrity', cat:'entertainment', aliases:['oyinkansola aderibigbe']},
+  'osimhen': {label:'Osimhen', type:'sports', cat:'sports', aliases:['victor osimhen']},
+  'super eagles': {label:'Super Eagles', type:'sports', cat:'sports', aliases:['nigeria football']},
+  'politics': {label:'Politics', type:'topic', cat:'politics', aliases:['political','election','senate','government']},
+  'business': {label:'Business', type:'topic', cat:'business', aliases:['economy','naira','market','banking']},
+  'sports': {label:'Sports', type:'topic', cat:'sports', aliases:['football','world cup','afcon']},
+  'entertainment': {label:'Entertainment', type:'topic', cat:'entertainment', aliases:['celebrity','music','nollywood','afrobeats']},
+  'technology': {label:'Technology', type:'topic', cat:'technology', aliases:['tech','startup','ai','fintech']},
+  'health': {label:'Health', type:'topic', cat:'health', aliases:['medical','hospital','disease']}
+};
+function fnNorm(s){return String(s||'').toLowerCase().replace(/[’']/g,'').replace(/[^a-z0-9]+/g,' ').trim();}
+function fnWordHit(hay,needle){
+  hay=' '+fnNorm(hay)+' '; needle=fnNorm(needle);
+  if(!needle) return false;
+  if(needle.includes(' ')) return hay.includes(' '+needle+' ');
+  return new RegExp('(^|\\s)'+needle.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'(\\s|$)','i').test(hay);
+}
+function fnInterestMeta(term){
+  const key=fnNorm(term);
+  if(FN_INTERESTS[key]) return FN_INTERESTS[key];
+  for(const [k,v] of Object.entries(FN_INTERESTS)){
+    if(fnWordHit(key,k) || (v.aliases||[]).some(a=>fnWordHit(key,a))) return v;
+  }
+  return {label:String(term||'').trim(), type:'custom', cat:'', aliases:[]};
+}
+function fnExactInterestMatch(a,term){
+  const meta=fnInterestMeta(term);
+  const hay=(a.title||'')+' '+(a.desc||'');
+  if(fnWordHit(hay, meta.label)) return true;
+  return (meta.aliases||[]).some(alias=>fnWordHit(hay, alias));
+}
+function fnCategoryMatch(a,term){
+  const meta=fnInterestMeta(term);
+  return !!(meta.cat && String(a.cat||'').toLowerCase()===meta.cat);
+}
+function fnInterestChipLabel(x){const m=fnInterestMeta(x); return m.label || x;}
+function trackerCategoryFor(term){
+  const meta=fnInterestMeta(term);
+  const labels={politics:'Related politics stories',business:'Related business and economy stories',sports:'Related sports stories',entertainment:'Related entertainment stories',technology:'Related technology stories',health:'Related health stories'};
+  return {cat:meta.cat||'', label:labels[meta.cat]||'Related current stories'};
+}
+function trackerMatches(a,q){ return fnExactInterestMatch(a,q); }
+function mfMatchesArticle(a,follow){ return fnExactInterestMatch(a,follow); }
+function mfRelatedForFollow(follow){ return (arts||[]).filter(a=>!fnExactInterestMatch(a,follow) && fnCategoryMatch(a,follow)).sort((a,b)=>new Date(b.pub||0)-new Date(a.pub||0)); }
+function buildSmartAlerts(){
+  const alerts=[];
+  const follows=[...new Set([...(flashFollowedCompanies||[]),...(flashFollowedTopics||[])])];
+  follows.forEach(f=>{
+    const exact=(arts||[]).filter(a=>fnExactInterestMatch(a,f)).sort((a,b)=>new Date(b.pub||0)-new Date(a.pub||0));
+    if(exact.length){ alerts.push({title:'Exact mention: '+fnInterestChipLabel(f),message:getTitle(exact[0])}); return; }
+    const related=mfRelatedForFollow(f);
+    if(related.length){ alerts.push({title:'Related update: '+fnInterestChipLabel(f),message:'No exact mention yet. Latest '+fnInterestMeta(f).cat+' headline: '+getTitle(related[0])}); }
+  });
+  return alerts;
+}
+async function runCompanyTracker(){
+  const inp=document.getElementById('company-track-input');
+  const box=document.getElementById('company-track-results');
+  if(!inp||!box)return;
+  const q=inp.value.trim();
+  if(!q){box.innerHTML='<div class="mini-note">Enter a company, public figure, celebrity, or topic first.</div>';return;}
+  lastTrackedCompany=q;
+  const meta=fnInterestMeta(q);
+  box.innerHTML='<div class="mini-note">Searching latest 48 hours for exact mentions and tagged related stories…</div>';
+  let windowStories=await fetchTrackerWindow(q);
+  let results=trackerSortRecent(windowStories.filter(a=>fnExactInterestMatch(a,q))).slice(0,12);
+  if(!results.length){
+    let related=(await fetchRelatedTrackerWindow(q)).filter(a=>!fnExactInterestMatch(a,q) && (!meta.cat || String(a.cat||'').toLowerCase()===meta.cat)).slice(0,8);
+    box.innerHTML=`<div class="mini-note">No exact mention found for <strong>${meta.label||q}</strong> in the latest 48 hours.</div>` +
+      (related.length ? renderTrackerRelated(meta.label||q, related) : `<div class="mini-note">No tagged related stories found yet. Try another interest or check again later.</div>`);
+    box.querySelectorAll('.tracker-related-card').forEach((el,i)=>el.addEventListener('click',()=>openArt(related[i])));
+    return;
+  }
+  const srcs=[...new Set(results.map(a=>a.source||'Flash Nigeria'))];
+  const newest=results[0]?.pub?ago(results[0].pub):'recent';
+  box.innerHTML=`<div class="tracker-stats"><div class="tracker-stat"><b>${results.length}</b><span>Exact 48H</span></div><div class="tracker-stat"><b>${srcs.length}</b><span>Sources</span></div><div class="tracker-stat"><b>${results.filter(isTrending).length}</b><span>Trending</span></div></div><div class="mini-note"><strong>${results.length}</strong> exact mention${results.length===1?'':'s'} found for <strong>${meta.label||q}</strong> in the latest 48 hours. Most recent: ${newest}.</div>`+results.map((a,i)=>`<div class="tracker-result" data-i="${i}"><div class="tracker-src">${a.source||'Flash Nigeria'} · ${ago(a.pub)}</div><div class="tracker-title">${getTitle(a)}</div></div>`).join('');
+  box.querySelectorAll('.tracker-result').forEach((el,i)=>el.addEventListener('click',()=>openArt(results[i])));
+}
+function renderMyFeed(){
+  const greeting=document.getElementById('mf-greeting');
+  if(!greeting) return;
+  const name=mfUserName();
+  greeting.textContent=flashUser?`Welcome back, ${name} 👋`:'My Feed';
+  const savedCt=document.getElementById('mf-saved-count'); if(savedCt) savedCt.textContent=String(saved.length||0);
+  const follows=[...new Set(mfFollowList())];
+  const fCt=document.getElementById('mf-follow-count'); if(fCt) fCt.textContent=String(follows.length||0);
+  const alerts=buildSmartAlerts();
+  const aCt=document.getElementById('mf-alert-count'); if(aCt) aCt.textContent=String((flashNotifications||[]).length||alerts.length||0);
+  const chips=document.getElementById('mf-interest-chips');
+  if(chips){chips.innerHTML=follows.length?follows.map(x=>`<span class="mf-chip on">${fnInterestChipLabel(x)}</span>`).join(''):'<div class="mf-empty">Follow topics, companies, celebrities, or public figures from your Profile to personalize this page.</div>';}
+  let exact=[]; const seen=new Set();
+  follows.forEach(f=>{(arts||[]).filter(a=>fnExactInterestMatch(a,f)).sort((a,b)=>new Date(b.pub||0)-new Date(a.pub||0)).forEach(a=>{if(!seen.has(a.id)){seen.add(a.id); exact.push(a);}})});
+  const personalBox=document.getElementById('mf-personal-list');
+  if(personalBox){personalBox.innerHTML=exact.length?exact.slice(0,8).map(a=>mfArticleHTML(a,'⭐')).join(''):'<div class="mf-empty">No exact matches for your interests yet. Related stories are shown below so your feed stays useful without pretending they are exact mentions.</div>'; bindMfArticles(personalBox,exact.slice(0,8));}
+  const alertBox=document.getElementById('mf-alert-list');
+  const combinedAlerts=(flashNotifications&&flashNotifications.length?flashNotifications:alerts).slice(0,6);
+  if(alertBox){alertBox.innerHTML=combinedAlerts.length?combinedAlerts.map(n=>`<div class="mf-item"><div class="mf-ico">🔔</div><div style="flex:1"><div class="mf-meta">Personal alert</div><div class="mf-headline">${n.title||'Flash Alert'}</div><div class="mini-note">${n.message||''}</div></div></div>`).join(''):'<div class="mf-empty">You are all caught up. Follow interests to receive personal alerts.</div>';}
+  const savedBox=document.getElementById('mf-saved-list'); const savedItems=(saved||[]).slice(0,4);
+  if(savedBox){savedBox.innerHTML=savedItems.length?savedItems.map(a=>mfArticleHTML(a,'📚')).join(''):'<div class="mf-empty">Save articles to build your personal reading library.</div>'; bindMfArticles(savedBox,savedItems);}
+  const trendBox=document.getElementById('mf-trending-list');
+  let related=[]; const rseen=new Set();
+  follows.forEach(f=>{mfRelatedForFollow(f).forEach(a=>{if(!seen.has(a.id)&&!rseen.has(a.id)){rseen.add(a.id); related.push(a);}})});
+  if(!related.length) related=[...(arts||[])].sort((a,b)=>(trendScore(b)-trendScore(a)) || (new Date(b.pub)-new Date(a.pub))).slice(0,6);
+  if(trendBox){trendBox.innerHTML=related.length?related.slice(0,6).map(a=>mfArticleHTML(a,'🔥')).join(''):'<div class="mf-empty">Related and trending stories will appear here after news loads.</div>'; bindMfArticles(trendBox,related.slice(0,6));}
+}
+async function followTrackedCompany(){
+  const q=(lastTrackedCompany||(document.getElementById('company-track-input')?.value||'')).trim();
+  if(!q){toast('Enter an interest first');return;}
+  if(!flashUser){toast('Login to follow interests');openAuthModal('login');return;}
+  const label=fnInterestChipLabel(q);
+  try{await flashSB.from('followed_companies').upsert({user_id:flashUser.id,company_name:label},{onConflict:'user_id,company_name'});if(!flashFollowedCompanies.includes(label))flashFollowedCompanies.unshift(label);toast('⭐ Following '+label);addLocalNotification('Interest followed','You are now monitoring '+label+'.');renderFlashDashboard();}catch(e){toast('Could not follow yet');console.warn(e);}
+}
 </script>
 </body>
 </html>
