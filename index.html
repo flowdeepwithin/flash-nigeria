@@ -220,6 +220,164 @@
   .ticker-track{padding:6px 0!important;animation-duration:62s!important;}
   .ticker span{font-size:13px!important;margin-right:34px!important;}
 }
+
+
+/* Phoenix v15 — mobile-first slim cleanup */
+@media (max-width: 640px){
+  body{padding-bottom:64px!important;background:#f6f8fb!important;}
+  .app{padding:0 10px!important;}
+  .top-inner{height:58px!important;padding:0!important;}
+  .brand{font-size:18px!important;gap:7px!important;}
+  .brand .bolt{font-size:25px!important;}
+  .icon-btn,.avatar{width:38px!important;height:38px!important;font-size:18px!important;box-shadow:0 4px 14px rgba(15,23,42,.06)!important;}
+  .top-actions{gap:8px!important;}
+  .ticker-track{padding:7px 0!important;animation-duration:52s!important;}
+  .ticker span{margin-right:34px!important;font-size:13px!important;}
+
+  /* Slim hero: header, not half-screen */
+  .hero{
+    margin:10px 0 10px!important;
+    padding:13px 14px!important;
+    border-radius:20px!important;
+    box-shadow:0 9px 24px rgba(6,22,38,.12)!important;
+    background:linear-gradient(120deg,#071626 0%,#06213a 56%,#07523a 100%)!important;
+  }
+  .live{font-size:12px!important;margin-bottom:8px!important;gap:6px!important;}
+  .dot{width:9px!important;height:9px!important;}
+  @keyframes pulse{70%{box-shadow:0 0 0 8px rgba(24,230,107,0)}}
+  .hero h1{font-size:25px!important;line-height:1.02!important;margin:0 0 5px!important;letter-spacing:-.045em!important;}
+  .hero p{font-size:12.5px!important;margin:0 0 10px!important;line-height:1.28!important;color:#eafbf2!important;}
+  .stats{
+    display:grid!important;
+    grid-template-columns:repeat(4,1fr)!important;
+    border-radius:15px!important;
+    background:rgba(255,255,255,.075)!important;
+  }
+  .stat{display:block!important;text-align:center!important;padding:7px 3px!important;gap:0!important;}
+  .stat-icon{width:25px!important;height:25px!important;border-radius:9px!important;margin:0 auto 3px!important;font-size:12px!important;}
+  .stat b{font-size:15px!important;line-height:1!important;}
+  .stat small{font-size:8.5px!important;line-height:1!important;}
+
+  /* Compact app-icon style modules */
+  .module-grid{grid-template-columns:repeat(3,1fr)!important;gap:8px!important;margin:8px 0 12px!important;}
+  .module-card{min-height:58px!important;border-radius:16px!important;padding:8px 5px!important;gap:4px!important;box-shadow:0 6px 16px rgba(15,23,42,.055)!important;}
+  .module-ico{font-size:20px!important;line-height:1!important;}
+  .module-card b{font-size:12px!important;line-height:1.05!important;}
+  .module-card small{display:none!important;}
+
+  /* Sections lighter and tighter */
+  .section{margin:14px 0!important;}
+  .section-head{margin:0 2px 8px!important;align-items:center!important;}
+  .section-head h2{font-size:20px!important;letter-spacing:-.04em!important;}
+  .link{font-size:13px!important;white-space:nowrap!important;}
+
+  /* One clean trends swipe row */
+  #homeTrends{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;gap:7px!important;padding:1px 2px 8px!important;scrollbar-width:none!important;}
+  #homeTrends::-webkit-scrollbar{display:none!important;}
+  #homeTrends .trend-card{flex:0 0 auto!important;min-height:32px!important;max-width:156px!important;padding:5px 8px!important;border-radius:999px!important;gap:6px!important;box-shadow:0 5px 12px rgba(15,23,42,.045)!important;}
+  #homeTrends .trend-card .ticon{width:18px!important;height:18px!important;font-size:9px!important;}
+  #homeTrends .trend-card b{font-size:11.5px!important;max-width:110px!important;}
+
+  /* Intelligence search cleaner */
+  .flash-intel-home .section-head{margin-bottom:7px!important;}
+  .searchbox{border-radius:18px!important;padding:8px 10px!important;gap:7px!important;box-shadow:0 6px 18px rgba(15,23,42,.055)!important;}
+  .searchbox input{font-size:13.5px!important;min-width:0!important;}
+  .searchbox button{border-radius:13px!important;padding:10px 13px!important;font-size:13px!important;}
+  .rotating-hint{display:none!important;}
+
+  /* News cards cleaner */
+  .news-grid{gap:11px!important;}
+  .story{border-radius:17px!important;box-shadow:0 7px 18px rgba(15,23,42,.055)!important;}
+  .thumb{height:132px!important;}
+  .story-body{padding:11px!important;}
+  .meta{font-size:10.5px!important;}
+  .story h3{font-size:16px!important;line-height:1.17!important;margin:7px 0 8px!important;}
+  .story-actions{padding:0 11px 11px!important;gap:7px!important;}
+  .soft{padding:8px 10px!important;border-radius:11px!important;font-size:12px!important;}
+
+  /* Bottom nav more balanced */
+  .bottom-inner{height:60px!important;}
+  .nav-item{font-size:10px!important;gap:2px!important;}
+  .nav-item span{display:none!important;}
+  .bottom-nav{box-shadow:0 -8px 22px rgba(15,23,42,.05)!important;}
+
+  .page-title{margin:10px 0 10px!important;}
+  .page-title h2{font-size:20px!important;}
+  .back-btn{width:34px!important;height:34px!important;border-radius:12px!important;}
+}
+
+@media (max-width: 380px){
+  .hero h1{font-size:23px!important;}
+  .hero{padding:12px!important;border-radius:18px!important;}
+  .module-card{min-height:54px!important;}
+  .module-ico{font-size:18px!important;}
+  .module-card b{font-size:11px!important;}
+  .searchbox input{font-size:12.5px!important;}
+  .searchbox button{padding:9px 11px!important;}
+}
+
+
+/* Phoenix v16: hero removed — compact live status only */
+.hero{display:none!important;}
+.compact-livebar{
+  margin:12px 0 10px;
+  background:linear-gradient(90deg,#052e1a,#063b2a);
+  color:white;
+  border-radius:16px;
+  padding:10px 12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  box-shadow:0 8px 22px rgba(6,22,38,.10);
+}
+.compact-live-left{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:900;white-space:nowrap;color:#d1fae5;}
+.small-dot{width:8px!important;height:8px!important;flex:0 0 auto;}
+.compact-live-stats{display:flex;align-items:center;gap:6px;overflow-x:auto;scrollbar-width:none;}
+.compact-live-stats::-webkit-scrollbar{display:none;}
+.compact-live-stats button{
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.08);
+  color:white;
+  border-radius:12px;
+  padding:6px 9px;
+  min-width:58px;
+  cursor:pointer;
+}
+.compact-live-stats b{display:block;font-size:16px;line-height:1;font-weight:950;}
+.compact-live-stats small{display:block;font-size:9px;line-height:1.1;color:#d1fae5;font-weight:800;margin-top:2px;}
+@media(max-width:860px){
+  .compact-livebar{margin:8px 0 8px;padding:8px 8px;border-radius:14px;}
+  .compact-live-left{font-size:11px;}
+  .compact-live-stats{gap:4px;}
+  .compact-live-stats button{min-width:47px;padding:5px 6px;border-radius:10px;}
+  .compact-live-stats b{font-size:14px;}
+  .compact-live-stats small{font-size:8px;}
+  .module-grid{margin-top:0!important;}
+}
+@media(max-width:380px){
+  .compact-livebar{align-items:flex-start;flex-direction:column;}
+  .compact-live-stats{width:100%;}
+  .compact-live-stats button{flex:1;}
+}
+
+
+
+/* Phoenix v17: reliable news image/fallback display */
+.story .thumb{background:linear-gradient(135deg,#e8f5ee,#f4f8fb)!important;position:relative;}
+.story .thumb img{display:block;width:100%;height:100%;object-fit:cover;object-position:center;}
+.news-fallback{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:14px;background:linear-gradient(135deg,#f8fafc 0%,#e8f5ee 100%);color:#052e1a;}
+.news-fallback .nf-icon{font-size:30px;line-height:1;margin-bottom:8px;}
+.news-fallback .nf-source{font-weight:950;letter-spacing:-.03em;font-size:18px;max-width:92%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.news-fallback .nf-cat{margin-top:4px;font-size:11px;font-weight:900;text-transform:uppercase;color:#16a34a;letter-spacing:.08em;}
+@media(max-width:600px){
+  .news-fallback .nf-icon{font-size:24px;margin-bottom:6px;}
+  .news-fallback .nf-source{font-size:16px;}
+  .thumb{height:165px!important;}
+  .compact-livebar{display:none!important;}
+  .section:first-of-type{margin-top:12px!important;}
+}
+
 </style>
 
 
@@ -249,6 +407,164 @@
   #homeTrends .trend-card b{max-width:128px!important;font-size:12.5px!important;}
   #homeTrends .trend-card .ticon{width:20px!important;height:20px!important;font-size:10px!important;}
 }
+
+
+/* Phoenix v15 — mobile-first slim cleanup */
+@media (max-width: 640px){
+  body{padding-bottom:64px!important;background:#f6f8fb!important;}
+  .app{padding:0 10px!important;}
+  .top-inner{height:58px!important;padding:0!important;}
+  .brand{font-size:18px!important;gap:7px!important;}
+  .brand .bolt{font-size:25px!important;}
+  .icon-btn,.avatar{width:38px!important;height:38px!important;font-size:18px!important;box-shadow:0 4px 14px rgba(15,23,42,.06)!important;}
+  .top-actions{gap:8px!important;}
+  .ticker-track{padding:7px 0!important;animation-duration:52s!important;}
+  .ticker span{margin-right:34px!important;font-size:13px!important;}
+
+  /* Slim hero: header, not half-screen */
+  .hero{
+    margin:10px 0 10px!important;
+    padding:13px 14px!important;
+    border-radius:20px!important;
+    box-shadow:0 9px 24px rgba(6,22,38,.12)!important;
+    background:linear-gradient(120deg,#071626 0%,#06213a 56%,#07523a 100%)!important;
+  }
+  .live{font-size:12px!important;margin-bottom:8px!important;gap:6px!important;}
+  .dot{width:9px!important;height:9px!important;}
+  @keyframes pulse{70%{box-shadow:0 0 0 8px rgba(24,230,107,0)}}
+  .hero h1{font-size:25px!important;line-height:1.02!important;margin:0 0 5px!important;letter-spacing:-.045em!important;}
+  .hero p{font-size:12.5px!important;margin:0 0 10px!important;line-height:1.28!important;color:#eafbf2!important;}
+  .stats{
+    display:grid!important;
+    grid-template-columns:repeat(4,1fr)!important;
+    border-radius:15px!important;
+    background:rgba(255,255,255,.075)!important;
+  }
+  .stat{display:block!important;text-align:center!important;padding:7px 3px!important;gap:0!important;}
+  .stat-icon{width:25px!important;height:25px!important;border-radius:9px!important;margin:0 auto 3px!important;font-size:12px!important;}
+  .stat b{font-size:15px!important;line-height:1!important;}
+  .stat small{font-size:8.5px!important;line-height:1!important;}
+
+  /* Compact app-icon style modules */
+  .module-grid{grid-template-columns:repeat(3,1fr)!important;gap:8px!important;margin:8px 0 12px!important;}
+  .module-card{min-height:58px!important;border-radius:16px!important;padding:8px 5px!important;gap:4px!important;box-shadow:0 6px 16px rgba(15,23,42,.055)!important;}
+  .module-ico{font-size:20px!important;line-height:1!important;}
+  .module-card b{font-size:12px!important;line-height:1.05!important;}
+  .module-card small{display:none!important;}
+
+  /* Sections lighter and tighter */
+  .section{margin:14px 0!important;}
+  .section-head{margin:0 2px 8px!important;align-items:center!important;}
+  .section-head h2{font-size:20px!important;letter-spacing:-.04em!important;}
+  .link{font-size:13px!important;white-space:nowrap!important;}
+
+  /* One clean trends swipe row */
+  #homeTrends{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;gap:7px!important;padding:1px 2px 8px!important;scrollbar-width:none!important;}
+  #homeTrends::-webkit-scrollbar{display:none!important;}
+  #homeTrends .trend-card{flex:0 0 auto!important;min-height:32px!important;max-width:156px!important;padding:5px 8px!important;border-radius:999px!important;gap:6px!important;box-shadow:0 5px 12px rgba(15,23,42,.045)!important;}
+  #homeTrends .trend-card .ticon{width:18px!important;height:18px!important;font-size:9px!important;}
+  #homeTrends .trend-card b{font-size:11.5px!important;max-width:110px!important;}
+
+  /* Intelligence search cleaner */
+  .flash-intel-home .section-head{margin-bottom:7px!important;}
+  .searchbox{border-radius:18px!important;padding:8px 10px!important;gap:7px!important;box-shadow:0 6px 18px rgba(15,23,42,.055)!important;}
+  .searchbox input{font-size:13.5px!important;min-width:0!important;}
+  .searchbox button{border-radius:13px!important;padding:10px 13px!important;font-size:13px!important;}
+  .rotating-hint{display:none!important;}
+
+  /* News cards cleaner */
+  .news-grid{gap:11px!important;}
+  .story{border-radius:17px!important;box-shadow:0 7px 18px rgba(15,23,42,.055)!important;}
+  .thumb{height:132px!important;}
+  .story-body{padding:11px!important;}
+  .meta{font-size:10.5px!important;}
+  .story h3{font-size:16px!important;line-height:1.17!important;margin:7px 0 8px!important;}
+  .story-actions{padding:0 11px 11px!important;gap:7px!important;}
+  .soft{padding:8px 10px!important;border-radius:11px!important;font-size:12px!important;}
+
+  /* Bottom nav more balanced */
+  .bottom-inner{height:60px!important;}
+  .nav-item{font-size:10px!important;gap:2px!important;}
+  .nav-item span{display:none!important;}
+  .bottom-nav{box-shadow:0 -8px 22px rgba(15,23,42,.05)!important;}
+
+  .page-title{margin:10px 0 10px!important;}
+  .page-title h2{font-size:20px!important;}
+  .back-btn{width:34px!important;height:34px!important;border-radius:12px!important;}
+}
+
+@media (max-width: 380px){
+  .hero h1{font-size:23px!important;}
+  .hero{padding:12px!important;border-radius:18px!important;}
+  .module-card{min-height:54px!important;}
+  .module-ico{font-size:18px!important;}
+  .module-card b{font-size:11px!important;}
+  .searchbox input{font-size:12.5px!important;}
+  .searchbox button{padding:9px 11px!important;}
+}
+
+
+/* Phoenix v16: hero removed — compact live status only */
+.hero{display:none!important;}
+.compact-livebar{
+  margin:12px 0 10px;
+  background:linear-gradient(90deg,#052e1a,#063b2a);
+  color:white;
+  border-radius:16px;
+  padding:10px 12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  box-shadow:0 8px 22px rgba(6,22,38,.10);
+}
+.compact-live-left{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:900;white-space:nowrap;color:#d1fae5;}
+.small-dot{width:8px!important;height:8px!important;flex:0 0 auto;}
+.compact-live-stats{display:flex;align-items:center;gap:6px;overflow-x:auto;scrollbar-width:none;}
+.compact-live-stats::-webkit-scrollbar{display:none;}
+.compact-live-stats button{
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.08);
+  color:white;
+  border-radius:12px;
+  padding:6px 9px;
+  min-width:58px;
+  cursor:pointer;
+}
+.compact-live-stats b{display:block;font-size:16px;line-height:1;font-weight:950;}
+.compact-live-stats small{display:block;font-size:9px;line-height:1.1;color:#d1fae5;font-weight:800;margin-top:2px;}
+@media(max-width:860px){
+  .compact-livebar{margin:8px 0 8px;padding:8px 8px;border-radius:14px;}
+  .compact-live-left{font-size:11px;}
+  .compact-live-stats{gap:4px;}
+  .compact-live-stats button{min-width:47px;padding:5px 6px;border-radius:10px;}
+  .compact-live-stats b{font-size:14px;}
+  .compact-live-stats small{font-size:8px;}
+  .module-grid{margin-top:0!important;}
+}
+@media(max-width:380px){
+  .compact-livebar{align-items:flex-start;flex-direction:column;}
+  .compact-live-stats{width:100%;}
+  .compact-live-stats button{flex:1;}
+}
+
+
+
+/* Phoenix v17: reliable news image/fallback display */
+.story .thumb{background:linear-gradient(135deg,#e8f5ee,#f4f8fb)!important;position:relative;}
+.story .thumb img{display:block;width:100%;height:100%;object-fit:cover;object-position:center;}
+.news-fallback{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:14px;background:linear-gradient(135deg,#f8fafc 0%,#e8f5ee 100%);color:#052e1a;}
+.news-fallback .nf-icon{font-size:30px;line-height:1;margin-bottom:8px;}
+.news-fallback .nf-source{font-weight:950;letter-spacing:-.03em;font-size:18px;max-width:92%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.news-fallback .nf-cat{margin-top:4px;font-size:11px;font-weight:900;text-transform:uppercase;color:#16a34a;letter-spacing:.08em;}
+@media(max-width:600px){
+  .news-fallback .nf-icon{font-size:24px;margin-bottom:6px;}
+  .news-fallback .nf-source{font-size:16px;}
+  .thumb{height:165px!important;}
+  .compact-livebar{display:none!important;}
+  .section:first-of-type{margin-top:12px!important;}
+}
+
 </style>
 </head>
 <body>
@@ -256,7 +572,15 @@
 <div class="ticker"><div class="ticker-track" id="tickerTrack"><span>⚡ Loading breaking headlines...</span></div></div>
 <main class="app">
 <section id="home" class="panel active">
-  <div class="hero"><div class="hero-content"><div class="live"><span class="dot"></span><span>LIVE · Updated just now</span></div><h1 id="greeting">Good Morning 👋</h1><p>Know what's happening. Understand why.</p><div class="stats"><div class="stat" onclick="showPanel('news')"><div class="stat-icon">▤</div><div><b id="storiesCount">0</b><small>Stories</small></div></div><div class="stat"><div class="stat-icon">▦</div><div><b id="sourcesCount">0</b><small>Sources</small></div></div><div class="stat" onclick="showPanel('trends')"><div class="stat-icon">↗</div><div><b id="trendsCount">0</b><small>Trends</small></div></div><div class="stat" onclick="showPanel('myflash')"><div class="stat-icon">🔔</div><div><b id="alertsCount">0</b><small>Alerts</small></div></div></div></div></div>
+  <div class="compact-livebar">
+    <div class="compact-live-left"><span class="dot small-dot"></span><span>LIVE · Updated just now</span></div>
+    <div class="compact-live-stats">
+      <button onclick="showPanel('news')"><b id="storiesCount">0</b><small>Stories</small></button>
+      <button><b id="sourcesCount">0</b><small>Sources</small></button>
+      <button onclick="showPanel('trends')"><b id="trendsCount">0</b><small>Trends</small></button>
+      <button onclick="showPanel('myflash')"><b id="alertsCount">0</b><small>Alerts</small></button>
+    </div>
+  </div>
   <div class="module-grid"><div class="module-card" onclick="showPanel('news')"><span class="module-ico">📰</span><div><b>News</b><small>Latest</small></div></div><div class="module-card" onclick="showPanel('trends')"><span class="module-ico">🔥</span><div><b>Flash Trends</b><small>Trending</small></div></div><div class="module-card" onclick="showPanel('intelligence')"><span class="module-ico">🧠</span><div><b>Intelligence</b><small>Insights</small></div></div><div class="module-card" onclick="showPanel('myflash')"><span class="module-ico">❤️</span><div><b>My Flash</b><small>Saved</small></div></div><div class="module-card" onclick="showPanel('voice')"><span class="module-ico">🎤</span><div><b>Voice</b><small>Voice</small></div></div><div class="module-card" onclick="showPanel('pro')"><span class="module-ico">👑</span><div><b>PRO</b><small>Premium</small></div></div></div>
   <div class="section"><div class="section-head"><h2>🔥 Flash Trends</h2><span class="link" onclick="showPanel('trends')">View all ›</span></div><div class="trend-grid" id="homeTrends"></div></div>
   <div class="section flash-intel-home"><div class="section-head"><h2>🧠 Flash Intelligence</h2><span class="link" onclick="showPanel('intelligence')">Search everything ›</span></div><div class="searchbox"><span>⌕</span><input id="homeSearch" name="flash_intelligence_query" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Search companies..." onkeydown="if(event.key==='Enter') runIntelligence(this.value)"/><button onclick="runIntelligence(document.getElementById('homeSearch').value)">Search</button></div><div class="rotating-hint" id="rotatingHint">Companies • Politicians • Celebrities • Pastors • Banks • Sports</div></div>
@@ -415,7 +739,12 @@ function renderTicker(){document.getElementById('tickerTrack').innerHTML=[...art
 function renderCats(){const cats=['All',...Array.from(new Set(articles.map(a=>cap(a.category)))).filter(Boolean).slice(0,8)]; document.getElementById('catChips').innerHTML=cats.map(c=>`<button class="chip ${c===activeCat?'active':''}" onclick="filterCat('${c}')">${c}</button>`).join('')}
 function filterCat(cat){activeCat=cat; filtered=cat==='All'?articles:articles.filter(a=>cap(a.category)===cat); renderNews('newsGrid',filtered); renderNews('homeNews',articles.slice(0,6)); renderCats()}
 function catIcon(c){return {politics:'🏛️',business:'💼',sports:'⚽',entertainment:'🎵',technology:'💻',health:'🏥',religion:'⛪',general:'📰'}[(c||'general').toLowerCase()]||'📰'}
-function renderNews(elId,list){document.getElementById(elId).innerHTML=list.map((a,i)=>`<article class="story" onclick="openArticle('${encodeURIComponent(a.url)}')"><div class="thumb">${a.image?`<img src="${escapeAttr(a.image)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove();this.parentElement.innerHTML='<span class=\'thumb-fallback\'>${catIcon(a.category)}</span>'">`:`<span class="thumb-fallback">${catIcon(a.category)}</span>`}</div><div class="story-body"><div class="meta">${escapeHTML(a.source)} · ${timeAgo(a.published_at)} · ${escapeHTML(a.category)}</div><h3>${escapeHTML(a.title)}</h3></div><div class="story-actions"><button class="soft" onclick="event.stopPropagation();saveArticle(${articles.indexOf(a)})">♡ Save</button><button class="soft" onclick="event.stopPropagation();shareArticle(${articles.indexOf(a)})">Share</button></div></article>`).join('') || '<p>No stories yet.</p>'}
+function newsImageHTML(a){
+  var fallback = `<div class="news-fallback"><div class="nf-icon">${catIcon(a.category)}</div><div class="nf-source">${escapeHTML(a.source||'Flash Nigeria')}</div><div class="nf-cat">${escapeHTML(a.category||'news')}</div></div>`;
+  if(!a.image) return fallback;
+  return `<img src="${escapeAttr(a.image)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove();this.parentElement.innerHTML='${fallback.replace(/`/g,'').replace(/'/g,'&#39;')}'">`;
+}
+function renderNews(elId,list){document.getElementById(elId).innerHTML=list.map((a,i)=>`<article class="story" onclick="openArticle('${encodeURIComponent(a.url)}')"><div class="thumb">${newsImageHTML(a)}</div><div class="story-body"><div class="meta">${escapeHTML(a.source)} · ${timeAgo(a.published_at)} · ${escapeHTML(a.category)}</div><h3>${escapeHTML(a.title)}</h3></div><div class="story-actions"><button class="soft" onclick="event.stopPropagation();saveArticle(${articles.indexOf(a)})">♡ Save</button><button class="soft" onclick="event.stopPropagation();shareArticle(${articles.indexOf(a)})">Share</button></div></article>`).join('') || '<p>No stories yet.</p>'}
 function renderTrends(){
   const words={};
   articles.forEach(a=>{Object.values(entityMap).forEach(ent=>{if(ent.aliases.some(x=>textOf(a).includes(x.toLowerCase()))) words[ent.name]=(words[ent.name]||0)+1});});
