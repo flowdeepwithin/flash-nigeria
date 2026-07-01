@@ -61,10 +61,43 @@
 .load-more-news:disabled{background:#cbd5e1;color:#64748b;box-shadow:none;cursor:not-allowed}
 
 @media(max-width:600px){.ticker-track{animation-duration:50s!important}}
+
+/* Phoenix v9 stability polish: cleaner compact hero, no background lightning bolt */
+.hero{
+  margin:18px 0 18px!important;
+  padding:22px 26px!important;
+  border-radius:24px!important;
+  background:radial-gradient(circle at 88% 22%,rgba(22,163,74,.26),transparent 32%),linear-gradient(120deg,#071626 0%,#06233a 45%,#07523a 100%)!important;
+  box-shadow:0 14px 38px rgba(6,22,38,.16)!important;
+}
+.hero::before,.hero::after,.hero-content::after{display:none!important;content:none!important;}
+.hero h1{font-size:clamp(30px,4.1vw,48px)!important;line-height:1!important;margin-bottom:8px!important;}
+.hero p{font-size:clamp(15px,1.5vw,18px)!important;margin-bottom:18px!important;}
+.live{margin-bottom:14px!important;}
+.stats{border-radius:20px!important;}
+.stat{padding:13px 18px!important;}
+.stat-icon{width:44px!important;height:44px!important;font-size:20px!important;}
+.stat b{font-size:26px!important;}
+.ticker-track{animation-duration:46s!important;}
+@media(max-width:860px){
+  .hero{padding:20px!important;margin:14px 0 16px!important;border-radius:22px!important;}
+  .hero h1{font-size:34px!important;}
+  .hero p{font-size:14px!important;max-width:100%!important;}
+  .stats{grid-template-columns:repeat(2,1fr)!important;}
+  .stat{padding:12px!important;}
+  .ticker-track{animation-duration:56s!important;}
+}
+@media(max-width:560px){
+  .hero h1{font-size:30px!important;}
+  .stat-icon{width:38px!important;height:38px!important;}
+  .stat b{font-size:22px!important;}
+  .module-grid{grid-template-columns:repeat(2,1fr)!important;}
+}
+
 </style>
 </head>
 <body>
-<header class="topbar"><div class="app top-inner"><div class="brand" onclick="showPanel('home')"><span class="bolt">ϟ</span><span>FLASH</span> <span>NIGERIA</span></div><div class="top-actions"><button class="icon-btn" onclick="showPanel('intelligence')">⌕</button><button class="icon-btn" onclick="showPanel('myflash')">🔔</button><button class="avatar" id="avatar" onclick="openAuthOrProfile()">B</button></div></div></header>
+<header class="topbar"><div class="app top-inner"><div class="brand" onclick="showPanel('home')"><span class="bolt">ϟ</span><span>FLASH</span> <span>NIGERIA</span></div><div class="top-actions"><button class="icon-btn" onclick="showPanel('intelligence')">⌕</button><button class="icon-btn" onclick="showPanel('myflash');toast('Alerts are inside My Flash')">🔔</button><button class="avatar" id="avatar" onclick="openAuthOrProfile()">B</button></div></div></header>
 <div class="ticker"><div class="ticker-track" id="tickerTrack"><span>⚡ Loading breaking headlines...</span></div></div>
 <main class="app">
 <section id="home" class="panel active">
@@ -228,7 +261,7 @@ document.addEventListener('focusin',function(e){
 });
 
 async function initAuth(){try{const {data}=await sb.auth.getUser(); currentUser=data.user; syncUser(); sb.auth.onAuthStateChange((e,session)=>{currentUser=session?.user||null;syncUser()});}catch(e){}}
-function syncUser(){const email=currentUser?.email; const isLoggedIn=!!email; clearAutofilledSearchEmails(); const name const name=isLoggedIn?(currentUser?.user_metadata?.full_name || email.split('@')[0]):'Guest'; document.getElementById('profileName').textContent=name; document.getElementById('profileEmail').textContent=email||'Sign in to sync your account.'; document.getElementById('avatar').textContent=isLoggedIn?(name[0]||'U').toUpperCase():'G'; document.getElementById('greeting').textContent=isLoggedIn?`${dayGreeting()}, ${name.split(' ')[0]} 👋`:`${dayGreeting()} 👋`; const logoutLink=document.querySelector('#profile .page-title .link'); if(logoutLink){logoutLink.style.display=isLoggedIn?'inline-flex':'none';} }
+function syncUser(){const email=currentUser?.email; const isLoggedIn=!!email; clearAutofilledSearchEmails(); const name=isLoggedIn?(currentUser?.user_metadata?.full_name || email.split('@')[0]):'Guest'; document.getElementById('profileName').textContent=name; document.getElementById('profileEmail').textContent=email||'Sign in to sync your account.'; document.getElementById('avatar').textContent=isLoggedIn?(name[0]||'U').toUpperCase():'G'; document.getElementById('greeting').textContent=isLoggedIn?`${dayGreeting()}, ${name.split(' ')[0]} 👋`:`${dayGreeting()} 👋`; const logoutLink=document.querySelector('#profile .page-title .link'); if(logoutLink){logoutLink.style.display=isLoggedIn?'inline-flex':'none';} }
 function dayGreeting(){let h=new Date().getHours(); return h<12?'Good Morning':h<17?'Good Afternoon':'Good Evening'}
 function textOf(a){return ((a.title||'')+' '+(a.description||'')+' '+(a.source||'')).toLowerCase()}function cap(s){return (s||'').charAt(0).toUpperCase()+(s||'').slice(1)}function escapeHTML(s){return String(s||'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}function escapeAttr(s){return escapeHTML(s).replace(/'/g,'&#39;')}function timeAgo(d){let t=new Date(d).getTime(); if(!t)return 'now'; let m=Math.max(0,Math.round((Date.now()-t)/60000)); if(m<1)return 'just now'; if(m<60)return m+'m ago'; let h=Math.round(m/60); if(h<24)return h+'h ago'; return Math.round(h/24)+'d ago'}
 function setupQuick(){const qs=['Tinubu','CBN','Dangote','MTN','Davido','Wizkid','Burna Boy','Rema','2Face','Adeboye','Oyedepo','Jerry Eze','Kumuyi','RCCG','NSPPD','EFCC','INEC','Osimhen','Super Eagles']; document.getElementById('quickChips').innerHTML=qs.map(q=>`<button class="chip" onclick="runIntelligence('${q}')">${q}</button>`).join('')}
