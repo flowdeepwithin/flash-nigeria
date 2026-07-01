@@ -3080,6 +3080,233 @@ async function followTrackedCompany(){
   const label=fnInterestChipLabel(q);
   try{await flashSB.from('followed_companies').upsert({user_id:flashUser.id,company_name:label},{onConflict:'user_id,company_name'});if(!flashFollowedCompanies.includes(label))flashFollowedCompanies.unshift(label);toast('⭐ Following '+label);addLocalNotification('Interest followed','You are now monitoring '+label+'.');renderFlashDashboard();}catch(e){toast('Could not follow yet');console.warn(e);}
 }
+
+
+// ── FLASH NIGERIA v13: FREE Flash Dictionary (no paid AI/server) ──
+// A local knowledge dictionary that improves Tracker, My Feed, Voice, Alerts and PRO previews.
+// It costs ₦0 because it runs inside the browser.
+const FN_DICTIONARY_V13 = {
+  // Politics / public figures
+  'tinubu': {label:'Tinubu', type:'politician', cat:'politics', aliases:['bola tinubu','bola ahmed tinubu','president tinubu','president bola tinubu','asiwaju','asiwaju tinubu']},
+  'shettima': {label:'Kashim Shettima', type:'politician', cat:'politics', aliases:['vice president shettima','kashim shettima']},
+  'peter obi': {label:'Peter Obi', type:'politician', cat:'politics', aliases:['mr peter obi','obi','labour party presidential candidate']},
+  'atiku': {label:'Atiku Abubakar', type:'politician', cat:'politics', aliases:['atiku abubakar']},
+  'wike': {label:'Nyesom Wike', type:'politician', cat:'politics', aliases:['wike','nyesom wike','fct minister']},
+  'akpabio': {label:'Godswill Akpabio', type:'politician', cat:'politics', aliases:['senate president akpabio','godswill akpabio']},
+  'sanwo olu': {label:'Babajide Sanwo-Olu', type:'politician', cat:'politics', aliases:['sanwo olu','sanwo-olu','babajide sanwo olu','lagos governor']},
+  'el rufai': {label:'Nasir El-Rufai', type:'politician', cat:'politics', aliases:['el rufai','el-rufai','nasir el rufai']},
+  'kwankwaso': {label:'Rabiu Kwankwaso', type:'politician', cat:'politics', aliases:['kwankwaso','rabiu kwankwaso','nnpp']},
+  'obasanjo': {label:'Olusegun Obasanjo', type:'politician', cat:'politics', aliases:['obasanjo','olusegun obasanjo']},
+  'jonathan': {label:'Goodluck Jonathan', type:'politician', cat:'politics', aliases:['goodluck jonathan','jonathan']},
+  'buhari': {label:'Muhammadu Buhari', type:'politician', cat:'politics', aliases:['buhari','muhammadu buhari']},
+  'inec': {label:'INEC', type:'agency', cat:'politics', aliases:['independent national electoral commission','electoral commission']},
+  'efcc': {label:'EFCC', type:'agency', cat:'politics', aliases:['economic and financial crimes commission','anti graft agency','anti-graft agency']},
+  'icpc': {label:'ICPC', type:'agency', cat:'politics', aliases:['independent corrupt practices commission']},
+  'nass': {label:'National Assembly', type:'agency', cat:'politics', aliases:['national assembly','senate','house of representatives','house of reps']},
+  'apc': {label:'APC', type:'party', cat:'politics', aliases:['all progressives congress']},
+  'pdp': {label:'PDP', type:'party', cat:'politics', aliases:['peoples democratic party']},
+  'labour party': {label:'Labour Party', type:'party', cat:'politics', aliases:['lp','labour party']},
+
+  // Business / economy / government agencies
+  'cbn': {label:'CBN', type:'agency', cat:'business', aliases:['central bank','central bank of nigeria','apex bank','cardoso','yemi cardoso']},
+  'naira': {label:'Naira', type:'market', cat:'business', aliases:['exchange rate','forex','fx','dollar to naira','usd naira']},
+  'fuel': {label:'Fuel', type:'market', cat:'business', aliases:['petrol','pms','fuel price','subsidy']},
+  'nnpc': {label:'NNPC', type:'company', cat:'business', aliases:['nnpc limited','nigerian national petroleum company']},
+  'dangote': {label:'Dangote', type:'company', cat:'business', aliases:['dangote refinery','dangote group','dangote cement','aliko dangote']},
+  'bua': {label:'BUA', type:'company', cat:'business', aliases:['bua foods','bua cement','abdulsamad rabiu']},
+  'oando': {label:'Oando', type:'company', cat:'business', aliases:['oando plc']},
+  'seplat': {label:'Seplat', type:'company', cat:'business', aliases:['seplat energy']},
+  'nigeria stock exchange': {label:'NGX', type:'market', cat:'business', aliases:['ngx','nigerian exchange','stock exchange']},
+  'access bank': {label:'Access Bank', type:'bank', cat:'business', aliases:['access holdings','accesscorp']},
+  'gtbank': {label:'GTBank', type:'bank', cat:'business', aliases:['gtco','gt bank','guaranty trust bank','guaranty trust']},
+  'zenith bank': {label:'Zenith Bank', type:'bank', cat:'business', aliases:['zenith']},
+  'uba': {label:'UBA', type:'bank', cat:'business', aliases:['united bank for africa','tony elumelu']},
+  'fidelity bank': {label:'Fidelity Bank', type:'bank', cat:'business', aliases:['fidelity']},
+  'first bank': {label:'First Bank', type:'bank', cat:'business', aliases:['firstbank','fBN holdings','fBNH']},
+  'sterling bank': {label:'Sterling Bank', type:'bank', cat:'business', aliases:['sterling']},
+  'opay': {label:'OPay', type:'fintech', cat:'technology', aliases:['o pay','opay nigeria']},
+  'moniepoint': {label:'Moniepoint', type:'fintech', cat:'technology', aliases:['monie point']},
+  'paystack': {label:'Paystack', type:'fintech', cat:'technology', aliases:['paystack payments']},
+  'flutterwave': {label:'Flutterwave', type:'fintech', cat:'technology', aliases:['flutterwave payments']},
+
+  // Telecom / technology
+  'mtn': {label:'MTN', type:'company', cat:'technology', aliases:['mtn nigeria','mtn ng']},
+  'airtel': {label:'Airtel', type:'company', cat:'technology', aliases:['airtel nigeria','airtel africa']},
+  'glo': {label:'Glo', type:'company', cat:'technology', aliases:['globacom']},
+  '9mobile': {label:'9mobile', type:'company', cat:'technology', aliases:['etisalat nigeria','9 mobile']},
+  'ncc': {label:'NCC', type:'agency', cat:'technology', aliases:['nigerian communications commission','telecom regulator']},
+  'nitda': {label:'NITDA', type:'agency', cat:'technology', aliases:['national information technology development agency']},
+  'starlink': {label:'Starlink', type:'company', cat:'technology', aliases:['elon musk starlink']},
+  'ai': {label:'Artificial Intelligence', type:'topic', cat:'technology', aliases:['artificial intelligence','machine learning']},
+  'crypto': {label:'Crypto', type:'topic', cat:'technology', aliases:['bitcoin','cryptocurrency','blockchain']},
+
+  // Entertainment / celebrities
+  'davido': {label:'Davido', type:'celebrity', cat:'entertainment', aliases:['david adeleke','obo','30bg']},
+  'wizkid': {label:'Wizkid', type:'celebrity', cat:'entertainment', aliases:['ayodeji balogun','big wiz','starboy']},
+  'burna boy': {label:'Burna Boy', type:'celebrity', cat:'entertainment', aliases:['damini ogulu','odogwu']},
+  'rema': {label:'Rema', type:'celebrity', cat:'entertainment', aliases:['divine ikubor']},
+  'tems': {label:'Tems', type:'celebrity', cat:'entertainment', aliases:['temilade openiyi']},
+  'ayra starr': {label:'Ayra Starr', type:'celebrity', cat:'entertainment', aliases:['oyinkansola aderibigbe','celestial being']},
+  'tiwa savage': {label:'Tiwa Savage', type:'celebrity', cat:'entertainment', aliases:['tiwa']},
+  'asake': {label:'Asake', type:'celebrity', cat:'entertainment', aliases:['mr money','ahmed ololade']},
+  'simi': {label:'Simi', type:'celebrity', cat:'entertainment', aliases:['simisola']},
+  'falz': {label:'Falz', type:'celebrity', cat:'entertainment', aliases:['falz the bahd guy','folarin falana']},
+  'odumodublvck': {label:'Odumodublvck', type:'celebrity', cat:'entertainment', aliases:['odumodu black','odumodu']},
+  'portable': {label:'Portable', type:'celebrity', cat:'entertainment', aliases:['zazuu','zazu','portable omolalomi']},
+  'funke akindele': {label:'Funke Akindele', type:'celebrity', cat:'entertainment', aliases:['jenifa','funke']},
+  'genevieve nnaji': {label:'Genevieve Nnaji', type:'celebrity', cat:'entertainment', aliases:['genevieve']},
+  'ramsey nouah': {label:'Ramsey Nouah', type:'celebrity', cat:'entertainment', aliases:['ramsey noah']},
+  'mercy johnson': {label:'Mercy Johnson', type:'celebrity', cat:'entertainment', aliases:['mercy johnson okojie']},
+  'ini edo': {label:'Ini Edo', type:'celebrity', cat:'entertainment', aliases:['ini edo']},
+  'bbnaija': {label:'BBNaija', type:'show', cat:'entertainment', aliases:['big brother naija','b b naija']},
+  'nollywood': {label:'Nollywood', type:'topic', cat:'entertainment', aliases:['nigerian movie','nigerian movies']},
+  'afrobeats': {label:'Afrobeats', type:'topic', cat:'entertainment', aliases:['afrobeat','nigerian music']},
+
+  // Sports
+  'osimhen': {label:'Victor Osimhen', type:'footballer', cat:'sports', aliases:['victor osimhen']},
+  'lookman': {label:'Ademola Lookman', type:'footballer', cat:'sports', aliases:['ademola lookman']},
+  'boniface': {label:'Victor Boniface', type:'footballer', cat:'sports', aliases:['victor boniface']},
+  'iwobi': {label:'Alex Iwobi', type:'footballer', cat:'sports', aliases:['alex iwobi']},
+  'ndidi': {label:'Wilfred Ndidi', type:'footballer', cat:'sports', aliases:['wilfred ndidi']},
+  'iheanacho': {label:'Kelechi Iheanacho', type:'footballer', cat:'sports', aliases:['kelechi iheanacho']},
+  'super eagles': {label:'Super Eagles', type:'team', cat:'sports', aliases:['nigeria football','nigerian national team']},
+  'falcons': {label:'Super Falcons', type:'team', cat:'sports', aliases:['super falcons','nigeria women football']},
+  'npfl': {label:'NPFL', type:'league', cat:'sports', aliases:['nigeria premier football league']},
+  'world cup': {label:'World Cup', type:'topic', cat:'sports', aliases:['fifa world cup','world cup qualifiers']},
+  'afcon': {label:'AFCON', type:'topic', cat:'sports', aliases:['africa cup of nations']},
+
+  // Health / education / social
+  'ncdc': {label:'NCDC', type:'agency', cat:'health', aliases:['nigeria centre for disease control','disease control']},
+  'who': {label:'WHO', type:'agency', cat:'health', aliases:['world health organization','world health organisation']},
+  'cholera': {label:'Cholera', type:'topic', cat:'health', aliases:['cholera outbreak']},
+  'malaria': {label:'Malaria', type:'topic', cat:'health', aliases:['malaria disease']},
+  'healthcare': {label:'Healthcare', type:'topic', cat:'health', aliases:['health care','hospital','medical']},
+  'jamb': {label:'JAMB', type:'agency', cat:'education', aliases:['joint admissions and matriculation board','utme']},
+  'waec': {label:'WAEC', type:'agency', cat:'education', aliases:['west african examinations council']},
+  'asuu': {label:'ASUU', type:'union', cat:'education', aliases:['academic staff union of universities']},
+  'unilag': {label:'UNILAG', type:'university', cat:'education', aliases:['university of lagos']},
+  'ui': {label:'University of Ibadan', type:'university', cat:'education', aliases:['university of ibadan']},
+
+  // States / locations
+  'lagos': {label:'Lagos', type:'state', cat:'politics', aliases:['lagos state']},
+  'abuja': {label:'Abuja', type:'location', cat:'politics', aliases:['fct','federal capital territory']},
+  'kano': {label:'Kano', type:'state', cat:'politics', aliases:['kano state']},
+  'rivers': {label:'Rivers', type:'state', cat:'politics', aliases:['rivers state','port harcourt']},
+  'kaduna': {label:'Kaduna', type:'state', cat:'politics', aliases:['kaduna state']},
+  'enugu': {label:'Enugu', type:'state', cat:'politics', aliases:['enugu state']},
+  'oyo': {label:'Oyo', type:'state', cat:'politics', aliases:['oyo state','ibadan']},
+  'imo': {label:'Imo', type:'state', cat:'politics', aliases:['imo state']},
+  'anambra': {label:'Anambra', type:'state', cat:'politics', aliases:['anambra state']},
+  'delta': {label:'Delta', type:'state', cat:'politics', aliases:['delta state']},
+
+  // Broad topics
+  'politics': {label:'Politics', type:'topic', cat:'politics', aliases:['political','election','senate','government','governance']},
+  'business': {label:'Business', type:'topic', cat:'business', aliases:['economy','naira','market','banking','finance']},
+  'sports': {label:'Sports', type:'topic', cat:'sports', aliases:['football','athletics','basketball']},
+  'entertainment': {label:'Entertainment', type:'topic', cat:'entertainment', aliases:['celebrity','music','nollywood','afrobeats']},
+  'technology': {label:'Technology', type:'topic', cat:'technology', aliases:['tech','startup','ai','fintech','digital']},
+  'health': {label:'Health', type:'topic', cat:'health', aliases:['medical','hospital','disease','wellness']},
+  'security': {label:'Security', type:'topic', cat:'politics', aliases:['police','army','kidnap','bandit','terrorism','crime','insurgency']},
+  'education': {label:'Education', type:'topic', cat:'education', aliases:['school','university','students','exam']}
+};
+function fnInterestMeta(term){
+  const key=fnNorm(term);
+  if(FN_DICTIONARY_V13[key]) return FN_DICTIONARY_V13[key];
+  // Exact alias / label matching first
+  for(const [k,v] of Object.entries(FN_DICTIONARY_V13)){
+    if(fnWordHit(key,k) || fnWordHit(key,v.label) || (v.aliases||[]).some(a=>fnWordHit(key,a))) return v;
+  }
+  // Partial fallback only when user typed 3+ chars and it clearly appears in a known name/alias
+  if(key.length>=3){
+    for(const [k,v] of Object.entries(FN_DICTIONARY_V13)){
+      const all=[k,v.label,...(v.aliases||[])].map(fnNorm);
+      if(all.some(x=>x.includes(key) || key.includes(x))) return v;
+    }
+  }
+  return {label:String(term||'').trim(), type:'custom', cat:'', aliases:[]};
+}
+function fnEntityCategoryLabel(meta){
+  if(!meta) return 'Custom';
+  const map={politician:'Politician',party:'Political Party',agency:'Agency',company:'Company',bank:'Bank',fintech:'Fintech',celebrity:'Celebrity',footballer:'Footballer',team:'Sports Team',topic:'Topic',state:'State',location:'Location',university:'University',market:'Market'};
+  return map[meta.type] || (meta.cat?meta.cat.charAt(0).toUpperCase()+meta.cat.slice(1):'Custom');
+}
+function fnExactInterestMatch(a,term){
+  const meta=fnInterestMeta(term);
+  const hay=(a.title||'')+' '+(a.desc||'');
+  if(fnWordHit(hay, meta.label)) return true;
+  return (meta.aliases||[]).some(alias=>fnWordHit(hay, alias));
+}
+function fnCategoryMatch(a,term){
+  const meta=fnInterestMeta(term);
+  if(!meta.cat) return false;
+  if(meta.cat==='education'){
+    const hay=(a.title||'')+' '+(a.desc||'')+' '+(a.cat||'');
+    return /\b(school|university|education|student|students|jamb|waec|asuu|exam|utme)\b/i.test(hay);
+  }
+  return String(a.cat||'').toLowerCase()===meta.cat;
+}
+function fnInterestChipLabel(x){const m=fnInterestMeta(x); return m.label || x;}
+function trackerCategoryFor(term){
+  const meta=fnInterestMeta(term);
+  const labels={politics:'Related politics and government stories',business:'Related business and economy stories',sports:'Related sports stories',entertainment:'Related entertainment stories',technology:'Related technology stories',health:'Related health stories',education:'Related education stories'};
+  return {cat:meta.cat||'', label:labels[meta.cat]||'Related current stories'};
+}
+function renderTrackerRelated(q,items){
+  const meta=fnInterestMeta(q);
+  const label=trackerCategoryFor(q).label;
+  return `<div class="mini-note"><strong>${label}</strong><br>These are not exact mentions of ${fnInterestChipLabel(q)}. They are shown because ${fnInterestChipLabel(q)} is tagged as ${fnEntityCategoryLabel(meta)}.</div>`+
+    items.map((a,i)=>`<div class="tracker-related-card tracker-result" data-i="${i}"><div class="tracker-src">${a.source||'Flash Nigeria'} · ${ago(a.pub)}</div><div class="tracker-title">${getTitle(a)}</div></div>`).join('');
+}
+function buildSmartAlerts(){
+  const alerts=[];
+  const follows=[...new Set([...(flashFollowedCompanies||[]),...(flashFollowedTopics||[])])];
+  follows.forEach(f=>{
+    const meta=fnInterestMeta(f);
+    const exact=(arts||[]).filter(a=>fnExactInterestMatch(a,f)).sort((a,b)=>new Date(b.pub||0)-new Date(a.pub||0));
+    if(exact.length){ alerts.push({title:'Exact mention: '+fnInterestChipLabel(f),message:getTitle(exact[0])}); return; }
+    const related=mfRelatedForFollow(f);
+    if(related.length){ alerts.push({title:'Related '+fnEntityCategoryLabel(meta)+': '+fnInterestChipLabel(f),message:'No exact mention yet. Latest '+(meta.cat||'related')+' headline: '+getTitle(related[0])}); }
+  });
+  return alerts;
+}
+// Upgrade the tracker header with dictionary metadata and keep exact matches separated from related stories.
+const _oldRunCompanyTrackerV13 = runCompanyTracker;
+runCompanyTracker = async function(){
+  const inp=document.getElementById('company-track-input');
+  const box=document.getElementById('company-track-results');
+  if(!inp||!box)return;
+  const q=inp.value.trim();
+  if(!q){box.innerHTML='<div class="mini-note">Enter a company, public figure, celebrity, topic, bank, agency, or state first.</div>';return;}
+  const meta=fnInterestMeta(q);
+  lastTrackedCompany=q;
+  box.innerHTML=`<div class="mini-note">Searching the latest 48 hours with Flash Dictionary…<br><strong>${fnInterestChipLabel(q)}</strong> · ${fnEntityCategoryLabel(meta)}${meta.cat?' · '+meta.cat:''}</div>`;
+  let windowStories=await fetchTrackerWindow(q);
+  let results=windowStories.filter(a=>trackerMatches(a,q));
+  results=trackerSortRecent(results).slice(0,12);
+  if(!results.length){
+    const related=(await fetchRelatedTrackerWindow(q)).filter(a=>!trackerMatches(a,q)).slice(0,8);
+    box.innerHTML=`<div class="mini-note"><strong>${fnInterestChipLabel(q)}</strong> is recognized as ${fnEntityCategoryLabel(meta)}${meta.cat?' under '+meta.cat:''}.</div><div class="mini-note">No exact headline mention found for <strong>${fnInterestChipLabel(q)}</strong> in the latest 48 hours.</div>` +
+      (related.length ? renderTrackerRelated(q, related) : `<div class="mini-note">Try another keyword or check again later.</div>`);
+    box.querySelectorAll('.tracker-related-card').forEach((el,i)=>el.addEventListener('click',()=>openArt(related[i])));
+    return;
+  }
+  const srcs=[...new Set(results.map(a=>a.source||'Flash Nigeria'))];
+  const newest=results[0]?.pub?ago(results[0].pub):'recent';
+  box.innerHTML=`<div class="mini-note"><strong>${fnInterestChipLabel(q)}</strong> · ${fnEntityCategoryLabel(meta)}${meta.cat?' · '+meta.cat:''}<br>Match quality: 🟢 Exact mention</div><div class="tracker-stats"><div class="tracker-stat"><b>${results.length}</b><span>48H Mentions</span></div><div class="tracker-stat"><b>${srcs.length}</b><span>Sources</span></div><div class="tracker-stat"><b>${results.filter(isTrending).length}</b><span>Trending</span></div></div><div class="mini-note"><strong>${results.length}</strong> exact mention${results.length===1?'':'s'} found for <strong>${fnInterestChipLabel(q)}</strong>. Most recent: ${newest}.</div><div class="intelligence-report-card"><strong>📊 Intelligence Report</strong><span>PRO users can turn these mentions into a professional briefing with timeline, sources, trends, and PDF export.</span><button onclick="requestProAccess()">Generate Report — PRO</button></div>`+results.map((a,i)=>`<div class="tracker-result" data-i="${i}"><div class="tracker-src">${a.source||'Flash Nigeria'} · ${ago(a.pub)}</div><div class="tracker-title">${getTitle(a)}</div></div>`).join('');
+  box.querySelectorAll('.tracker-result').forEach((el,i)=>el.addEventListener('click',()=>openArt(results[i])));
+};
+// Refresh My Feed wording with dictionary labels.
+const _oldRenderMyFeedV13 = renderMyFeed;
+renderMyFeed = function(){
+  _oldRenderMyFeedV13();
+  const chips=document.getElementById('mf-interest-chips');
+  if(chips){
+    const follows=mfFollowList();
+    if(follows.length){
+      chips.innerHTML=follows.map(x=>{const m=fnInterestMeta(x);return `<span class="mf-chip on">${fnInterestChipLabel(x)} · ${fnEntityCategoryLabel(m)}</span>`;}).join('');
+    }
+  }
+};
 </script>
 </body>
 </html>
