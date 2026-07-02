@@ -414,7 +414,7 @@
 @media(max-width:600px){.profile-tools{grid-template-columns:1fr;gap:10px}.profile-tool{padding:14px;border-radius:16px}.profile-login-actions{grid-template-columns:1fr}.profile-tool .pt-ico{font-size:24px}}
 
 
-/* Phoenix v26 — stronger article classification for Politics, Business, Entertainment, Sports, Religion */
+/* Phoenix v27 — stronger article classification for Politics, Business, Entertainment, Sports, Religion */
 /* Phoenix v23 — Home is now Flash News, clean category-first layout */
 .news-home{padding-top:20px!important;}
 .home-news-title{margin-top:0!important;}
@@ -980,7 +980,8 @@ function cleanArticle(a,i){
   }
 }
 let nextPage=null; let currentPage=1; let reachedEnd=false;
-let homeVisibleCount=12;
+let homeVisibleCount=18;
+let categoryPages={}; let categoryLoading={}; let autoLoadBusy=false;
 function extractArticles(data){return Array.isArray(data)?data:(data.articles||data.news||data.items||[])}
 function extractNext(data){return data.nextPage||data.next_page||data.next||data.cursor||data.pageToken||data?.pagination?.next||null}
 function uniqueMerge(oldItems,newItems){const seen=new Set(oldItems.map(a=>a.url||a.title)); const out=[...oldItems]; newItems.forEach(a=>{const k=a.url||a.title; if(!seen.has(k)){seen.add(k); out.push(a)}}); return out}
@@ -1000,7 +1001,7 @@ async function loadNews(force=false){
     if(!res.ok){ res=await fetch('https://www.flashnigeria.com/api/news?t='+Date.now(), {cache:'no-store'}); }
     if(!res.ok) throw new Error('API '+res.status);
     let data=await res.json();
-    currentPage=1; reachedEnd=false; homeVisibleCount=12;
+    currentPage=1; reachedEnd=false; homeVisibleCount=18;
     nextPage=extractNext(data);
     articles=extractArticles(data).map(cleanArticle);
     if(!articles.length) throw new Error('No articles');
@@ -1077,6 +1078,68 @@ async function loadMoreNews(){
   }
 }
 
+
+function apiCategoryName(cat){
+  const c=String(cat||'All').toLowerCase();
+  if(c==='all') return '';
+  if(c==='religion') return 'religion';
+  if(c==='entertainment') return 'entertainment';
+  if(c==='sports') return 'sports';
+  if(c==='business') return 'business';
+  if(c==='politics') return 'politics';
+  return c;
+}
+function categoryListCount(cat){
+  return cat==='All'?articles.length:articles.filter(a=>cap(a.category)===cat).length;
+}
+async function fetchCategoryBatch(cat, requestedPage){
+  const apiCat=apiCategoryName(cat);
+  const page=requestedPage || (categoryPages[cat]||1);
+  const urls=[];
+  if(apiCat){
+    urls.push('/api/news?category='+encodeURIComponent(apiCat)+'&limit=60&page='+encodeURIComponent(page)+'&t='+Date.now());
+    urls.push('/api/news?cat='+encodeURIComponent(apiCat)+'&limit=60&page='+encodeURIComponent(page)+'&t='+Date.now());
+    urls.push('/api/news?section='+encodeURIComponent(apiCat)+'&limit=60&page='+encodeURIComponent(page)+'&t='+Date.now());
+  }else{
+    urls.push('/api/news?limit=60&page='+encodeURIComponent(page)+'&t='+Date.now());
+  }
+  let merged=[]; let got=false; let next=null;
+  for(const u of urls){
+    try{
+      let res=await fetch(u,{cache:'no-store'});
+      if(!res.ok && u.startsWith('/')) res=await fetch('https://www.flashnigeria.com'+u,{cache:'no-store'});
+      if(!res.ok) continue;
+      got=true;
+      const data=await res.json();
+      const batch=extractArticles(data).map(cleanArticle);
+      if(batch.length) merged=uniqueMerge(merged,batch);
+      next=next||extractNext(data);
+    }catch(_e){}
+  }
+  return {got, batch:merged, next};
+}
+async function ensureCategoryRich(cat){
+  if(!cat || cat==='All') return;
+  if(categoryLoading[cat]) return;
+  const current=categoryListCount(cat);
+  if(current>=24) return;
+  categoryLoading[cat]=true;
+  try{
+    let before=articles.length;
+    for(let i=0;i<3;i++){
+      const page=(categoryPages[cat]||1);
+      const res=await fetchCategoryBatch(cat,page);
+      categoryPages[cat]=page+1;
+      if(res.batch&&res.batch.length) articles=uniqueMerge(articles,res.batch);
+      if(categoryListCount(cat)>=24) break;
+      if(!res.got || !res.batch.length) break;
+    }
+    if(articles.length>before){
+      localStorage.setItem('flash_cache',JSON.stringify(articles));
+      renderAll();
+    }
+  }finally{categoryLoading[cat]=false;}
+}
 function sampleNews(){return ['Tinubu meets security chiefs over economy and national stability','CBN issues fresh directive to banks on forex transactions','Dangote refinery imports first UAE crude cargoes','Davido announces new African tour dates','Super Eagles prepare for crucial World Cup qualifier','Pastor Adeboye addresses RCCG convention in Lagos','MTN Nigeria unveils new data plans','Burna Boy makes Afrobeats history in London'].map((title,i)=>cleanArticle({title,source:['Punch','Vanguard','BusinessDay','Channels TV'][i%4],category:['politics','business','business','entertainment','sports','religion','technology','entertainment'][i],published_at:new Date(Date.now()-i*3600e3).toISOString()},i))}
 function renderAll(){renderCounts();renderTicker();renderCats();filterCat(activeCat);renderTrends();updateMyFlash();updateLoadMoreButton();}
 function setTextSafe(id,val){var el=document.getElementById(id); if(el) el.textContent=val;}
@@ -1098,6 +1161,8 @@ function renderCats(){
 }
 function filterCat(cat){
   activeCat=cat;
+  const count=categoryListCount(cat);
+  if(cat!=='All' && count < 24) ensureCategoryRich(cat);
   filtered=cat==='All'?articles:articles.filter(a=>cap(a.category)===cat);
   renderNews('newsGrid',filtered);
   renderNews('homeNews',filtered.slice(0,homeVisibleCount));
@@ -1165,6 +1230,20 @@ function syncUser(){const email=currentUser?.email; const isLoggedIn=!!email; cl
 function dayGreeting(){let h=new Date().getHours(); return h<12?'Good Morning':h<17?'Good Afternoon':'Good Evening'}
 function textOf(a){return ((a.title||'')+' '+(a.description||'')+' '+(a.source||'')).toLowerCase()}function cap(s){return (s||'').charAt(0).toUpperCase()+(s||'').slice(1)}function escapeHTML(s){return String(s||'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}function escapeAttr(s){return escapeHTML(s).replace(/'/g,'&#39;')}function timeAgo(d){let t=new Date(d).getTime(); if(!t)return 'now'; let m=Math.max(0,Math.round((Date.now()-t)/60000)); if(m<1)return 'just now'; if(m<60)return m+'m ago'; let h=Math.round(m/60); if(h<24)return h+'h ago'; return Math.round(h/24)+'d ago'}
 function setupQuick(){const qs=['Tinubu','CBN','Dangote','MTN','Davido','Wizkid','Burna Boy','Rema','2Face','Adeboye','Oyedepo','Jerry Eze','Kumuyi','RCCG','NSPPD','EFCC','INEC','Osimhen','Super Eagles']; document.getElementById('quickChips').innerHTML=qs.map(q=>`<button class="chip" onclick="runIntelligence('${q}')">${q}</button>`).join('')}
+
+function setupAutoLoadMore(){
+  let last=0;
+  window.addEventListener('scroll',function(){
+    const now=Date.now();
+    if(autoLoadBusy || now-last<900) return;
+    if((window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 950)){
+      last=now;
+      autoLoadBusy=true;
+      loadMoreNews().finally(function(){autoLoadBusy=false;});
+    }
+  },{passive:true});
+}
+setupAutoLoadMore();
 setupQuick();initAuth();loadNews();syncUser();
 </script>
 </body>
