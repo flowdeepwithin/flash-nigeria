@@ -398,6 +398,21 @@
   .latest-home-section{margin-top:16px!important;}
 }
 
+
+
+/* Phoenix v21 — Profile tools: PRO + Voice preserved without homepage clutter */
+.profile-tools{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px}
+.profile-tool{border:1px solid var(--line);background:#fff;border-radius:18px;padding:16px;box-shadow:var(--shadow);cursor:pointer;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+.profile-tool:hover{transform:translateY(-2px);border-color:#bbf7d0;box-shadow:0 16px 35px rgba(15,23,42,.10)}
+.profile-tool .pt-ico{font-size:28px;margin-bottom:8px}
+.profile-tool b{display:block;font-size:16px;margin-bottom:4px}
+.profile-tool small{color:var(--muted);line-height:1.35;display:block}
+.pro-inline-card{background:linear-gradient(135deg,#071626,#063b2a);color:#fff;border:0}
+.pro-inline-card small{color:#d1fae5}.pro-inline-card .primary{margin-top:12px;width:100%}
+.profile-login-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.profile-login-actions .soft,.profile-login-actions .primary{width:100%;text-align:center}
+@media(max-width:600px){.profile-tools{grid-template-columns:1fr;gap:10px}.profile-tool{padding:14px;border-radius:16px}.profile-login-actions{grid-template-columns:1fr}.profile-tool .pt-ico{font-size:24px}}
+
 </style>
 
 
@@ -605,6 +620,21 @@
   .latest-home-section{margin-top:16px!important;}
 }
 
+
+
+/* Phoenix v21 — Profile tools: PRO + Voice preserved without homepage clutter */
+.profile-tools{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px}
+.profile-tool{border:1px solid var(--line);background:#fff;border-radius:18px;padding:16px;box-shadow:var(--shadow);cursor:pointer;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+.profile-tool:hover{transform:translateY(-2px);border-color:#bbf7d0;box-shadow:0 16px 35px rgba(15,23,42,.10)}
+.profile-tool .pt-ico{font-size:28px;margin-bottom:8px}
+.profile-tool b{display:block;font-size:16px;margin-bottom:4px}
+.profile-tool small{color:var(--muted);line-height:1.35;display:block}
+.pro-inline-card{background:linear-gradient(135deg,#071626,#063b2a);color:#fff;border:0}
+.pro-inline-card small{color:#d1fae5}.pro-inline-card .primary{margin-top:12px;width:100%}
+.profile-login-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.profile-login-actions .soft,.profile-login-actions .primary{width:100%;text-align:center}
+@media(max-width:600px){.profile-tools{grid-template-columns:1fr;gap:10px}.profile-tool{padding:14px;border-radius:16px}.profile-login-actions{grid-template-columns:1fr}.profile-tool .pt-ico{font-size:24px}}
+
 </style>
 </head>
 <body>
@@ -622,7 +652,17 @@
 <section id="myflash" class="panel"><div class="page-title"><button class="back-btn" onclick="showPanel('home')">←</button><h2>❤️ My Flash</h2><span class="link" onclick="showPanel('profile')">Manage</span></div><div class="kpis"><div class="kpi"><b id="savedKpi">0</b><div>Saved</div></div><div class="kpi"><b id="followKpi">0</b><div>Following</div></div><div class="kpi"><b id="alertKpi">0</b><div>Alerts</div></div><div class="kpi"><b>Free</b><div>Membership</div></div></div><div class="my-card"><h3>⭐ Your Interests</h3><div class="chips" id="followingList"></div></div><div class="my-card"><h3>🔥 Breaking For You</h3><div id="myFeedList"></div></div><div class="my-card"><h3>📚 Saved Articles</h3><div id="savedList"></div></div></section>
 <section id="voice" class="panel"><div class="page-title"><button class="back-btn" onclick="showPanel('home')">←</button><h2>🎤 Flash Voice</h2><span class="link">Free headline assistant</span></div><div class="pro-card"><h3>Ask Flash Voice to find and read today’s headlines.</h3><p>Flash Voice searches news and reads headlines. Reports, executive briefs, and analytics stay inside Flash PRO.</p><div class="searchbox"><span>🎤</span><input id="voiceInput" placeholder="Try: politics today, CBN news, celebrity news..."/><button onclick="voiceSearch()">Ask</button></div><div id="voiceOutput"></div></div></section>
 <section id="pro" class="panel"><div class="page-title"><button class="back-btn" onclick="showPanel('home')">←</button><h2>👑 Flash PRO</h2><span class="link">Premium Intelligence</span></div><div class="pro-card"><h3>Unlock Flash Nigeria PRO</h3><p>Executive briefings, company intelligence, personalized alerts, PDF reports, AI summaries, and future research tools.</p><h2>₦10,000/month</h2><button class="primary" onclick="location.href='https://paystack.shop/pay/5etlalgs33'">Upgrade with Paystack</button></div></section>
-<section id="profile" class="panel"><div class="page-title"><button class="back-btn" onclick="showPanel('home')">←</button><h2>👤 Profile</h2><span class="link" onclick="logout()">Logout</span></div><div class="pro-card"><h3 id="profileName">Guest</h3><p id="profileEmail">Sign in to sync saved articles and following.</p><button class="primary" onclick="openAuth()">Login / Sign up</button></div></section>
+<section id="profile" class="panel"><div class="page-title"><button class="back-btn" onclick="showPanel('home')">←</button><h2>👤 Profile</h2><span class="link" onclick="logout()">Logout</span></div>
+  <div class="pro-card"><h3 id="profileName">Guest</h3><p id="profileEmail">Sign in to sync saved articles and following.</p><div class="profile-login-actions"><button class="primary" id="profileLoginBtn" onclick="openAuth()">Login / Sign up</button><button class="soft" onclick="showPanel('myflash')">My Flash</button></div></div>
+  <div class="section"><div class="section-head"><h2>⚡ Flash Tools</h2><span class="link">Account tools</span></div>
+    <div class="profile-tools">
+      <div class="profile-tool" onclick="showPanel('voice')"><div class="pt-ico">🎤</div><b>Flash Voice</b><small>Search and listen to today’s headlines. Free for all readers.</small></div>
+      <div class="profile-tool pro-inline-card" onclick="showPanel('pro')"><div class="pt-ico">👑</div><b>Upgrade to Flash PRO</b><small>Executive briefings, company intelligence, alerts, reports, and premium research tools.</small><button class="primary" onclick="event.stopPropagation();location.href='https://paystack.shop/pay/5etlalgs33'">Upgrade with Paystack</button></div>
+      <div class="profile-tool" onclick="showPanel('myflash')"><div class="pt-ico">❤️</div><b>Saved & Following</b><small>View your saved articles, followed topics, and personal alerts.</small></div>
+      <div class="profile-tool" onclick="showPanel('intelligence')"><div class="pt-ico">🧠</div><b>Flash Intelligence</b><small>Track people, companies, pastors, banks, sports stars, and trends.</small></div>
+    </div>
+  </div>
+</section>
 </main>
 <div class="bottom-nav"><div class="bottom-inner"><button class="nav-item active" onclick="showPanel('home')">🏠<span>Home</span></button><button class="nav-item" onclick="showPanel('news')">📰<span>News</span></button><button class="nav-item" onclick="showPanel('trends')">🔥<span>Trends</span></button><button class="nav-item" onclick="showPanel('intelligence')">🧠<span>Intelligence</span></button><button class="nav-item" onclick="showPanel('myflash')">♡<span>My Flash</span></button><button class="nav-item" onclick="showPanel('profile')">👤<span>Profile</span></button></div></div>
 <div class="auth-box" id="authBox"><div class="modal"><button style="float:right" class="soft" onclick="closeAuth()">×</button><h3>Flash Nigeria Account</h3><input class="field" id="authName" placeholder="Full name"/><input class="field" id="authEmail" placeholder="Email"/><input class="field" id="authPassword" type="password" placeholder="Password"/><button class="primary" style="width:100%;margin-top:8px" onclick="signIn()">Login</button><button class="soft" style="width:100%;margin-top:8px" onclick="signUp()">Create account</button><p style="color:var(--muted);font-size:13px">You may need to confirm your email after sign up.</p></div></div><div class="toast" id="toast"></div>
@@ -886,7 +926,7 @@ document.addEventListener('focusin',function(e){
 });
 
 async function initAuth(){try{const {data}=await sb.auth.getUser(); currentUser=data.user; syncUser(); sb.auth.onAuthStateChange((e,session)=>{currentUser=session?.user||null;syncUser()});}catch(e){}}
-function syncUser(){const email=currentUser?.email; const isLoggedIn=!!email; clearAutofilledSearchEmails(); const name=isLoggedIn?(currentUser?.user_metadata?.full_name || email.split('@')[0]):'Guest'; document.getElementById('profileName').textContent=name; document.getElementById('profileEmail').textContent=email||'Sign in to sync your account.'; document.getElementById('avatar').textContent=isLoggedIn?(name[0]||'U').toUpperCase():'G'; document.getElementById('greeting').textContent=isLoggedIn?`${dayGreeting()}, ${name.split(' ')[0]} 👋`:`${dayGreeting()} 👋`; const logoutLink=document.querySelector('#profile .page-title .link'); if(logoutLink){logoutLink.style.display=isLoggedIn?'inline-flex':'none';} }
+function syncUser(){const email=currentUser?.email; const isLoggedIn=!!email; clearAutofilledSearchEmails(); const name=isLoggedIn?(currentUser?.user_metadata?.full_name || email.split('@')[0]):'Guest'; document.getElementById('profileName').textContent=name; document.getElementById('profileEmail').textContent=email||'Sign in to sync your account.'; document.getElementById('avatar').textContent=isLoggedIn?(name[0]||'U').toUpperCase():'G'; document.getElementById('greeting').textContent=isLoggedIn?`${dayGreeting()}, ${name.split(' ')[0]} 👋`:`${dayGreeting()} 👋`; const logoutLink=document.querySelector('#profile .page-title .link'); if(logoutLink){logoutLink.style.display=isLoggedIn?'inline-flex':'none';} const loginBtn=document.getElementById('profileLoginBtn'); if(loginBtn){loginBtn.style.display=isLoggedIn?'none':'block';} }
 function dayGreeting(){let h=new Date().getHours(); return h<12?'Good Morning':h<17?'Good Afternoon':'Good Evening'}
 function textOf(a){return ((a.title||'')+' '+(a.description||'')+' '+(a.source||'')).toLowerCase()}function cap(s){return (s||'').charAt(0).toUpperCase()+(s||'').slice(1)}function escapeHTML(s){return String(s||'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}function escapeAttr(s){return escapeHTML(s).replace(/'/g,'&#39;')}function timeAgo(d){let t=new Date(d).getTime(); if(!t)return 'now'; let m=Math.max(0,Math.round((Date.now()-t)/60000)); if(m<1)return 'just now'; if(m<60)return m+'m ago'; let h=Math.round(m/60); if(h<24)return h+'h ago'; return Math.round(h/24)+'d ago'}
 function setupQuick(){const qs=['Tinubu','CBN','Dangote','MTN','Davido','Wizkid','Burna Boy','Rema','2Face','Adeboye','Oyedepo','Jerry Eze','Kumuyi','RCCG','NSPPD','EFCC','INEC','Osimhen','Super Eagles']; document.getElementById('quickChips').innerHTML=qs.map(q=>`<button class="chip" onclick="runIntelligence('${q}')">${q}</button>`).join('')}
