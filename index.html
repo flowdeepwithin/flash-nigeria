@@ -57,7 +57,7 @@
 @media(max-width:860px){.page-title{margin:14px 2px 12px}.back-btn{width:38px;height:38px;border-radius:13px}.page-title h2{font-size:22px}.module-grid{grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px}.module-card{min-height:70px;padding:10px 8px;text-align:center;display:flex;flex-direction:column;justify-content:center;gap:5px}.module-ico{font-size:22px}.module-card b{font-size:13px}.module-card small{display:none}.trend-grid{gap:8px}.trend-card{padding:8px 10px}.trend-card b{font-size:14px;max-width:150px}.trend-card .ticon{width:25px;height:25px}.hero{padding:18px;margin:14px 0 14px}.stats{grid-template-columns:repeat(4,1fr)}.stat{display:block;text-align:center;padding:10px 5px}.stat-icon{width:30px;height:30px;margin:0 auto 5px;font-size:15px}.stat b{font-size:19px}.stat small{font-size:10px}.section{margin:18px 0}.section-head h2{font-size:21px}.top-inner{height:62px}.icon-btn,.avatar{width:40px;height:40px}.news-grid{grid-template-columns:1fr}.thumb{height:150px}}
 
 
-.load-more-news{display:block;margin:28px auto 90px;padding:14px 26px;border-radius:999px;background:#16a34a;color:#fff;font-weight:900;border:none;box-shadow:0 10px 24px rgba(22,163,74,.25);font-size:15px;cursor:pointer}
+.load-more-news{display:block;margin:22px auto 90px;padding:14px 26px;border-radius:999px;background:#16a34a;color:#fff;font-weight:900;border:none;box-shadow:0 10px 24px rgba(22,163,74,.25);font-size:15px;cursor:pointer}
 .load-more-news:disabled{background:#cbd5e1;color:#64748b;box-shadow:none;cursor:not-allowed}
 
 @media(max-width:600px){.ticker-track{animation-duration:50s!important}}
@@ -378,6 +378,26 @@
   .section:first-of-type{margin-top:12px!important;}
 }
 
+
+
+/* Phoenix v19 — content-first homepage: no hero, no duplicate shortcut cards */
+.content-first-home{padding-top:10px!important;}
+.content-first-home .section{margin:18px 0!important;}
+.content-first-home .section:first-child{margin-top:8px!important;}
+.trends-home-section .section-head,.flash-intel-home .section-head,.latest-home-section .section-head{margin-bottom:10px!important;}
+.trends-home-section .link,.flash-intel-home .link,.latest-home-section .link{font-size:14px!important;}
+/* keep old shortcut grid hidden if cached markup ever appears */
+.content-first-home .module-grid,.module-grid.home-duplicates{display:none!important;}
+@media(max-width:640px){
+  .content-first-home{padding-top:6px!important;}
+  .content-first-home .section{margin:14px 0!important;}
+  .content-first-home .section-head h2{font-size:22px!important;}
+  .content-first-home .section-head .link{font-size:13px!important;}
+  .flash-intel-home .searchbox{margin-top:4px!important;}
+  .rotating-hint{font-size:11px!important;margin-top:6px!important;color:#7b8494!important;}
+  .latest-home-section{margin-top:16px!important;}
+}
+
 </style>
 
 
@@ -565,26 +585,36 @@
   .section:first-of-type{margin-top:12px!important;}
 }
 
+
+
+/* Phoenix v19 — content-first homepage: no hero, no duplicate shortcut cards */
+.content-first-home{padding-top:10px!important;}
+.content-first-home .section{margin:18px 0!important;}
+.content-first-home .section:first-child{margin-top:8px!important;}
+.trends-home-section .section-head,.flash-intel-home .section-head,.latest-home-section .section-head{margin-bottom:10px!important;}
+.trends-home-section .link,.flash-intel-home .link,.latest-home-section .link{font-size:14px!important;}
+/* keep old shortcut grid hidden if cached markup ever appears */
+.content-first-home .module-grid,.module-grid.home-duplicates{display:none!important;}
+@media(max-width:640px){
+  .content-first-home{padding-top:6px!important;}
+  .content-first-home .section{margin:14px 0!important;}
+  .content-first-home .section-head h2{font-size:22px!important;}
+  .content-first-home .section-head .link{font-size:13px!important;}
+  .flash-intel-home .searchbox{margin-top:4px!important;}
+  .rotating-hint{font-size:11px!important;margin-top:6px!important;color:#7b8494!important;}
+  .latest-home-section{margin-top:16px!important;}
+}
+
 </style>
 </head>
 <body>
 <header class="topbar"><div class="app top-inner"><div class="brand" onclick="showPanel('home')"><span class="bolt">ϟ</span><span>FLASH</span> <span>NIGERIA</span></div><div class="top-actions"><button class="icon-btn" onclick="showPanel('intelligence')">⌕</button><button class="icon-btn" onclick="showPanel('myflash');toast('Alerts are inside My Flash')">🔔</button><button class="avatar" id="avatar" onclick="openAuthOrProfile()">B</button></div></div></header>
 <div class="ticker"><div class="ticker-track" id="tickerTrack"><span>⚡ Loading breaking headlines...</span></div></div>
 <main class="app">
-<section id="home" class="panel active">
-  <div class="compact-livebar">
-    <div class="compact-live-left"><span class="dot small-dot"></span><span>LIVE · Updated just now</span></div>
-    <div class="compact-live-stats">
-      <button onclick="showPanel('news')"><b id="storiesCount">0</b><small>Stories</small></button>
-      <button><b id="sourcesCount">0</b><small>Sources</small></button>
-      <button onclick="showPanel('trends')"><b id="trendsCount">0</b><small>Trends</small></button>
-      <button onclick="showPanel('myflash')"><b id="alertsCount">0</b><small>Alerts</small></button>
-    </div>
-  </div>
-  <div class="module-grid"><div class="module-card" onclick="showPanel('news')"><span class="module-ico">📰</span><div><b>News</b><small>Latest</small></div></div><div class="module-card" onclick="showPanel('trends')"><span class="module-ico">🔥</span><div><b>Flash Trends</b><small>Trending</small></div></div><div class="module-card" onclick="showPanel('intelligence')"><span class="module-ico">🧠</span><div><b>Intelligence</b><small>Insights</small></div></div><div class="module-card" onclick="showPanel('myflash')"><span class="module-ico">❤️</span><div><b>My Flash</b><small>Saved</small></div></div><div class="module-card" onclick="showPanel('voice')"><span class="module-ico">🎤</span><div><b>Voice</b><small>Voice</small></div></div><div class="module-card" onclick="showPanel('pro')"><span class="module-ico">👑</span><div><b>PRO</b><small>Premium</small></div></div></div>
-  <div class="section"><div class="section-head"><h2>🔥 Flash Trends</h2><span class="link" onclick="showPanel('trends')">View all ›</span></div><div class="trend-grid" id="homeTrends"></div></div>
-  <div class="section flash-intel-home"><div class="section-head"><h2>🧠 Flash Intelligence</h2><span class="link" onclick="showPanel('intelligence')">Search everything ›</span></div><div class="searchbox"><span>⌕</span><input id="homeSearch" name="flash_intelligence_query" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Search companies..." onkeydown="if(event.key==='Enter') runIntelligence(this.value)"/><button onclick="runIntelligence(document.getElementById('homeSearch').value)">Search</button></div><div class="rotating-hint" id="rotatingHint">Companies • Politicians • Celebrities • Pastors • Banks • Sports</div></div>
-  <div class="section"><div class="section-head"><h2>📰 Latest Headlines</h2><span class="link" onclick="showPanel('news')">More ›</span></div><div class="news-grid" id="homeNews"></div></div>
+<section id="home" class="panel active content-first-home">
+  <div class="section trends-home-section"><div class="section-head"><h2>🔥 Flash Trends</h2><span class="link" onclick="showPanel('trends')">See all →</span></div><div class="trend-grid" id="homeTrends"></div></div>
+  <div class="section flash-intel-home"><div class="section-head"><h2>🧠 Flash Intelligence</h2><span class="link" onclick="showPanel('intelligence')">Explore →</span></div><div class="searchbox"><span>⌕</span><input id="homeSearch" name="flash_intelligence_query" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Search companies..." onkeydown="if(event.key==='Enter') runIntelligence(this.value)"/><button onclick="runIntelligence(document.getElementById('homeSearch').value)">Search</button></div><div class="rotating-hint" id="rotatingHint">Companies • Politicians • Celebrities • Pastors • Banks • Sports</div></div>
+  <div class="section latest-home-section"><div class="section-head"><h2>📰 Latest Headlines</h2><span class="link" onclick="showPanel('news')">More →</span></div><div class="news-grid" id="homeNews"></div><button id="homeLoadMoreNewsBtn" class="load-more-news" onclick="loadMoreNews()">Load More News</button></div>
 </section>
 <section id="news" class="panel"><div class="page-title"><button class="back-btn" onclick="showPanel('home')">←</button><h2>📰 Flash News</h2><span class="link" onclick="loadNews(true)">Refresh</span></div><div class="chips" id="catChips"></div><div class="news-grid" id="newsGrid"></div><button id="loadMoreNewsBtn" class="load-more-news" onclick="loadMoreNews()">Load More News</button></section>
 <section id="trends" class="panel"><div class="page-title"><button class="back-btn" onclick="showPanel('home')">←</button><h2>🔥 Flash Trends</h2><span class="link">Live from headlines</span></div><div class="trend-grid" id="allTrends"></div></section>
@@ -724,20 +754,89 @@ function cleanArticle(a,i){
     description:a.description||a.summary||a.desc||''
   }
 }
-let nextPage=null;
+let nextPage=null; let currentPage=1; let reachedEnd=false;
 function extractArticles(data){return Array.isArray(data)?data:(data.articles||data.news||data.items||[])}
 function extractNext(data){return data.nextPage||data.next_page||data.next||data.cursor||data.pageToken||data?.pagination?.next||null}
 function uniqueMerge(oldItems,newItems){const seen=new Set(oldItems.map(a=>a.url||a.title)); const out=[...oldItems]; newItems.forEach(a=>{const k=a.url||a.title; if(!seen.has(k)){seen.add(k); out.push(a)}}); return out}
-function updateLoadMoreButton(){const b=document.getElementById('loadMoreNewsBtn'); if(!b)return; b.style.display=(view==='news'||document.getElementById('news').classList.contains('active'))?'block':'block'; if(nextPage){b.disabled=false;b.textContent='Load More News'}else{b.disabled=true;b.textContent=articles.length?'All Available News Loaded':'No More News'}}
-async function loadNews(force=false){try{const res=await fetch('/api/news?t='+Date.now(), {cache:'no-store'}); if(!res.ok) throw new Error('API '+res.status); let data=await res.json(); nextPage=extractNext(data); articles=extractArticles(data).map(cleanArticle); if(!articles.length) throw new Error('No articles'); localStorage.setItem('flash_cache',JSON.stringify(articles));}catch(e){articles=getStorage('flash_cache'); if(!articles.length){articles=sampleNews(); toast('Showing sample preview until API loads')}} renderAll(); updateLoadMoreButton()}
-async function loadMoreNews(){const btn=document.getElementById('loadMoreNewsBtn'); if(!nextPage){toast('No more stories available right now'); updateLoadMoreButton(); return;} try{btn.disabled=true;btn.textContent='Loading more...'; let url=String(nextPage).startsWith('http')?nextPage:'/api/news?page='+encodeURIComponent(nextPage)+'&t='+Date.now(); const res=await fetch(url,{cache:'no-store'}); if(!res.ok) throw new Error('API '+res.status); const data=await res.json(); nextPage=extractNext(data); const more=extractArticles(data).map(cleanArticle); if(!more.length){nextPage=null;toast('No more stories right now')}else{articles=uniqueMerge(articles,more); localStorage.setItem('flash_cache',JSON.stringify(articles)); toast('Loaded '+more.length+' more stories')} renderAll(); updateLoadMoreButton()}catch(e){toast('Could not load more news'); if(btn){btn.disabled=false;btn.textContent='Load More News'}}}
+function updateLoadMoreButton(){
+  const buttons=[document.getElementById('loadMoreNewsBtn'),document.getElementById('homeLoadMoreNewsBtn')].filter(Boolean);
+  buttons.forEach(function(b){
+    b.style.display='block';
+    if(reachedEnd){b.disabled=true;b.textContent=articles.length?'All Available News Loaded':'No More News';}
+    else{b.disabled=false;b.textContent='Load More News';}
+  });
+}
+async function loadNews(force=false){
+  try{
+    let res=await fetch('/api/news?t='+Date.now(), {cache:'no-store'});
+    if(!res.ok){ res=await fetch('https://www.flashnigeria.com/api/news?t='+Date.now(), {cache:'no-store'}); }
+    if(!res.ok) throw new Error('API '+res.status);
+    let data=await res.json();
+    currentPage=1; reachedEnd=false;
+    nextPage=extractNext(data);
+    articles=extractArticles(data).map(cleanArticle);
+    if(!articles.length) throw new Error('No articles');
+    localStorage.setItem('flash_cache',JSON.stringify(articles));
+  }catch(e){
+    articles=getStorage('flash_cache');
+    if(!articles.length){articles=sampleNews(); toast('Showing sample preview until API loads')}
+    reachedEnd=false;
+  }
+  renderAll(); updateLoadMoreButton();
+}
+async function loadMoreNews(){
+  const buttons=[document.getElementById('loadMoreNewsBtn'),document.getElementById('homeLoadMoreNewsBtn')].filter(Boolean);
+  if(reachedEnd){toast('All available stories are already loaded'); updateLoadMoreButton(); return;}
+  try{
+    buttons.forEach(function(btn){btn.disabled=true;btn.textContent='Loading more...';});
+    const requestedPage = nextPage || (currentPage + 1);
+    let url = String(requestedPage).startsWith('http') ? requestedPage : '/api/news?page=' + encodeURIComponent(requestedPage) + '&t=' + Date.now();
+    let res=await fetch(url,{cache:'no-store'});
+    if(!res.ok && !String(url).startsWith('http')){
+      res=await fetch('https://www.flashnigeria.com'+url,{cache:'no-store'});
+    }
+    if(!res.ok) throw new Error('API '+res.status);
+    const data=await res.json();
+    const more=extractArticles(data).map(cleanArticle);
+    nextPage=extractNext(data);
+    currentPage = Number.isFinite(Number(requestedPage)) ? Number(requestedPage) : currentPage + 1;
+    if(!more.length){
+      reachedEnd=true;
+      toast('No more stories right now');
+    }else{
+      const before=articles.length;
+      articles=uniqueMerge(articles,more);
+      if(articles.length===before){
+        // If API repeated page 1 and no new items came in, stop to prevent endless same results.
+        reachedEnd=true;
+        toast('All available stories are already loaded');
+      }else{
+        localStorage.setItem('flash_cache',JSON.stringify(articles));
+        toast('Loaded '+(articles.length-before)+' more stories');
+      }
+    }
+    renderAll(); updateLoadMoreButton();
+  }catch(e){
+    toast('Could not load more news');
+    buttons.forEach(function(btn){btn.disabled=false;btn.textContent='Load More News';});
+  }
+}
 
 function sampleNews(){return ['Tinubu meets security chiefs over economy and national stability','CBN issues fresh directive to banks on forex transactions','Dangote refinery imports first UAE crude cargoes','Davido announces new African tour dates','Super Eagles prepare for crucial World Cup qualifier','Pastor Adeboye addresses RCCG convention in Lagos','MTN Nigeria unveils new data plans','Burna Boy makes Afrobeats history in London'].map((title,i)=>cleanArticle({title,source:['Punch','Vanguard','BusinessDay','Channels TV'][i%4],category:['politics','business','business','entertainment','sports','religion','technology','entertainment'][i],published_at:new Date(Date.now()-i*3600e3).toISOString()},i))}
 function renderAll(){renderCounts();renderTicker();renderCats();filterCat(activeCat);renderTrends();updateMyFlash();updateLoadMoreButton();}
-function renderCounts(){document.getElementById('storiesCount').textContent=articles.length; document.getElementById('sourcesCount').textContent=new Set(articles.map(a=>a.source)).size; document.getElementById('alertsCount').textContent=getStorage('flash_follows').length; document.getElementById('alertKpi').textContent=getStorage('flash_follows').length;}
+function setTextSafe(id,val){var el=document.getElementById(id); if(el) el.textContent=val;}
+function renderCounts(){
+  // v20 fix: the big hero was removed, so some old KPI elements may not exist.
+  // Never let missing hero counters stop the news feed from rendering.
+  setTextSafe('storiesCount', articles.length);
+  setTextSafe('sourcesCount', new Set(articles.map(a=>a.source)).size);
+  setTextSafe('trendsCount', document.getElementById('trendsCount') ? document.getElementById('trendsCount').textContent : '');
+  setTextSafe('alertsCount', getStorage('flash_follows').length);
+  setTextSafe('alertKpi', getStorage('flash_follows').length);
+}
 function renderTicker(){document.getElementById('tickerTrack').innerHTML=[...articles.slice(0,8),...articles.slice(0,8)].map(a=>`<span>⚡ ${escapeHTML(a.title)}</span>`).join('')}
 function renderCats(){const cats=['All',...Array.from(new Set(articles.map(a=>cap(a.category)))).filter(Boolean).slice(0,8)]; document.getElementById('catChips').innerHTML=cats.map(c=>`<button class="chip ${c===activeCat?'active':''}" onclick="filterCat('${c}')">${c}</button>`).join('')}
-function filterCat(cat){activeCat=cat; filtered=cat==='All'?articles:articles.filter(a=>cap(a.category)===cat); renderNews('newsGrid',filtered); renderNews('homeNews',articles.slice(0,6)); renderCats()}
+function filterCat(cat){activeCat=cat; filtered=cat==='All'?articles:articles.filter(a=>cap(a.category)===cat); renderNews('newsGrid',filtered); renderNews('homeNews',articles.slice(0,12)); renderCats()}
 function catIcon(c){return {politics:'🏛️',business:'💼',sports:'⚽',entertainment:'🎵',technology:'💻',health:'🏥',religion:'⛪',general:'📰'}[(c||'general').toLowerCase()]||'📰'}
 function newsImageHTML(a){
   var fallback = `<div class="news-fallback"><div class="nf-icon">${catIcon(a.category)}</div><div class="nf-source">${escapeHTML(a.source||'Flash Nigeria')}</div><div class="nf-cat">${escapeHTML(a.category||'news')}</div></div>`;
