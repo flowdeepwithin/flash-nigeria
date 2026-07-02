@@ -414,6 +414,7 @@
 @media(max-width:600px){.profile-tools{grid-template-columns:1fr;gap:10px}.profile-tool{padding:14px;border-radius:16px}.profile-login-actions{grid-template-columns:1fr}.profile-tool .pt-ico{font-size:24px}}
 
 
+/* Phoenix v26 — stronger article classification for Politics, Business, Entertainment, Sports, Religion */
 /* Phoenix v23 — Home is now Flash News, clean category-first layout */
 .news-home{padding-top:20px!important;}
 .home-news-title{margin-top:0!important;}
@@ -429,6 +430,61 @@
 
 .news-img-fallback{width:100%;height:100%;align-items:stretch;justify-content:stretch;}
 .news-img-fallback .news-fallback{width:100%;height:100%;}
+
+
+
+/* Phoenix v25 — readable mobile bottom navigation */
+@media (max-width: 860px){
+  body{padding-bottom:82px!important;}
+  .bottom-nav{
+    background:rgba(255,255,255,.97)!important;
+    border-top:1px solid #e5e7eb!important;
+    box-shadow:0 -10px 28px rgba(15,23,42,.08)!important;
+  }
+  .bottom-inner{
+    height:78px!important;
+    grid-template-columns:repeat(5,1fr)!important;
+    max-width:100%!important;
+    padding:5px 4px 7px!important;
+  }
+  .nav-item{
+    font-size:23px!important;
+    line-height:1!important;
+    gap:6px!important;
+    border-radius:14px!important;
+    font-weight:900!important;
+    color:#64748b!important;
+    min-width:0!important;
+  }
+  .nav-item span{
+    display:block!important;
+    font-size:11px!important;
+    line-height:1!important;
+    max-width:72px!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    white-space:nowrap!important;
+    letter-spacing:-.02em!important;
+    color:inherit!important;
+  }
+  .nav-item.active{
+    color:#079440!important;
+    background:#ecfdf5!important;
+  }
+  .nav-item.active::after{
+    content:"";
+    width:22px;
+    height:3px;
+    border-radius:10px;
+    background:#16a34a;
+    margin-top:1px;
+  }
+}
+@media (max-width: 390px){
+  .bottom-inner{height:76px!important;padding-left:2px!important;padding-right:2px!important;}
+  .nav-item{font-size:21px!important;gap:5px!important;}
+  .nav-item span{font-size:10px!important;max-width:64px!important;}
+}
 
 </style>
 
@@ -855,16 +911,57 @@ function pickImage(a){
   return '';
 }
 function inferCategory(a){
-  const raw = String(a.cat || a.category || a.section || '').trim().toLowerCase();
-  const text = String((a.title||a.headline||'')+' '+(a.description||a.summary||a.desc||'')+' '+(a.source||a.publisher||a.site||'')).toLowerCase();
-  const known = ['politics','business','entertainment','sports','religion','technology','health'];
-  if(known.includes(raw)) return raw;
-  if(/pastor|church|rccg|redeemed|winners|oyedepo|adeboye|nsppd|dunamis|kumuyi|christ embassy|scoan|mfm|can|mosque|imam|islam|christian|religious|faith|prophet|apostle/.test(text)) return 'religion';
-  if(/davido|wizkid|burna|rema|tems|nollywood|actor|actress|music|singer|celebrity|entertainment|movie|afrobeats|bbnaija|comedian/.test(text)) return 'entertainment';
-  if(/football|sports|super eagles|osimhen|lookman|boniface|world cup|caf|fifa|npfl|match|goal|barcelona|arsenal|chelsea/.test(text)) return 'sports';
-  if(/cbn|bank|naira|forex|dollar|business|economy|market|oil|fuel|dangote|mtn|airtel|glo|nnpcl|stock|finance/.test(text)) return 'business';
-  if(/tinubu|governor|senate|president|minister|election|inec|apc|pdp|labour party|court|police|security|efcc|government/.test(text)) return 'politics';
-  if(raw && raw !== 'general') return raw;
+  const raw = String(a.cat || a.category || a.section || a.topic || '').trim().toLowerCase();
+  const source = String(a.source || a.publisher || a.site || '').toLowerCase();
+  const title = String(a.title || a.headline || '').toLowerCase();
+  const desc = String(a.description || a.summary || a.desc || '').toLowerCase();
+  const text = (title + ' ' + desc + ' ' + source).toLowerCase();
+
+  // Normalize incoming API categories first
+  const aliases = {
+    politics:'politics', political:'politics', government:'politics', governance:'politics', security:'politics', crime:'politics', judicial:'politics', judiciary:'politics', court:'politics', election:'politics', elections:'politics',
+    business:'business', economy:'business', finance:'business', market:'business', markets:'business', money:'business', banking:'business', oil:'business', energy:'business', forex:'business',
+    entertainment:'entertainment', celebrity:'entertainment', celebrities:'entertainment', nollywood:'entertainment', music:'entertainment', lifestyle:'entertainment', arts:'entertainment', culture:'entertainment',
+    sports:'sports', sport:'sports', football:'sports', soccer:'sports',
+    religion:'religion', faith:'religion', church:'religion', mosque:'religion', christianity:'religion', islam:'religion',
+    technology:'technology', tech:'technology', startup:'technology', startups:'technology', digital:'technology',
+    health:'health', healthcare:'health', medical:'health'
+  };
+  if(aliases[raw]) return aliases[raw];
+
+  // Source-level hints. Some APIs send “Legit Entertainment”, “Complete Sports”, etc.
+  if(/complete\s*sports|sports?/.test(source)) return 'sports';
+  if(/legit\s*entertainment|entertainment|bellanaija|naijaloaded|pulse/.test(source)) return 'entertainment';
+  if(/businessday|nairametrics|business/.test(source)) return 'business';
+
+  // Entity dictionary override: if a known entity is mentioned, use its category.
+  try{
+    for(const ent of Object.values(entityMap||{})){
+      if(ent && ent.cat && ent.aliases && ent.aliases.some(x => text.includes(String(x).toLowerCase()))){
+        return ent.cat;
+      }
+    }
+  }catch(e){}
+
+  // Faith / Religion
+  if(/\b(pastor|church|rccg|redeemed|winners chapel|living faith|oyedepo|adeboye|nsppd|streams of joy|dunamis|kumuyi|deeper life|christ embassy|scoan|mfm|\bcan\b|christian association|mosque|imam|islam|islamic|muslim|christian|religious|faith|prophet|apostle|bishop|ministry|cleric|clergy|prayer|crusade|revival|convention)\b/.test(text)) return 'religion';
+
+  // Entertainment
+  if(/\b(davido|wizkid|burna|burna boy|rema|tems|ayra starr|tiwa savage|2face|2baba|funke akindele|genevieve|nollywood|actor|actress|music|musician|singer|celebrity|entertainment|movie|film|afrobeats|bbnaija|big brother|comedian|skit|album|song|concert|tour|award|fashion)\b/.test(text)) return 'entertainment';
+
+  // Sports
+  if(/\b(football|sports?|super eagles|osimhen|lookman|boniface|troost|ekong|world cup|afcon|caf|fifa|npfl|match|goal|barcelona|arsenal|chelsea|manchester|liverpool|galatasaray|transfer|coach|player|tournament|league)\b/.test(text)) return 'sports';
+
+  // Business
+  if(/\b(cbn|bank|naira|forex|dollar|business|economy|economic|market|oil|fuel|petrol|diesel|subsidy|dangote|refinery|mtn|airtel|glo|nnpcl|nnpc|stock|finance|fintech|insurance|tax|loan|investment|investor|revenue|inflation|exchange rate|customs|import|export)\b/.test(text)) return 'business';
+
+  // Politics / Government / Security
+  if(/\b(tinubu|governor|senate|senator|president|presidency|minister|ministry|election|inec|apc|pdp|labour party|lp\b|court|police|security|efcc|icpc|dss|army|military|government|fg\b|house of reps|national assembly|speaker|lawmakers|commissioner|chairman|secretary|committee|bill|policy)\b/.test(text)) return 'politics';
+
+  if(/\b(ai|technology|tech|startup|digital|internet|software|cyber|app|innovation|data|5g|telecom)\b/.test(text)) return 'technology';
+  if(/\b(health|medical|hospital|doctor|nurse|disease|cholera|malaria|vaccine|ncdc|who\b|outbreak|epidemic|cancer)\b/.test(text)) return 'health';
+
+  if(raw && raw !== 'general' && raw !== 'latest') return raw;
   return 'general';
 }
 function cleanArticle(a,i){
