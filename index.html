@@ -921,7 +921,7 @@ const entityMap={
 };
 function getStorage(k){try{return JSON.parse(localStorage.getItem(k)||'[]')}catch(e){return[]}}
 function setStorage(k,v){localStorage.setItem(k,JSON.stringify(v));updateMyFlash()}
-function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
+function toast(m){if(/load more|more news|available stories|more headlines/i.test(String(m||''))){console.log(m);return;}const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
 function showPanel(id){
   setTimeout(clearAutofilledSearchEmails,50);document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active')); const map={home:0,trends:1,intelligence:2,myflash:3,profile:4,news:0};document.querySelectorAll('.nav-item')[map[id]??0]?.classList.add('active'); if(id==='myflash')updateMyFlash(); window.scrollTo({top:0,behavior:'smooth'})}
 function pickImage(a){
@@ -1058,11 +1058,11 @@ async function loadMoreNews(){
   if(currentPanel==='home' && canRevealLocal){
     homeVisibleCount=Math.min(homeVisibleCount+12, localListCount);
     renderAll();
-    toast('Showing more headlines');
+    console.log('Showing more headlines');
     return;
   }
 
-  if(reachedEnd){toast('All available stories are already loaded'); updateLoadMoreButton(); return;}
+  if(reachedEnd){updateLoadMoreButton(); return;}
   try{
     buttons.forEach(function(btn){btn.disabled=true;btn.textContent='Loading more...';});
     const requestedPage = nextPage || (currentPage + 1);
@@ -1100,11 +1100,11 @@ async function loadMoreNews(){
     articles=uniqueMerge(articles,merged);
     if(articles.length===before){
       reachedEnd=true;
-      toast('All available stories are already loaded');
+      console.log('All available stories are already loaded');
     }else{
       homeVisibleCount=Math.min(homeVisibleCount+12, articles.length);
       localStorage.setItem('flash_cache',JSON.stringify(articles));
-      toast('Loaded '+(articles.length-before)+' more stories');
+      console.log('Loaded '+(articles.length-before)+' more stories');
     }
     renderAll(); updateLoadMoreButton();
   }catch(e){
