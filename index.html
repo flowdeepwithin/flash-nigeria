@@ -643,12 +643,12 @@
 <main class="app">
 <section id="home" class="panel active content-first-home">
   <div class="section trends-home-section"><div class="section-head"><h2>🔥 Flash Trends</h2><span class="link" onclick="showPanel('trends')">See all →</span></div><div class="trend-grid" id="homeTrends"></div></div>
-  <div class="section flash-intel-home"><div class="section-head"><h2>🧠 Flash Intelligence</h2><span class="link" onclick="showPanel('intelligence')">Explore →</span></div><div class="searchbox"><span>⌕</span><input id="homeSearch" name="flash_intelligence_query" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Search companies..." onkeydown="if(event.key==='Enter') runIntelligence(this.value)"/><button onclick="runIntelligence(document.getElementById('homeSearch').value)">Search</button></div><div class="rotating-hint" id="rotatingHint">Companies • Politicians • Celebrities • Pastors • Banks • Sports</div></div>
+  <div class="section flash-intel-home"><div class="section-head"><h2>🧠 Flash Intelligence</h2><span class="link" onclick="showPanel('intelligence')">Explore →</span></div><div class="searchbox"><span>⌕</span><input id="homeSearch" type="search" name="flash_intelligence_home_query" autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="search" placeholder="Search companies..." onkeydown="if(event.key==='Enter') runIntelligence(this.value)"/><button onclick="runIntelligence(document.getElementById('homeSearch').value)">Search</button></div><div class="rotating-hint" id="rotatingHint">Companies • Politicians • Celebrities • Pastors • Banks • Sports</div></div>
   <div class="section latest-home-section"><div class="section-head"><h2>📰 Latest Headlines</h2><span class="link" onclick="showPanel('news')">More →</span></div><div class="news-grid" id="homeNews"></div><button id="homeLoadMoreNewsBtn" class="load-more-news" onclick="loadMoreNews()">Load More News</button></div>
 </section>
 <section id="news" class="panel"><div class="page-title"><button class="back-btn" onclick="showPanel('home')">←</button><h2>📰 Flash News</h2><span class="link" onclick="loadNews(true)">Refresh</span></div><div class="chips" id="catChips"></div><div class="news-grid" id="newsGrid"></div><button id="loadMoreNewsBtn" class="load-more-news" onclick="loadMoreNews()">Load More News</button></section>
 <section id="trends" class="panel"><div class="page-title"><button class="back-btn" onclick="showPanel('home')">←</button><h2>🔥 Flash Trends</h2><span class="link">Live from headlines</span></div><div class="trend-grid" id="allTrends"></div></section>
-<section id="intelligence" class="panel"><div class="page-title"><button class="back-btn" onclick="showPanel('home')">←</button><h2>🧠 Flash Intelligence</h2><span class="link">48-hour window</span></div><div class="intelligence-card"><p><b>Search Nigeria in real time.</b> Track companies, public figures, celebrities, faith leaders, government agencies, banks, sports stars, and topics.</p><div class="searchbox"><span>⌕</span><input id="intelInput" name="flash_intelligence_tracker" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Try Tinubu, CBN, Davido, RCCG, 2Face..." onkeydown="if(event.key==='Enter') runIntelligence(this.value)"/><button onclick="runIntelligence(document.getElementById('intelInput').value)">Track</button></div><div class="chips" id="quickChips"></div><div id="intelResults"></div></div></section>
+<section id="intelligence" class="panel"><div class="page-title"><button class="back-btn" onclick="showPanel('home')">←</button><h2>🧠 Flash Intelligence</h2><span class="link">48-hour window</span></div><div class="intelligence-card"><p><b>Search Nigeria in real time.</b> Track companies, public figures, celebrities, faith leaders, government agencies, banks, sports stars, and topics.</p><div class="searchbox"><span>⌕</span><input id="intelInput" type="search" name="flash_intelligence_tracker_query" autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="search" placeholder="Try Tinubu, CBN, Davido, RCCG, 2Face..." onkeydown="if(event.key==='Enter') runIntelligence(this.value)"/><button onclick="runIntelligence(document.getElementById('intelInput').value)">Track</button></div><div class="chips" id="quickChips"></div><div id="intelResults"></div></div></section>
 <section id="myflash" class="panel"><div class="page-title"><button class="back-btn" onclick="showPanel('home')">←</button><h2>❤️ My Flash</h2><span class="link" onclick="showPanel('profile')">Manage</span></div><div class="kpis"><div class="kpi"><b id="savedKpi">0</b><div>Saved</div></div><div class="kpi"><b id="followKpi">0</b><div>Following</div></div><div class="kpi"><b id="alertKpi">0</b><div>Alerts</div></div><div class="kpi"><b>Free</b><div>Membership</div></div></div><div class="my-card"><h3>⭐ Your Interests</h3><div class="chips" id="followingList"></div></div><div class="my-card"><h3>🔥 Breaking For You</h3><div id="myFeedList"></div></div><div class="my-card"><h3>📚 Saved Articles</h3><div id="savedList"></div></div></section>
 <section id="voice" class="panel"><div class="page-title"><button class="back-btn" onclick="showPanel('home')">←</button><h2>🎤 Flash Voice</h2><span class="link">Free headline assistant</span></div><div class="pro-card"><h3>Ask Flash Voice to find and read today’s headlines.</h3><p>Flash Voice searches news and reads headlines. Reports, executive briefs, and analytics stay inside Flash PRO.</p><div class="searchbox"><span>🎤</span><input id="voiceInput" placeholder="Try: politics today, CBN news, celebrity news..."/><button onclick="voiceSearch()">Ask</button></div><div id="voiceOutput"></div></div></section>
 <section id="pro" class="panel"><div class="page-title"><button class="back-btn" onclick="showPanel('home')">←</button><h2>👑 Flash PRO</h2><span class="link">Premium Intelligence</span></div><div class="pro-card"><h3>Unlock Flash Nigeria PRO</h3><p>Executive briefings, company intelligence, personalized alerts, PDF reports, AI summaries, and future research tools.</p><h2>₦10,000/month</h2><button class="primary" onclick="location.href='https://paystack.shop/pay/5etlalgs33'">Upgrade with Paystack</button></div></section>
@@ -757,7 +757,8 @@ const entityMap={
 function getStorage(k){try{return JSON.parse(localStorage.getItem(k)||'[]')}catch(e){return[]}}
 function setStorage(k,v){localStorage.setItem(k,JSON.stringify(v));updateMyFlash()}
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
-function showPanel(id){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active')); const map={home:0,news:1,trends:2,intelligence:3,myflash:4,profile:5};document.querySelectorAll('.nav-item')[map[id]??0]?.classList.add('active'); if(id==='myflash')updateMyFlash(); window.scrollTo({top:0,behavior:'smooth'})}
+function showPanel(id){
+  setTimeout(clearAutofilledSearchEmails,50);document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active')); const map={home:0,news:1,trends:2,intelligence:3,myflash:4,profile:5};document.querySelectorAll('.nav-item')[map[id]??0]?.classList.add('active'); if(id==='myflash')updateMyFlash(); window.scrollTo({top:0,behavior:'smooth'})}
 function pickImage(a){
   const candidates = [
     a.img, a.image, a.imageUrl, a.image_url, a.urlToImage,
@@ -795,14 +796,16 @@ function cleanArticle(a,i){
   }
 }
 let nextPage=null; let currentPage=1; let reachedEnd=false;
+let homeVisibleCount=12;
 function extractArticles(data){return Array.isArray(data)?data:(data.articles||data.news||data.items||[])}
 function extractNext(data){return data.nextPage||data.next_page||data.next||data.cursor||data.pageToken||data?.pagination?.next||null}
 function uniqueMerge(oldItems,newItems){const seen=new Set(oldItems.map(a=>a.url||a.title)); const out=[...oldItems]; newItems.forEach(a=>{const k=a.url||a.title; if(!seen.has(k)){seen.add(k); out.push(a)}}); return out}
 function updateLoadMoreButton(){
   const buttons=[document.getElementById('loadMoreNewsBtn'),document.getElementById('homeLoadMoreNewsBtn')].filter(Boolean);
+  const homeHasHidden = homeVisibleCount < articles.length;
   buttons.forEach(function(b){
     b.style.display='block';
-    if(reachedEnd){b.disabled=true;b.textContent=articles.length?'All Available News Loaded':'No More News';}
+    if(reachedEnd && !homeHasHidden){b.disabled=true;b.textContent=articles.length?'All Available News Loaded':'No More News';}
     else{b.disabled=false;b.textContent='Load More News';}
   });
 }
@@ -812,7 +815,7 @@ async function loadNews(force=false){
     if(!res.ok){ res=await fetch('https://www.flashnigeria.com/api/news?t='+Date.now(), {cache:'no-store'}); }
     if(!res.ok) throw new Error('API '+res.status);
     let data=await res.json();
-    currentPage=1; reachedEnd=false;
+    currentPage=1; reachedEnd=false; homeVisibleCount=12;
     nextPage=extractNext(data);
     articles=extractArticles(data).map(cleanArticle);
     if(!articles.length) throw new Error('No articles');
@@ -826,34 +829,60 @@ async function loadNews(force=false){
 }
 async function loadMoreNews(){
   const buttons=[document.getElementById('loadMoreNewsBtn'),document.getElementById('homeLoadMoreNewsBtn')].filter(Boolean);
+  const currentPanel=document.querySelector('.panel.active')?.id || (document.getElementById('home')?.classList.contains('active')?'home':'home');
+  const canRevealLocal = homeVisibleCount < articles.length;
+
+  // First reveal articles already loaded into memory. This makes Home Load More reliable even if API pagination is unavailable.
+  if(currentPanel==='home' && canRevealLocal){
+    homeVisibleCount=Math.min(homeVisibleCount+12, articles.length);
+    renderAll();
+    toast('Showing more headlines');
+    return;
+  }
+
   if(reachedEnd){toast('All available stories are already loaded'); updateLoadMoreButton(); return;}
   try{
     buttons.forEach(function(btn){btn.disabled=true;btn.textContent='Loading more...';});
     const requestedPage = nextPage || (currentPage + 1);
-    let url = String(requestedPage).startsWith('http') ? requestedPage : '/api/news?page=' + encodeURIComponent(requestedPage) + '&t=' + Date.now();
-    let res=await fetch(url,{cache:'no-store'});
-    if(!res.ok && !String(url).startsWith('http')){
-      res=await fetch('https://www.flashnigeria.com'+url,{cache:'no-store'});
-    }
-    if(!res.ok) throw new Error('API '+res.status);
-    const data=await res.json();
-    const more=extractArticles(data).map(cleanArticle);
-    nextPage=extractNext(data);
-    currentPage = Number.isFinite(Number(requestedPage)) ? Number(requestedPage) : currentPage + 1;
-    if(!more.length){
-      reachedEnd=true;
-      toast('No more stories right now');
+    const attempts=[];
+    if(String(requestedPage).startsWith('http')){
+      attempts.push(String(requestedPage));
     }else{
-      const before=articles.length;
-      articles=uniqueMerge(articles,more);
-      if(articles.length===before){
-        // If API repeated page 1 and no new items came in, stop to prevent endless same results.
-        reachedEnd=true;
-        toast('All available stories are already loaded');
-      }else{
-        localStorage.setItem('flash_cache',JSON.stringify(articles));
-        toast('Loaded '+(articles.length-before)+' more stories');
-      }
+      attempts.push('/api/news?page=' + encodeURIComponent(requestedPage) + '&t=' + Date.now());
+      attempts.push('/api/news?limit=30&page=' + encodeURIComponent(requestedPage) + '&t=' + Date.now());
+    }
+    // If the API does not paginate, pull category feeds and merge them as a free fallback.
+    ['politics','business','sports','entertainment','technology','health'].forEach(function(c){
+      attempts.push('/api/news?category='+encodeURIComponent(c)+'&t='+Date.now());
+    });
+
+    let merged=[]; let gotResponse=false; let nextFromResponse=null;
+    for(const u of attempts){
+      try{
+        let res=await fetch(u,{cache:'no-store'});
+        if(!res.ok && u.startsWith('/')) res=await fetch('https://www.flashnigeria.com'+u,{cache:'no-store'});
+        if(!res.ok) continue;
+        gotResponse=true;
+        const data=await res.json();
+        const batch=extractArticles(data).map(cleanArticle);
+        if(batch.length) merged=uniqueMerge(merged,batch);
+        nextFromResponse=nextFromResponse || extractNext(data);
+      }catch(_e){}
+      if(merged.length>=24 && nextFromResponse) break;
+    }
+    if(!gotResponse) throw new Error('No API response');
+
+    nextPage=nextFromResponse;
+    currentPage = Number.isFinite(Number(requestedPage)) ? Number(requestedPage) : currentPage + 1;
+    const before=articles.length;
+    articles=uniqueMerge(articles,merged);
+    if(articles.length===before){
+      reachedEnd=true;
+      toast('All available stories are already loaded');
+    }else{
+      homeVisibleCount=Math.min(homeVisibleCount+12, articles.length);
+      localStorage.setItem('flash_cache',JSON.stringify(articles));
+      toast('Loaded '+(articles.length-before)+' more stories');
     }
     renderAll(); updateLoadMoreButton();
   }catch(e){
@@ -876,7 +905,7 @@ function renderCounts(){
 }
 function renderTicker(){document.getElementById('tickerTrack').innerHTML=[...articles.slice(0,8),...articles.slice(0,8)].map(a=>`<span>⚡ ${escapeHTML(a.title)}</span>`).join('')}
 function renderCats(){const cats=['All',...Array.from(new Set(articles.map(a=>cap(a.category)))).filter(Boolean).slice(0,8)]; document.getElementById('catChips').innerHTML=cats.map(c=>`<button class="chip ${c===activeCat?'active':''}" onclick="filterCat('${c}')">${c}</button>`).join('')}
-function filterCat(cat){activeCat=cat; filtered=cat==='All'?articles:articles.filter(a=>cap(a.category)===cat); renderNews('newsGrid',filtered); renderNews('homeNews',articles.slice(0,12)); renderCats()}
+function filterCat(cat){activeCat=cat; filtered=cat==='All'?articles:articles.filter(a=>cap(a.category)===cat); renderNews('newsGrid',filtered); renderNews('homeNews',articles.slice(0,homeVisibleCount)); renderCats()}
 function catIcon(c){return {politics:'🏛️',business:'💼',sports:'⚽',entertainment:'🎵',technology:'💻',health:'🏥',religion:'⛪',general:'📰'}[(c||'general').toLowerCase()]||'📰'}
 function newsImageHTML(a){
   var fallback = `<div class="news-fallback"><div class="nf-icon">${catIcon(a.category)}</div><div class="nf-source">${escapeHTML(a.source||'Flash Nigeria')}</div><div class="nf-cat">${escapeHTML(a.category||'news')}</div></div>`;
@@ -914,14 +943,22 @@ function looksLikeEmail(v){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((v||'').trim
 function clearAutofilledSearchEmails(){
   ['homeSearch','intelInput','voiceInput'].forEach(function(id){
     var el=document.getElementById(id);
-    if(el && looksLikeEmail(el.value)) el.value='';
+    if(!el) return;
+    el.setAttribute('autocomplete','new-password');
+    el.setAttribute('name', id + '_no_email_autofill');
+    if(looksLikeEmail(el.value)) el.value='';
   });
 }
 window.addEventListener('load',function(){
+  clearAutofilledSearchEmails();
   setTimeout(clearAutofilledSearchEmails,150);
   setTimeout(clearAutofilledSearchEmails,800);
+  setTimeout(clearAutofilledSearchEmails,1600);
 });
 document.addEventListener('focusin',function(e){
+  if(e.target && ['homeSearch','intelInput','voiceInput'].includes(e.target.id) && looksLikeEmail(e.target.value)) e.target.value='';
+});
+document.addEventListener('input',function(e){
   if(e.target && ['homeSearch','intelInput','voiceInput'].includes(e.target.id) && looksLikeEmail(e.target.value)) e.target.value='';
 });
 
