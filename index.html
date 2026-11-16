@@ -790,6 +790,47 @@
   .home-trends-slim .trend-card b{font-size:12px!important;max-width:120px!important;}
 }
 </style>
+<style id="flash-v26-upgrade">
+/* Flash Nigeria v26 — visual upgrade (gold accent, breaking red, featured story, branded fallbacks, desktop nav pill, PRO strip) */
+:root{--flash-gold:#f5b800;--breaking:#dc2626;}
+/* 1. Gold "flash" bolt in the logo */
+.brand .bolt{color:var(--flash-gold)!important;text-shadow:0 0 16px rgba(245,184,0,.35);}
+/* 2. Red only for BREAKING */
+.bs-badge{background:var(--breaking)!important;color:#fff!important;box-shadow:0 6px 18px rgba(220,38,38,.35);}
+/* 3. Branded fallback when a story has no photo */
+.news-fallback{position:relative;overflow:hidden;background:radial-gradient(circle at 82% 12%,rgba(22,163,74,.45),transparent 42%),linear-gradient(135deg,#071626 0%,#064131 100%)!important;color:#fff!important;}
+.news-fallback::after{content:"\03DF";position:absolute;right:8px;bottom:-26px;font-size:120px;font-weight:900;line-height:1;color:rgba(245,184,0,.16);pointer-events:none;}
+.news-fallback .nf-icon{display:none!important;}
+.news-fallback .nf-source{color:#fff!important;font-size:20px!important;}
+.news-fallback .nf-cat{color:var(--flash-gold)!important;}
+/* 4. Clear order of importance: first headline is the big featured story (desktop) */
+@media(min-width:900px){
+  #homeNews .story:first-child{grid-column:span 2;display:grid;grid-template-columns:1.2fr 1fr;grid-template-rows:1fr auto;}
+  #homeNews .story:first-child .thumb{grid-row:1 / span 2;height:100%;min-height:270px;}
+  #homeNews .story:first-child .story-body{padding:24px 22px 8px;}
+  #homeNews .story:first-child h3{font-size:27px;line-height:1.15;}
+  #homeNews .story:first-child .story-actions{padding:0 22px 22px;}
+}
+/* 5. Desktop: bottom bar becomes a slim floating pill instead of a full-width mobile bar */
+@media(min-width:861px){
+  body{padding-bottom:100px!important;}
+  .bottom-nav{left:50%!important;right:auto!important;bottom:18px!important;transform:translateX(-50%);border:1px solid #e5e7eb!important;border-radius:999px!important;background:rgba(255,255,255,.96)!important;box-shadow:0 14px 36px rgba(15,23,42,.16)!important;}
+  .bottom-inner{display:flex!important;height:56px!important;max-width:none!important;padding:0 8px!important;gap:2px;}
+  .nav-item{flex-direction:row!important;gap:8px!important;padding:0 16px!important;font-size:13px!important;border-radius:999px!important;}
+  .nav-item.active{background:#ecfdf5!important;}
+  .nav-item svg{width:18px;height:18px;}
+}
+/* 6. Clean line icons replace emojis in navigation */
+.nav-item svg,.icon-btn svg{width:1em;height:1em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
+.icon-btn svg{width:20px;height:20px;}
+/* 7. Flash PRO strip on the home page */
+.pro-strip{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:0 0 22px;padding:14px 18px;border-radius:18px;cursor:pointer;color:#fff;background:linear-gradient(110deg,#071626 0%,#064131 70%,#0b5a3d 100%);box-shadow:0 10px 26px rgba(6,22,38,.16);}
+.pro-strip b{color:var(--flash-gold);font-size:16px;margin-right:8px;}
+.pro-strip span{opacity:.9;font-weight:600;}
+.pro-strip .primary{background:var(--flash-gold)!important;color:#071626!important;white-space:nowrap;padding:10px 16px;}
+@media(max-width:860px){.nav-item svg{width:24px!important;height:24px!important;}}
+@media(max-width:600px){.pro-strip{padding:12px 14px;gap:10px}.pro-strip b{display:block;font-size:15px;margin:0 0 2px}.pro-strip span{font-size:12px;line-height:1.3;display:block}.pro-strip .primary{padding:9px 13px;font-size:13px}}
+</style>
 </head>
 <body>
 <header class="topbar"><div class="app top-inner"><div class="brand" onclick="showPanel('home')"><span class="bolt">ϟ</span><span>FLASH</span> <span>NIGERIA</span></div><div class="top-actions"><button class="icon-btn" onclick="showPanel('intelligence')">⌕</button><button class="icon-btn" onclick="showPanel('myflash');toast('Alerts are inside My Flash')">🔔</button><button class="avatar" id="avatar" onclick="openAuthOrProfile()">B</button></div></div></header>
@@ -807,6 +848,7 @@
   <div class="chips home-category-chips" id="homeCatChips"></div>
   <div class="home-trends-slim"><span class="tr-label">🔥 Trending</span><div id="homeTrends"></div></div>
   <div id="breakingSlider" class="breaking-slider"></div>
+  <div class="pro-strip" onclick="showPanel('pro')"><div><b>&#9889; Flash PRO</b><span>Executive briefings, company intelligence and personal alerts.</span></div><button class="primary" onclick="event.stopPropagation();showPanel('pro')">Upgrade</button></div>
   <div class="section-head latest-head"><h2>📰 Latest Headlines</h2><span class="link" onclick="loadMoreNews()">More ›</span></div>
   <div class="news-grid" id="homeNews"></div>
   <button id="homeLoadMoreNewsBtn" class="load-more-news" onclick="loadMoreNews()">Load More News</button>
@@ -1324,6 +1366,32 @@ function setupAutoLoadMore(){
 }
 setupAutoLoadMore();
 setupQuick();initAuth();loadNews();syncUser();
+</script>
+<script id="flash-v26-icons">
+(function(){
+  var I={
+    home:'<svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/></svg>',
+    trends:'<svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>',
+    intelligence:'<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/><path d="M11 8v6M8 11h6"/></svg>',
+    'my flash':'<svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/></svg>',
+    profile:'<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>',
+    search:'<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
+    bell:'<svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg>'
+  };
+  function swap(btn,key){
+    if(!I[key]) return;
+    Array.prototype.slice.call(btn.childNodes).forEach(function(n){ if(n.nodeType===3 && n.textContent.trim()) n.remove(); });
+    btn.insertAdjacentHTML('afterbegin',I[key]);
+  }
+  try{
+    document.querySelectorAll('.bottom-nav .nav-item').forEach(function(b){
+      var sp=b.querySelector('span'); if(sp) swap(b, sp.textContent.trim().toLowerCase());
+    });
+    var hb=document.querySelectorAll('.top-actions .icon-btn');
+    if(hb[0]) swap(hb[0],'search');
+    if(hb[1]) swap(hb[1],'bell');
+  }catch(e){}
+})();
 </script>
 </body>
 </html>
